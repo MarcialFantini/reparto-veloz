@@ -2,24 +2,45 @@
 
 /* ===========================================================
  * Design tokens — Reparto Veloz SRL
- * Papel (background), Ink (text), Accent (delivery orange), Gris (borders).
+ * Paleta: delivery naranja + navy + mist + blanco.
+ * Tipografía UI: Plus Jakarta Sans · Mono: JetBrains Mono.
  * Mobile-first. AA contrast verified for every state pill pair.
+ *
+ * Renaming policy: existing semantic names kept (`papel`, `ink`,
+ * `accent`, `gris`, etc.) so any consumer outside the allowed
+ * component set keeps working; their VALUES were shifted to the
+ * new identity (mist body bg, white card surfaces, delivery
+ * orange CTA). The brand-spec navy lives under its own name
+ * and is used by Header / Footer / PedidoTracker / ConsultaForm.
  * =========================================================== */
 
 @theme {
-  /* Brand */
-  --color-papel: #f8f6f2;
-  --color-papel-soft: #fbfaf6;
-  --color-ink: #0f1112;
-  --color-ink-soft: #4a4f52;
-  --color-ink-muted: #6b7280;
-  --color-accent: #e76f2c;
-  --color-accent-deep: #c25818;
-  --color-accent-soft: #fef3e7;
-  --color-gris: #e5e2db;
-  --color-gris-soft: #efebe2;
+  /* ---- Brand: surface ---- */
+  --color-papel: #f4f4f4;          /* body bg — mist per brand spec */
+  --color-papel-soft: #ffffff;     /* cards, inputs — blanco per brand spec */
+  --color-papel-line: #e6e6e6;     /* hairline divider on mist */
 
-  /* State semantics — contrast-checked for AA */
+  /* ---- Brand: text ---- */
+  --color-ink: #1b2845;            /* primary text — navy per brand spec */
+  --color-ink-soft: #4a5568;       /* secondary text on white/mist */
+  --color-ink-muted: #6b7280;      /* tertiary / metadata */
+  --color-ink-inverse: #ffffff;    /* text on navy / delivery */
+
+  /* ---- Brand: navy (new) ---- */
+  --color-navy: #1b2845;
+  --color-navy-soft: #2a3a5c;
+  --color-navy-tint: #eef1f6;      /* tinted surface behind navy headers */
+
+  /* ---- Brand: delivery (CTAs, accents, badges) ---- */
+  --color-accent: #e76f2c;         /* delivery naranja */
+  --color-accent-deep: #c25818;    /* hover / active */
+  --color-accent-soft: #fef3e7;    /* badge bg, subtle tints */
+
+  /* ---- Brand: line / divider ---- */
+  --color-gris: #e6e6e6;
+  --color-gris-soft: #ededed;
+
+  /* ---- State semantics — contrast-checked for AA ---- */
   --color-state-preparando-bg: #eef2f6;
   --color-state-preparando-text: #334155;
   --color-state-preparando-ring: #cbd5e1;
@@ -40,7 +61,7 @@
   --color-state-demorado-ring: #fca5a5;
   --color-state-demorado-dot: #dc2626;
 
-  /* Typography — desired fonts first, native fallbacks always present */
+  /* ---- Typography — Plus Jakarta Sans (UI) + JetBrains Mono (codes) ---- */
   --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system,
     "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", "Menlo",
@@ -54,6 +75,7 @@
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  background-color: var(--color-papel);
 }
 
 body {
@@ -98,4 +120,16 @@ body {
 .font-mono {
   font-family: var(--font-mono);
   font-feature-settings: "zero", "ss02";
+}
+
+/* Mono tabular numerals for codes / timestamps / ETAs. */
+.tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1, "zero" 1;
+}
+
+/* Navy surface used by Header / Footer brand blocks. */
+.surface-navy {
+  background-color: var(--color-navy);
+  color: var(--color-ink-inverse);
 }

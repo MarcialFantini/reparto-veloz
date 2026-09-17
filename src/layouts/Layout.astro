@@ -34,11 +34,24 @@ const canonicalURL = new URL(
       name="viewport"
       content="width=device-width, initial-scale=1, viewport-fit=cover"
     />
-    <meta name="theme-color" content="#F8F6F2" />
+    <meta name="theme-color" content="#F4F4F4" />
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex,nofollow" />}
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!--
+      Typography — Bunny Fonts (privacy-friendly Google Fonts mirror).
+      UI: Plus Jakarta Sans · Mono (codes / timestamps): JetBrains Mono.
+      Loaded with preconnect for fast first paint, swap so the
+      `ui-sans-serif`/`ui-monospace` fallbacks paint immediately and
+      the brand face takes over without layout shift.
+    -->
+    <link rel="preconnect" href="https://fonts.bunny.net" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.bunny.net/css?family=plus-jakarta-sans:400,500,600,700|jetbrains-mono:400,500,600&display=swap"
+    />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
@@ -62,7 +75,7 @@ const canonicalURL = new URL(
   <body class="flex min-h-[100dvh] flex-col antialiased">
     <a
       href="#main"
-      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-ink focus:px-4 focus:py-2 focus:text-[12px] focus:font-medium focus:text-papel"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-navy focus:px-4 focus:py-2 focus:text-[12px] focus:font-semibold focus:text-white"
     >
       Saltar al contenido principal
     </a>

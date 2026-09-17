@@ -11,7 +11,7 @@ const isActive = (href: string) => {
 };
 ---
 
-<header class="sticky top-0 z-40 border-b border-gris bg-papel/85 backdrop-blur-xl">
+<header class="sticky top-0 z-40 border-b border-gris bg-papel/90 backdrop-blur-xl">
   <div
     class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6 sm:py-4"
   >
@@ -21,7 +21,7 @@ const isActive = (href: string) => {
       aria-label="Reparto Veloz · Inicio"
     >
       <span
-        class="grid h-9 w-9 place-items-center rounded-xl bg-accent text-papel ring-1 ring-accent-deep/40 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]"
+        class="grid h-10 w-10 place-items-center rounded-xl bg-navy text-white ring-1 ring-navy-soft/40 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
         aria-hidden="true"
       >
         <!-- Truck glyph: hand-built SVG mark -->
@@ -33,7 +33,7 @@ const isActive = (href: string) => {
           stroke-width="1.6"
           stroke-linecap="round"
           stroke-linejoin="round"
-          class="h-4 w-4"
+          class="h-5 w-5"
         >
           <path d="M2 7h11v9H2z"></path>
           <path d="M13 10h4l3 3v3h-7"></path>
@@ -42,11 +42,11 @@ const isActive = (href: string) => {
         </svg>
       </span>
       <span class="flex flex-col leading-tight">
-        <span class="text-[15px] font-semibold tracking-tight text-ink">Reparto Veloz</span>
+        <span class="text-[15px] font-semibold tracking-tight text-navy">Reparto Veloz</span>
         <span
           class="font-mono text-[10px] uppercase tracking-[0.18em] text-accent-deep"
         >
-          CABA · GBA
+          Rastreo de envíos · CABA
         </span>
       </span>
     </a>
@@ -56,10 +56,10 @@ const isActive = (href: string) => {
         href="/"
         aria-current={isActive("/") ? "page" : undefined}
         class:list={[
-          "rounded-full px-3 py-1.5 text-[13px] font-medium transition-colors",
+          "rounded-full px-4 py-2 text-[13px] font-semibold transition-colors",
           isActive("/")
-            ? "bg-ink text-papel"
-            : "text-ink-soft hover:bg-gris-soft hover:text-ink",
+            ? "bg-navy text-white ring-1 ring-navy-soft"
+            : "text-ink-soft hover:bg-papel-soft hover:text-navy",
         ]}
       >
         Inicio
@@ -68,10 +68,10 @@ const isActive = (href: string) => {
         href="/#rastrear"
         aria-current={isActive("/rastrear") ? "page" : undefined}
         class:list={[
-          "rounded-full px-3 py-1.5 text-[13px] font-medium transition-colors",
+          "rounded-full px-4 py-2 text-[13px] font-semibold transition-colors",
           isActive("/rastrear")
-            ? "bg-ink text-papel"
-            : "text-ink-soft hover:bg-gris-soft hover:text-ink",
+            ? "bg-navy text-white ring-1 ring-navy-soft"
+            : "text-ink-soft hover:bg-papel-soft hover:text-navy",
         ]}
       >
         Rastrear

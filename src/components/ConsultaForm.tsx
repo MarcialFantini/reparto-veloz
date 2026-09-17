@@ -107,7 +107,7 @@ export default function ConsultaForm({ initial = "" }: Props) {
             handleChange((e.currentTarget as HTMLInputElement).value)
           }
           class={[
-            "block h-12 w-full rounded-xl border-0 bg-papel px-4 font-mono text-[18px] uppercase tracking-[0.18em] text-ink placeholder:text-ink-muted placeholder:tracking-[0.18em] focus:outline-none focus:ring-2 focus:ring-accent-deep sm:text-[20px]",
+            "block h-14 w-full rounded-xl border-0 bg-papel px-4 font-mono text-[20px] uppercase tracking-[0.18em] text-navy placeholder:text-ink-muted placeholder:tracking-[0.18em] focus:outline-none focus:ring-2 focus:ring-navy sm:text-[22px]",
             error ? "ring-2 ring-state-demorado-dot" : "ring-1 ring-gris",
           ].join(" ")}
         />
@@ -116,7 +116,7 @@ export default function ConsultaForm({ initial = "" }: Props) {
           type="submit"
           disabled={cargando}
           aria-busy={cargando || undefined}
-          class="inline-flex h-12 shrink-0 items-center justify-center gap-2 self-stretch rounded-xl bg-accent-deep px-5 text-[13px] font-semibold uppercase tracking-[0.18em] text-papel ring-1 ring-accent-deep transition-colors hover:bg-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-60 sm:px-7"
+          class="inline-flex h-14 shrink-0 items-center justify-center gap-2 self-stretch rounded-xl bg-accent-deep px-5 text-[13px] font-bold uppercase tracking-[0.16em] text-white ring-1 ring-accent-deep transition-colors hover:bg-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy disabled:opacity-60 sm:px-7"
         >
           {cargando ? (
             <>
@@ -140,11 +140,11 @@ export default function ConsultaForm({ initial = "" }: Props) {
                   d="M4 12a8 8 0 0 1 8-8v3a5 5 0 0 0-5 5H4z"
                 ></path>
               </svg>
-              Buscando…
+              Buscando
             </>
           ) : (
             <>
-              Buscar
+              Rastrear
               <span aria-hidden="true">→</span>
             </>
           )}
