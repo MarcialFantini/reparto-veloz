@@ -124,6 +124,72 @@
       ],
       "repartidor": null,
       "etaMinutos": 75
+    },
+    {
+      "codigo": "RV-YP22QA",
+      "cliente": "Sofía Ledesma",
+      "direccion": "Av. Caseros 3120, Parque Patricios, CABA",
+      "estado": "en_camino",
+      "historial": [
+        { "timestamp": "2026-09-17T07:30:00-03:00", "descripcion": "Pedido registrado en el sistema.", "ubicacion": "Centro de operaciones" },
+        { "timestamp": "2026-09-17T08:15:00-03:00", "descripcion": "Paquete armado y etiquetado.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-17T09:00:00-03:00", "descripcion": "Repartidor retiró el paquete.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-17T11:25:00-03:00", "descripcion": "En camino — Av. Caseros y Monteagudo.", "ubicacion": "Parque Patricios, CABA" }
+      ],
+      "repartidor": {
+        "nombre": "Diego Mansilla",
+        "foto": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' aria-hidden='true'><rect width='64' height='64' rx='32' fill='%23FEF3E7'/><circle cx='32' cy='25' r='11' fill='%23E76F2C'/><path d='M10 58c2-10 12-16 22-16s20 6 22 16' fill='%23E76F2C'/></svg>",
+        "telefono": "+5491147771103"
+      },
+      "etaMinutos": 18
+    },
+    {
+      "codigo": "RV-DC78NX",
+      "cliente": "Mateo Bustamante",
+      "direccion": "Av. Triunvirato 4180, Villa Urquiza, CABA",
+      "estado": "entregado",
+      "historial": [
+        { "timestamp": "2026-09-16T15:20:00-03:00", "descripcion": "Pedido registrado en el sistema.", "ubicacion": "Centro de operaciones" },
+        { "timestamp": "2026-09-16T16:05:00-03:00", "descripcion": "Paquete armado y etiquetado.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-16T17:30:00-03:00", "descripcion": "Repartidor retiró el paquete.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-16T18:42:00-03:00", "descripcion": "Entregado al destinatario.", "ubicacion": "Av. Triunvirato 4180, CABA" }
+      ],
+      "repartidor": {
+        "nombre": "Camila Bustos",
+        "foto": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' aria-hidden='true'><rect width='64' height='64' rx='32' fill='%23FEF3E7'/><circle cx='32' cy='25' r='11' fill='%23C25818'/><path d='M10 58c2-10 12-16 22-16s20 6 22 16' fill='%23C25818'/></svg>",
+        "telefono": "+5491147771101"
+      },
+      "etaMinutos": null
+    },
+    {
+      "codigo": "RV-LM91TH",
+      "cliente": "Victoria Aguiar",
+      "direccion": "Av. Córdoba 3450, Piso 9°A, Palermo, CABA",
+      "estado": "demorado",
+      "historial": [
+        { "timestamp": "2026-09-17T06:30:00-03:00", "descripcion": "Pedido registrado en el sistema.", "ubicacion": "Centro de operaciones" },
+        { "timestamp": "2026-09-17T07:20:00-03:00", "descripcion": "Paquete armado y etiquetado.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-17T08:35:00-03:00", "descripcion": "Repartidor retiró el paquete.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-17T09:50:00-03:00", "descripcion": "Demora por corte de calle en Av. Santa Fe.", "ubicacion": "Palermo, CABA" }
+      ],
+      "repartidor": {
+        "nombre": "Bruno Escobar",
+        "foto": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' aria-hidden='true'><rect width='64' height='64' rx='32' fill='%23FEE2E2'/><circle cx='32' cy='25' r='11' fill='%23DC2626'/><path d='M10 58c2-10 12-16 22-16s20 6 22 16' fill='%23DC2626'/></svg>",
+        "telefono": "+5491147771102"
+      },
+      "etaMinutos": 220
+    },
+    {
+      "codigo": "RV-VB44WE",
+      "cliente": "Ezequiel Páez",
+      "direccion": "Huaura 1140, Piso 1°B, Belgrano, CABA",
+      "estado": "preparando",
+      "historial": [
+        { "timestamp": "2026-09-17T10:45:00-03:00", "descripcion": "Pedido registrado en el sistema.", "ubicacion": "Centro de operaciones" },
+        { "timestamp": "2026-09-17T11:30:00-03:00", "descripcion": "En preparación en el depósito.", "ubicacion": "Depósito Once, CABA" }
+      ],
+      "repartidor": null,
+      "etaMinutos": 110
     }
   ]
 }

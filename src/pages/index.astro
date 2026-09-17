@@ -261,6 +261,245 @@ const EJEMPLO_CODIGO = "RV-AB12CD";
   </section>
 
   {/* ============================================================ */}
+  {/* ESTADOS DEL ENVÍO                                             */}
+  {/* ============================================================ */}
+  <section
+    id="estados"
+    class="border-b border-gris py-16 sm:py-20 scroll-mt-24"
+    aria-labelledby="estados-heading"
+  >
+    <div class="mx-auto max-w-6xl px-4 sm:px-6">
+      <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-muted">
+        Estados del envío
+      </p>
+      <h2
+        id="estados-heading"
+        class="mt-2 max-w-[28ch] text-[28px] font-semibold tracking-tight text-ink sm:text-[34px]"
+      >
+        Cuatro estados. Cero ambigüedad.
+      </h2>
+      <p class="mt-3 max-w-[58ch] text-[14px] leading-relaxed text-ink-soft">
+        Cada pedido pasa por estos estados, en este orden. Cuando algo se desvía, lo marcamos como demorado y explicamos por qué.
+      </p>
+
+      <ol class="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 sm:gap-5">
+        {
+          [
+            {
+              n: "01",
+              label: "Preparando",
+              tone: "preparando",
+              desc: "Tu paquete está en el depósito, armándose o esperando al repartidor.",
+              detail: "ETA promedio: 60–120 min",
+            },
+            {
+              n: "02",
+              label: "En camino",
+              tone: "en_camino",
+              desc: "El repartidor ya tiene tu paquete y va rumbo a la dirección.",
+              detail: "ETA promedio: 15–45 min",
+            },
+            {
+              n: "03",
+              label: "Entregado",
+              tone: "entregado",
+              desc: "Recibido por el destinatario o por portería con firma.",
+              detail: "Cierre del envío",
+            },
+            {
+              n: "04",
+              label: "Demorado",
+              tone: "demorado",
+              desc: "El envío tuvo una pausa. Mostramos el motivo y el nuevo ETA.",
+              detail: "ETA recalculado",
+            },
+          ].map((s) => (
+            <li class="rounded-2xl border border-gris bg-papel p-5 sm:p-6">
+              <div class="flex items-center justify-between gap-3">
+                <span class="font-mono text-[11px] uppercase tracking-[0.18em] text-ink-muted">
+                  Estado {s.n}
+                </span>
+                <span
+                  class:list={[
+                    "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-mono text-[10px] font-bold uppercase tracking-[0.16em] ring-2",
+                    s.tone === "preparando" && "bg-state-preparando-bg text-state-preparando-text ring-state-preparando-ring",
+                    s.tone === "en_camino" && "bg-state-en-camino-bg text-state-en-camino-text ring-state-en-camino-ring",
+                    s.tone === "entregado" && "bg-state-entregado-bg text-state-entregado-text ring-state-entregado-ring",
+                    s.tone === "demorado" && "bg-state-demorado-bg text-state-demorado-text ring-state-demorado-ring",
+                  ]}
+                >
+                  {s.label}
+                </span>
+              </div>
+              <p class="mt-4 text-[15px] font-semibold tracking-tight text-navy">
+                {s.desc}
+              </p>
+              <p class="mt-3 font-mono text-[11px] uppercase tracking-[0.16em] text-ink-muted">
+                {s.detail}
+              </p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  {/* ============================================================ */}
+  {/* ZONAS CUBIERTAS                                               */}
+  {/* ============================================================ */}
+  <section
+    id="zonas"
+    class="border-b border-gris bg-papel-soft py-16 sm:py-20 scroll-mt-24"
+    aria-labelledby="zonas-heading"
+  >
+    <div class="mx-auto max-w-6xl px-4 sm:px-6">
+      <div class="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-12">
+        <div class="lg:col-span-5">
+          <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-muted">
+            Cobertura
+          </p>
+          <h2
+            id="zonas-heading"
+            class="mt-2 text-[28px] font-semibold tracking-tight text-ink sm:text-[34px]"
+          >
+            Toda la Ciudad de Buenos Aires.
+          </h2>
+          <p class="mt-4 max-w-[44ch] text-[14px] leading-relaxed text-ink-soft">
+            Operamos los 48 barrios porteños con tres vehículos propios y una red de repartidores independientes para reforzar picos. GBA centro bajo consulta.
+          </p>
+          <dl class="mt-8 grid grid-cols-2 gap-4">
+            <div class="rounded-2xl border border-gris bg-papel p-4">
+              <dt class="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-muted">
+                Horario
+              </dt>
+              <dd class="mt-2 text-[18px] font-semibold tracking-tight text-navy">
+                9 a 20 h
+              </dd>
+              <dd class="mt-0.5 text-[12px] text-ink-soft">Lunes a sábado</dd>
+            </div>
+            <div class="rounded-2xl border border-gris bg-papel p-4">
+              <dt class="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-muted">
+                Tiempo medio
+              </dt>
+              <dd class="mt-2 text-[18px] font-semibold tracking-tight text-navy">
+                2 h 15
+              </dd>
+              <dd class="mt-0.5 text-[12px] text-ink-soft">Desde el registro</dd>
+            </div>
+            <div class="rounded-2xl border border-gris bg-papel p-4">
+              <dt class="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-muted">
+                Capacidad
+              </dt>
+              <dd class="mt-2 text-[18px] font-semibold tracking-tight text-navy">
+                220 envíos
+              </dd>
+              <dd class="mt-0.5 text-[12px] text-ink-soft">Por día hábil</dd>
+            </div>
+            <div class="rounded-2xl border border-gris bg-papel p-4">
+              <dt class="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-muted">
+                Cumplimiento
+              </dt>
+              <dd class="mt-2 text-[18px] font-semibold tracking-tight text-navy">
+                96,4 %
+              </dd>
+              <dd class="mt-0.5 text-[12px] text-ink-soft">En horario pactado</dd>
+            </div>
+          </dl>
+        </div>
+
+        <div class="lg:col-span-7">
+          <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-muted">
+            Barrios con servicio estándar
+          </p>
+          <ul class="mt-5 grid grid-cols-2 gap-x-6 gap-y-2 sm:grid-cols-3 sm:gap-y-3">
+            {
+              [
+                "Agronomía","Almagro","Balvanera","Barracas","Belgrano","Boedo","Caballito",
+                "Chacarita","Coghlan","Colegiales","Constitución","Flores","Floresta","La Boca",
+                "La Paternal","Liniers","Mataderos","Monte Castro","Monserrat","Nueva Pompeya",
+                "Núñez","Palermo","Parque Avellaneda","Parque Chas","Parque Patricios","Puerto Madero",
+                "Recoleta","Retiro","Saavedra","San Cristóbal","San Nicolás","San Telmo","Versalles",
+                "Villa Crespo","Villa del Parque","Villa Devoto","Villa General Mitre","Villa Lugano",
+                "Villa Luro","Villa Ortúzar","Villa Pueyrredón","Villa Real","Villa Riachuelo",
+                "Villa Santa Rita","Villa Soldati","Villa Urquiza","Vélez Sarsfield",
+              ].map((b) => (
+                <li class="flex items-center gap-2 border-b border-gris py-1.5 text-[13px] text-ink-soft">
+                  <span aria-hidden="true" class="h-1.5 w-1.5 rounded-full bg-accent" />
+                  {b}
+                </li>
+              ))
+            }
+          </ul>
+          <p class="mt-6 text-[12px] text-ink-muted">
+            GBA centro (Vicente López, San Isidro, San Martín, Tres de Febrero) bajo consulta por volumen.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ============================================================ */}
+  {/* PREGUNTAS FRECUENTES                                          */}
+  {/* ============================================================ */}
+  <section
+    id="preguntas"
+    class="border-b border-gris py-16 sm:py-20 scroll-mt-24"
+    aria-labelledby="faq-heading"
+  >
+    <div class="mx-auto max-w-6xl px-4 sm:px-6">
+      <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-muted">
+        Preguntas frecuentes
+      </p>
+      <h2
+        id="faq-heading"
+        class="mt-2 max-w-[28ch] text-[28px] font-semibold tracking-tight text-ink sm:text-[34px]"
+      >
+        Lo que más nos preguntan.
+      </h2>
+
+      <dl class="mt-10 grid grid-cols-1 gap-x-10 gap-y-2 lg:grid-cols-2">
+        {
+          [
+            {
+              q: "¿Dónde consigo mi código de pedido?",
+              a: "Viene en el comprobante que te mandó la tienda al confirmar el envío y también en el email de Reparto Veloz con el asunto 'Tu envío está en camino'.",
+            },
+            {
+              q: "¿El seguimiento se actualiza en tiempo real?",
+              a: "Sí. Cada paso del repartidor (retiro del depósito, en camino, entregado) se registra en el sistema en menos de un minuto y se refleja en esta página.",
+            },
+            {
+              q: "¿Qué pasa si no estoy cuando llega el repartidor?",
+              a: "Si hay portería, dejamos el paquete firmado. Si no, el pedido pasa a estado 'Demorado' y reprogramamos la visita con vos por WhatsApp.",
+            },
+            {
+              q: "¿Puedo cambiar la dirección de entrega?",
+              a: "Sí, mientras el pedido esté en estado 'Preparando'. Una vez que el repartidor lo retiró, sólo es posible redirigirlo a una dirección dentro de la misma zona.",
+            },
+            {
+              q: "¿Hacen envíos fuera de CABA?",
+              a: "Operamos toda la Ciudad de Buenos Aires. Para GBA centro (Vicente López, San Isidro, San Martín, Tres de Febrero) consultá por volumen antes de contratar.",
+            },
+            {
+              q: "¿Cómo reclamo si el paquete llegó dañado?",
+              a: "Sacá foto del paquete y del contenido antes de abrirlo si es posible, y escribinos a soporte@repartoveloz.example con el código de pedido. Respondemos en el día hábil.",
+            },
+          ].map((item) => (
+            <div class="border-b border-gris py-5">
+              <dt class="text-[15px] font-semibold tracking-tight text-navy">
+                {item.q}
+              </dt>
+              <dd class="mt-2 text-[13px] leading-relaxed text-ink-soft">
+                {item.a}
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+
+  {/* ============================================================ */}
   {/* DISCLAIMER                                                    */}
   {/* ============================================================ */}
   <section class="py-12" aria-label="Aviso">
