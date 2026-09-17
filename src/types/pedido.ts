@@ -22,6 +22,13 @@ export interface Repartidor {
   telefono: string;
 }
 
+export interface Reprogramado {
+  /** ISO date (YYYY-MM-DD) chosen by the recipient. */
+  fecha: string;
+  /** Display-friendly franja: "mañana" (9-13) or "tarde" (13-18). */
+  franja: "mañana" | "tarde";
+}
+
 export interface Pedido {
   /** Code formatted as RV-XXXXXX (6 alphanumerics). */
   codigo: string;
@@ -32,6 +39,8 @@ export interface Pedido {
   repartidor: Repartidor | null;
   /** Estimated minutes until delivery. null when status === "entregado". */
   etaMinutos: number | null;
+  /** Set when the recipient rescheduled the visit (demorado → preparando). */
+  reprogramado?: Reprogramado | null;
 }
 
 /** Helpful UI metadata for each estado. Kept here so the same
