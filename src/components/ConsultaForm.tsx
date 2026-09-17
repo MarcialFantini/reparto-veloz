@@ -92,7 +92,7 @@ export default function ConsultaForm({ initial = "" }: Props) {
         <input
           id={inputId}
           name="code"
-          type="text"
+          type="tel"
           inputMode="text"
           autoCapitalize="characters"
           autoComplete="off"
@@ -116,7 +116,7 @@ export default function ConsultaForm({ initial = "" }: Props) {
           type="submit"
           disabled={cargando}
           aria-busy={cargando || undefined}
-          class="inline-flex h-14 shrink-0 items-center justify-center gap-2 self-stretch rounded-xl bg-accent-deep px-5 text-[13px] font-bold uppercase tracking-[0.16em] text-white ring-1 ring-accent-deep transition-colors hover:bg-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy disabled:opacity-60 sm:px-7"
+          class="inline-flex h-14 shrink-0 items-center justify-center gap-2 self-stretch rounded-xl bg-delivery px-5 text-[13px] font-bold uppercase tracking-[0.16em] text-white ring-1 ring-delivery transition-colors hover:bg-accent-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy disabled:opacity-60 sm:px-7"
         >
           {cargando ? (
             <>

@@ -55,7 +55,7 @@ const pedido: Pedido | null = buscarPorCodigo(codigo);
             href={`https://wa.me/5491147771100?text=${encodeURIComponent(`Hola, necesito ayuda con el pedido ${codigo}.`)}`}
             target="_blank"
             rel="noopener noreferrer"
-            class="inline-flex items-center gap-2 rounded-xl bg-accent-deep px-5 py-3 text-[13px] font-semibold uppercase tracking-[0.18em] text-papel ring-1 ring-accent-deep transition-colors hover:bg-ink"
+            class="inline-flex items-center gap-2 rounded-xl bg-delivery px-5 py-3 text-[13px] font-semibold uppercase tracking-[0.18em] text-white ring-1 ring-delivery transition-colors hover:bg-accent-deep"
           >
             Abrir WhatsApp
             <span aria-hidden="true">→</span>
@@ -97,7 +97,7 @@ const pedido: Pedido | null = buscarPorCodigo(codigo);
               href={`https://wa.me/5491147771100?text=${encodeURIComponent(`Hola, no encuentro mi pedido ${codigo || "—"}.`)}`}
               target="_blank"
               rel="noopener noreferrer"
-              class="inline-flex items-center gap-2 rounded-xl bg-accent-deep px-5 py-3 text-[13px] font-semibold uppercase tracking-[0.18em] text-papel ring-1 ring-accent-deep transition-colors hover:bg-ink"
+              class="inline-flex items-center gap-2 rounded-xl bg-delivery px-5 py-3 text-[13px] font-semibold uppercase tracking-[0.18em] text-white ring-1 ring-delivery transition-colors hover:bg-accent-deep"
             >
               Pedir ayuda por WhatsApp
               <span aria-hidden="true">→</span>

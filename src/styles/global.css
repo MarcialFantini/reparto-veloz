@@ -1,10 +1,34 @@
 @import "tailwindcss";
 
+/* Self-hosted fonts via @fontsource — replaces the Bunny Fonts CDN
+ * (privacy-friendly Google Fonts mirror) that previously loaded these
+ * families. Self-hosting is faster, removes a network dependency and
+ * keeps every weight offline.
+ *
+ * Plus Jakarta Sans — UI (400 / 500 / 600 / 700)
+ * JetBrains Mono  — codes, timestamps, ETAs (400 / 500 / 600)
+ *
+ * Importing the per-language subsets we actually need keeps the
+ * bundle small (no cyrillic / vietnamese faces for an es-AR product).
+ */
+@import "@fontsource/plus-jakarta-sans/latin-400.css";
+@import "@fontsource/plus-jakarta-sans/latin-500.css";
+@import "@fontsource/plus-jakarta-sans/latin-600.css";
+@import "@fontsource/plus-jakarta-sans/latin-700.css";
+@import "@fontsource/jetbrains-mono/latin-400.css";
+@import "@fontsource/jetbrains-mono/latin-500.css";
+@import "@fontsource/jetbrains-mono/latin-600.css";
+
 /* ===========================================================
- * Design tokens — Reparto Veloz SRL
+ * Spec-mandated palette — Reparto Veloz SRL
  * Paleta: delivery naranja + navy + mist + blanco.
  * Tipografía UI: Plus Jakarta Sans · Mono: JetBrains Mono.
  * Mobile-first. AA contrast verified for every state pill pair.
+ *
+ * The four CSS variables below are the literal names required by
+ * the brand spec. They live at :root so any consumer (Tailwind,
+ * inline style, child project) can read them by spec name without
+ * knowing our internal semantic aliases.
  *
  * Renaming policy: existing semantic names kept (`papel`, `ink`,
  * `accent`, `gris`, etc.) so any consumer outside the allowed
@@ -14,27 +38,49 @@
  * and is used by Header / Footer / PedidoTracker / ConsultaForm.
  * =========================================================== */
 
+:root {
+  /* Spec-mandated tokens — exact names + values from the brand spec. */
+  --color-delivery: #E76F2C;          /* primary CTAs (naranja delivery) */
+  --color-navy: #1B2845;              /* headers, badges */
+  --color-mist: #F4F4F4;              /* light gray, section bg */
+  --color-white: #FFFFFF;             /* cards */
+}
+
+/* ===========================================================
+ * Tailwind v4 theme — same spec tokens exposed as utilities
+ * (`bg-delivery`, `text-rv-navy`, …) so components can address
+ * the palette by spec name without a tailwind.config.mjs.
+ * Semantic aliases (`accent`, `papel`, `gris`) are preserved
+ * for backward compatibility with the existing component set.
+ * =========================================================== */
+
 @theme {
+  /* ---- Spec tokens (utility classes) ---- */
+  --color-delivery: #E76F2C;
+  --color-rv-navy: #1B2845;
+  --color-rv-mist: #F4F4F4;
+  --color-rv-white: #FFFFFF;
+
   /* ---- Brand: surface ---- */
-  --color-papel: #f4f4f4;          /* body bg — mist per brand spec */
-  --color-papel-soft: #ffffff;     /* cards, inputs — blanco per brand spec */
-  --color-papel-line: #e6e6e6;     /* hairline divider on mist */
+  --color-papel: #f4f4f4;             /* body bg — mist per brand spec */
+  --color-papel-soft: #ffffff;        /* cards, inputs — blanco per brand spec */
+  --color-papel-line: #e6e6e6;        /* hairline divider on mist */
 
   /* ---- Brand: text ---- */
-  --color-ink: #1b2845;            /* primary text — navy per brand spec */
-  --color-ink-soft: #4a5568;       /* secondary text on white/mist */
-  --color-ink-muted: #6b7280;      /* tertiary / metadata */
-  --color-ink-inverse: #ffffff;    /* text on navy / delivery */
+  --color-ink: #1b2845;               /* primary text — navy per brand spec */
+  --color-ink-soft: #4a5568;          /* secondary text on white/mist */
+  --color-ink-muted: #6b7280;         /* tertiary / metadata */
+  --color-ink-inverse: #ffffff;       /* text on navy / delivery */
 
   /* ---- Brand: navy (new) ---- */
   --color-navy: #1b2845;
   --color-navy-soft: #2a3a5c;
-  --color-navy-tint: #eef1f6;      /* tinted surface behind navy headers */
+  --color-navy-tint: #eef1f6;         /* tinted surface behind navy headers */
 
   /* ---- Brand: delivery (CTAs, accents, badges) ---- */
-  --color-accent: #e76f2c;         /* delivery naranja */
-  --color-accent-deep: #c25818;    /* hover / active */
-  --color-accent-soft: #fef3e7;    /* badge bg, subtle tints */
+  --color-accent: #e76f2c;            /* delivery naranja */
+  --color-accent-deep: #c25818;       /* hover / active */
+  --color-accent-soft: #fef3e7;       /* badge bg, subtle tints */
 
   /* ---- Brand: line / divider ---- */
   --color-gris: #e6e6e6;
@@ -75,13 +121,13 @@
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
-  background-color: var(--color-papel);
+  background-color: var(--color-mist);
 }
 
 body {
   font-family: var(--font-sans);
-  background-color: var(--color-papel);
-  color: var(--color-ink);
+  background-color: var(--color-mist);
+  color: var(--color-navy);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-feature-settings: "ss01", "cv11";

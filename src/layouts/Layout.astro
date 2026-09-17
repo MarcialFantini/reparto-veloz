@@ -41,17 +41,11 @@ const canonicalURL = new URL(
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
     <!--
-      Typography — Bunny Fonts (privacy-friendly Google Fonts mirror).
+      Typography is self-hosted via @fontsource/* — see src/styles/global.css.
       UI: Plus Jakarta Sans · Mono (codes / timestamps): JetBrains Mono.
-      Loaded with preconnect for fast first paint, swap so the
-      `ui-sans-serif`/`ui-monospace` fallbacks paint immediately and
-      the brand face takes over without layout shift.
+      Latin subsets only; cyrillic / vietnamese faces are not shipped
+      (es-AR product).
     -->
-    <link rel="preconnect" href="https://fonts.bunny.net" />
-    <link
-      rel="stylesheet"
-      href="https://fonts.bunny.net/css?family=plus-jakarta-sans:400,500,600,700|jetbrains-mono:400,500,600&display=swap"
-    />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
