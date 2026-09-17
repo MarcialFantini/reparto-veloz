@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none">
+  <rect width="1200" height="630" fill="#F8F6F2"/>
+  <rect x="0" y="0" width="1200" height="6" fill="#E76F2C"/>
+  <g transform="translate(80,180)">
+    <rect width="80" height="80" rx="18" fill="#E76F2C"/>
+    <g stroke="#F8F6F2" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none">
+      <path d="M10 22h44v36H10z"/>
+      <path d="M54 32h16l12 12v10H54z"/>
+      <circle cx="22" cy="62" r="6" fill="#F8F6F2"/>
+      <circle cx="60" cy="62" r="6" fill="#F8F6F2"/>
+    </g>
+  </g>
+  <text x="200" y="240" font-family="Plus Jakarta Sans, system-ui, sans-serif" font-size="56" font-weight="700" fill="#0F1112">Reparto Veloz</text>
+  <text x="200" y="290" font-family="Plus Jakarta Sans, system-ui, sans-serif" font-size="28" font-weight="500" fill="#4A4F52">Rastreá tu pedido en tiempo real</text>
+  <text x="200" y="380" font-family="JetBrains Mono, ui-monospace, monospace" font-size="22" fill="#6B7280">RV-XXXXXX</text>
+</svg>

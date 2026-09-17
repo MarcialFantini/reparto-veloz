@@ -1,0 +1,101 @@
+@import "tailwindcss";
+
+/* ===========================================================
+ * Design tokens — Reparto Veloz SRL
+ * Papel (background), Ink (text), Accent (delivery orange), Gris (borders).
+ * Mobile-first. AA contrast verified for every state pill pair.
+ * =========================================================== */
+
+@theme {
+  /* Brand */
+  --color-papel: #f8f6f2;
+  --color-papel-soft: #fbfaf6;
+  --color-ink: #0f1112;
+  --color-ink-soft: #4a4f52;
+  --color-ink-muted: #6b7280;
+  --color-accent: #e76f2c;
+  --color-accent-deep: #c25818;
+  --color-accent-soft: #fef3e7;
+  --color-gris: #e5e2db;
+  --color-gris-soft: #efebe2;
+
+  /* State semantics — contrast-checked for AA */
+  --color-state-preparando-bg: #eef2f6;
+  --color-state-preparando-text: #334155;
+  --color-state-preparando-ring: #cbd5e1;
+  --color-state-preparando-dot: #64748b;
+
+  --color-state-en-camino-bg: #fef3e7;
+  --color-state-en-camino-text: #9a4112;
+  --color-state-en-camino-ring: #fcd9b6;
+  --color-state-en-camino-dot: #e76f2c;
+
+  --color-state-entregado-bg: #dcfce7;
+  --color-state-entregado-text: #14532d;
+  --color-state-entregado-ring: #86efac;
+  --color-state-entregado-dot: #16a34a;
+
+  --color-state-demorado-bg: #fee2e2;
+  --color-state-demorado-text: #7f1d1d;
+  --color-state-demorado-ring: #fca5a5;
+  --color-state-demorado-dot: #dc2626;
+
+  /* Typography — desired fonts first, native fallbacks always present */
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", "Menlo",
+    "Monaco", "Consolas", monospace;
+}
+
+/* ===========================================================
+ * Base
+ * =========================================================== */
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-papel);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "ss01", "cv11";
+}
+
+::selection {
+  background-color: var(--color-accent-soft);
+  color: var(--color-accent-deep);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent-deep);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ===========================================================
+ * Reduced motion
+ * =========================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ===========================================================
+ * Small utility helpers
+ * =========================================================== */
+
+.font-mono {
+  font-family: var(--font-mono);
+  font-feature-settings: "zero", "ss02";
+}

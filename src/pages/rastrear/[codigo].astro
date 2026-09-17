@@ -1,0 +1,113 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import PedidoTracker from "../../components/PedidoTracker.tsx";
+import {
+  buscarPorCodigo,
+  getTodosLosCodigos,
+  normalizarCodigo,
+} from "../../lib/pedidos";
+import type { Pedido } from "../../types/pedido";
+
+// Astro static-path generation. One page per codigo at build time.
+export function getStaticPaths() {
+  const codigos = getTodosLosCodigos();
+  return codigos.map((codigo) => ({ params: { codigo } }));
+}
+
+const rawParam = Astro.params.codigo ?? "";
+const codigo = normalizarCodigo(rawParam);
+
+// Each generated page already knows its pedido exists (because
+// getStaticPaths filtered by codigo), so buscarPorCodigo always resolves.
+// We still call it instead of indexing to keep the page logic honest
+// for the static-site 404 path (404.astro covers unknown codes).
+const pedido: Pedido | null = buscarPorCodigo(codigo);
+---
+
+<Layout
+  title={`${codigo} · Reparto Veloz`}
+  description={`Seguimiento del pedido ${codigo} de ${pedido?.cliente ?? "Reparto Veloz"}.`}
+  currentPath={`/rastrear/${codigo}`}
+>
+  {
+    pedido ? (
+      <section class="mx-auto max-w-6xl px-4 pb-16 pt-8 sm:px-6 sm:pb-20 sm:pt-10">
+        <nav class="mb-6 flex items-center gap-2 text-[12px] text-ink-soft" aria-label="Ruta">
+          <a href="/" class="hover:text-accent-deep">
+            Inicio
+          </a>
+          <span aria-hidden="true">›</span>
+          <span class="font-mono text-ink">{codigo}</span>
+        </nav>
+
+        <PedidoTracker pedido={pedido} client:load />
+
+        <div class="mt-10 flex flex-col items-start justify-between gap-3 rounded-2xl border border-gris bg-papel-soft p-5 sm:flex-row sm:items-center sm:p-6">
+          <div>
+            <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-muted">
+              ¿Necesitás algo más?
+            </p>
+            <p class="mt-1 text-[14px] text-ink-soft">
+              Escribinos y resolvemos sin que tengas que volver a llamar a la oficina.
+            </p>
+          </div>
+          <a
+            href={`https://wa.me/5491147771100?text=${encodeURIComponent(`Hola, necesito ayuda con el pedido ${codigo}.`)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 rounded-xl bg-accent-deep px-5 py-3 text-[13px] font-semibold uppercase tracking-[0.18em] text-papel ring-1 ring-accent-deep transition-colors hover:bg-ink"
+          >
+            Abrir WhatsApp
+            <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </section>
+    ) : (
+      <section class="mx-auto max-w-2xl px-4 pb-16 pt-12 sm:px-6 sm:pb-20 sm:pt-16">
+        <div class="rounded-2xl border border-gris bg-papel-soft p-6 sm:p-8">
+          <div
+            class="grid h-12 w-12 place-items-center rounded-2xl bg-state-demorado-bg text-state-demorado-text ring-1 ring-state-demorado-ring"
+            aria-hidden="true"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="h-6 w-6"
+            >
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </div>
+
+          <h1 class="mt-5 text-[26px] font-semibold tracking-tight text-ink sm:text-[30px]">
+            No encontramos ese pedido
+          </h1>
+          <p class="mt-3 text-[15px] leading-relaxed text-ink-soft">
+            Revisá el código e intentá de nuevo. Si acabás de recibir el
+            comprobante, esperá unos minutos y volvé a consultar.
+          </p>
+
+          <div class="mt-6 flex flex-wrap items-center gap-3 text-[13px]">
+            <a
+              href={`https://wa.me/5491147771100?text=${encodeURIComponent(`Hola, no encuentro mi pedido ${codigo || "—"}.`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 rounded-xl bg-accent-deep px-5 py-3 text-[13px] font-semibold uppercase tracking-[0.18em] text-papel ring-1 ring-accent-deep transition-colors hover:bg-ink"
+            >
+              Pedir ayuda por WhatsApp
+              <span aria-hidden="true">→</span>
+            </a>
+            <a href="/" class="text-ink-soft hover:text-accent-deep">
+              ← Volver al inicio
+            </a>
+          </div>
+        </div>
+      </section>
+    )
+  }
+</Layout>

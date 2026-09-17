@@ -1,0 +1,81 @@
+---
+interface Props {
+  currentPath?: string;
+}
+
+const { currentPath = "/" } = Astro.props;
+
+const isActive = (href: string) => {
+  if (href === "/") return currentPath === "/";
+  return currentPath.startsWith(href);
+};
+---
+
+<header class="sticky top-0 z-40 border-b border-gris bg-papel/85 backdrop-blur-xl">
+  <div
+    class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6 sm:py-4"
+  >
+    <a
+      href="/"
+      class="group flex items-center gap-2.5"
+      aria-label="Reparto Veloz · Inicio"
+    >
+      <span
+        class="grid h-9 w-9 place-items-center rounded-xl bg-accent text-papel ring-1 ring-accent-deep/40 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]"
+        aria-hidden="true"
+      >
+        <!-- Truck glyph: hand-built SVG mark -->
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="h-4 w-4"
+        >
+          <path d="M2 7h11v9H2z"></path>
+          <path d="M13 10h4l3 3v3h-7"></path>
+          <circle cx="6.5" cy="17.5" r="1.6"></circle>
+          <circle cx="17" cy="17.5" r="1.6"></circle>
+        </svg>
+      </span>
+      <span class="flex flex-col leading-tight">
+        <span class="text-[15px] font-semibold tracking-tight text-ink">Reparto Veloz</span>
+        <span
+          class="font-mono text-[10px] uppercase tracking-[0.18em] text-accent-deep"
+        >
+          CABA · GBA
+        </span>
+      </span>
+    </a>
+
+    <nav aria-label="Principal" class="flex items-center gap-1 sm:gap-2">
+      <a
+        href="/"
+        aria-current={isActive("/") ? "page" : undefined}
+        class:list={[
+          "rounded-full px-3 py-1.5 text-[13px] font-medium transition-colors",
+          isActive("/")
+            ? "bg-ink text-papel"
+            : "text-ink-soft hover:bg-gris-soft hover:text-ink",
+        ]}
+      >
+        Inicio
+      </a>
+      <a
+        href="/#rastrear"
+        aria-current={isActive("/rastrear") ? "page" : undefined}
+        class:list={[
+          "rounded-full px-3 py-1.5 text-[13px] font-medium transition-colors",
+          isActive("/rastrear")
+            ? "bg-ink text-papel"
+            : "text-ink-soft hover:bg-gris-soft hover:text-ink",
+        ]}
+      >
+        Rastrear
+      </a>
+    </nav>
+  </div>
+</header>

@@ -1,0 +1,278 @@
+---
+import Layout from "../layouts/Layout.astro";
+import ConsultaForm from "../components/ConsultaForm.tsx";
+
+const EJEMPLO_CODIGO = "RV-AB12CD";
+---
+
+<Layout
+  title="Reparto Veloz · Rastreá tu pedido en tiempo real"
+  description="Ingresá tu código de pedido RV-XXXXXX y mirá el recorrido en tiempo real: preparando, en camino, entregado o demorado."
+  currentPath="/"
+>
+  {/* ============================================================ */}
+  {/* HERO                                                         */}
+  {/* ============================================================ */}
+  <section
+    class="relative overflow-hidden border-b border-gris"
+    aria-labelledby="hero-heading"
+  >
+    <div
+      aria-hidden="true"
+      class="absolute inset-0 -z-10"
+      style="background:
+        radial-gradient(60% 50% at 12% 18%, rgba(231,111,44,0.10), transparent 70%),
+        radial-gradient(60% 60% at 92% 90%, rgba(15,17,18,0.06), transparent 65%),
+        linear-gradient(180deg, #F8F6F2, #FBFAF6);"
+    >
+    </div>
+
+    <div
+      class="mx-auto grid max-w-6xl grid-cols-1 gap-12 px-4 pb-12 pt-12 sm:px-6 sm:pb-16 sm:pt-16 lg:grid-cols-12 lg:gap-10 lg:pb-24 lg:pt-20"
+    >
+      <div class="lg:col-span-6 lg:pt-4">
+        <span
+          class="inline-flex items-center gap-2 rounded-full border border-gris bg-papel px-3 py-1.5 font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-accent-deep"
+        >
+          <span class="relative flex h-1.5 w-1.5">
+            <span
+              class="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60"
+            ></span>
+            <span class="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent-deep"
+            ></span>
+          </span>
+          Operación activa · Lun a Sáb 9 a 20 h
+        </span>
+
+        <h1
+          id="hero-heading"
+          class="mt-5 text-[40px] font-semibold leading-[1.05] tracking-tight text-ink sm:text-[52px] lg:text-[60px]"
+        >
+          Rastreá tu pedido <br class="hidden sm:block" />
+          en tiempo real.
+        </h1>
+
+        <p
+          class="mt-5 max-w-[48ch] text-[16px] leading-relaxed text-ink-soft sm:text-[17px]"
+        >
+          Ingresá el código de tu envío y mirá el recorrido en tiempo real.
+          Sin llamadas, sin esperas, sin seguir el estado por WhatsApp.
+        </p>
+
+        <ul class="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3 text-[13px] text-ink-soft">
+          <li class="inline-flex items-center gap-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+              class="h-4 w-4 text-accent-deep"
+            >
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+            Consulta anónima, sin login
+          </li>
+          <li class="inline-flex items-center gap-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+              class="h-4 w-4 text-accent-deep"
+            >
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            Actualización en cada paso
+          </li>
+          <li class="inline-flex items-center gap-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+              class="h-4 w-4 text-accent-deep"
+            >
+              <rect x="2" y="6" width="20" height="12" rx="2"></rect>
+              <line x1="2" y1="10" x2="22" y2="10"></line>
+            </svg>
+            Funciona en cualquier dispositivo
+          </li>
+        </ul>
+      </div>
+
+      <div id="rastrear" class="lg:col-span-6 lg:pl-4 lg:pt-2 scroll-mt-24">
+        <div
+          class="rounded-[2rem] border border-gris bg-papel-soft p-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.6)]"
+        >
+          <div class="rounded-[1.6rem] bg-papel p-5 ring-1 ring-gris sm:p-7">
+            <div class="flex items-start justify-between gap-3">
+              <div>
+                <p
+                  class="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-muted"
+                >
+                  Consulta de envío
+                </p>
+                <h2 class="mt-1 text-[22px] font-semibold tracking-tight text-ink">
+                  Tipeá tu código y enterate
+                </h2>
+              </div>
+              <span
+                aria-hidden="true"
+                class="hidden h-9 w-9 place-items-center rounded-xl bg-ink text-papel ring-1 ring-ink sm:grid"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="h-4 w-4"
+                >
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+              </span>
+            </div>
+
+            <p class="mt-2 max-w-[42ch] text-[13px] text-ink-soft">
+              Ingresá tu código de <strong>6 caracteres</strong> en el formato
+              <span class="font-mono"> RV-XXXXXX</span>.
+            </p>
+
+            <div class="mt-5">
+              <ConsultaForm client:load />
+            </div>
+
+            <div class="mt-5 flex flex-wrap items-center gap-2 border-t border-gris pt-4">
+              <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-muted">
+                Ejemplo:
+              </span>
+              <a
+                href={`/rastrear/${EJEMPLO_CODIGO}`}
+                class="inline-flex items-center gap-1.5 rounded-full border border-gris bg-papel-soft px-3 py-1 font-mono text-[12px] tracking-[0.12em] text-ink transition-colors hover:border-accent hover:text-accent-deep"
+              >
+                {EJEMPLO_CODIGO}
+                <span aria-hidden="true" class="text-ink-muted">↗</span>
+                <span class="sr-only">
+                  Ver el pedido de ejemplo {EJEMPLO_CODIGO}
+                </span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="mt-4 flex items-start gap-3 rounded-2xl border border-gris bg-papel-soft p-4"
+        >
+          <span
+            class="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-papel text-ink-soft ring-1 ring-gris"
+            aria-hidden="true"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="h-4 w-4"
+            >
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+          </span>
+          <p class="text-[13px] leading-relaxed text-ink-soft">
+            ¿No lo encontrás? El código viene en el comprobante que te mandó la
+            tienda y también en el email de confirmación de Reparto Veloz.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ============================================================ */}
+  {/* CÓMO FUNCIONA                                                */}
+  {/* ============================================================ */}
+  <section
+    id="como-funciona"
+    class="border-b border-gris bg-papel-soft py-16 sm:py-20 scroll-mt-24"
+    aria-labelledby="how-heading"
+  >
+    <div class="mx-auto max-w-6xl px-4 sm:px-6">
+      <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-muted">
+        Cómo funciona
+      </p>
+      <h2
+        id="how-heading"
+        class="mt-2 max-w-[24ch] text-[28px] font-semibold tracking-tight text-ink sm:text-[34px]"
+      >
+        Tres pasos. Sin llamar a la oficina.
+      </h2>
+
+      <ol class="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-5">
+        {
+          [
+            {
+              n: "01",
+              t: "Tipeá el código",
+              d: "Pegá o escribí el código RV-XXXXXX que figura en tu comprobante.",
+            },
+            {
+              n: "02",
+              t: "Mirá el recorrido",
+              d: "Te mostramos en qué etapa está el envío y la hora estimada de llegada.",
+            },
+            {
+              n: "03",
+              t: "Recibí el paquete",
+              d: "El repartidor llega a la dirección. Si hay una demora, te lo contamos antes.",
+            },
+          ].map((s) => (
+            <li class="rounded-2xl border border-gris bg-papel p-5 sm:p-6">
+              <span class="font-mono text-[11px] uppercase tracking-[0.18em] text-accent-deep">
+                Paso {s.n}
+              </span>
+              <h3 class="mt-3 text-[18px] font-semibold tracking-tight text-ink">
+                {s.t}
+              </h3>
+              <p class="mt-2 text-[13px] leading-relaxed text-ink-soft">{s.d}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  {/* ============================================================ */}
+  {/* DISCLAIMER                                                    */}
+  {/* ============================================================ */}
+  <section class="py-12" aria-label="Aviso">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6">
+      <p
+        class="rounded-2xl border border-gris bg-papel-soft px-5 py-4 text-[12px] leading-relaxed text-ink-soft"
+      >
+        <strong class="text-ink">Demo de portfolio.</strong>
+        Reparto Veloz es un cliente ficticio. Los códigos y los datos de
+        seguimiento son simulados: cualquier parecido con envíos reales es
+        coincidencia.
+      </p>
+    </div>
+  </section>
+</Layout>
