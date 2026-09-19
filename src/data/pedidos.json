@@ -3,36 +3,46 @@
     {
       "codigo": "RV-AB12CD",
       "cliente": "Mariana Sosa",
-      "direccion": "Av. Corrientes 2840, Piso 4°B, CABA",
+      "direccion": "Av. Corrientes 2840, Piso 4°B, Almagro, CABA",
       "estado": "entregado",
       "historial": [
         { "timestamp": "2026-09-15T09:12:00-03:00", "descripcion": "Pedido registrado en el sistema.", "ubicacion": "Centro de operaciones" },
         { "timestamp": "2026-09-15T10:40:00-03:00", "descripcion": "Paquete armado y etiquetado.", "ubicacion": "Depósito Once, CABA" },
-        { "timestamp": "2026-09-15T13:05:00-03:00", "descripcion": "Repartidor retiró el paquete.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-15T13:05:00-03:00", "descripcion": "Asignado a Lucas Pereyra.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-15T13:55:00-03:00", "descripcion": "Salió del depósito central.", "ubicacion": "Depósito Once, CABA" },
         { "timestamp": "2026-09-15T14:18:00-03:00", "descripcion": "Entregado al destinatario.", "ubicacion": "Av. Corrientes 2840, CABA" }
       ],
       "repartidor": {
         "nombre": "Lucas Pereyra",
         "foto": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' aria-hidden='true'><rect width='64' height='64' rx='32' fill='%23FEF3E7'/><circle cx='32' cy='25' r='11' fill='%23E76F2C'/><path d='M10 58c2-10 12-16 22-16s20 6 22 16' fill='%23E76F2C'/></svg>",
-        "telefono": "+5491147771100"
+        "telefono": "+5491147771100",
+        "vehiculo": "Moto Honda CG 150",
+        "rating": 4.9,
+        "entregas": 1284
       },
-      "etaMinutos": null
+      "etaMinutos": null,
+      "firma": "M. Sosa",
+      "recibidoPor": "Mariana Sosa (titular)"
     },
     {
       "codigo": "RV-7F9K22",
       "cliente": "Diego Almirón",
-      "direccion": "Honduras 4150, Palermo, CABA",
+      "direccion": "Honduras 4150, Piso 2°A, Palermo, CABA",
       "estado": "en_camino",
       "historial": [
-        { "timestamp": "2026-09-17T08:25:00-03:00", "descripcion": "Pedido registrado en el sistema.", "ubicacion": "Centro de operaciones" },
-        { "timestamp": "2026-09-17T09:50:00-03:00", "descripcion": "Paquete armado y etiquetado.", "ubicacion": "Depósito Once, CABA" },
-        { "timestamp": "2026-09-17T10:30:00-03:00", "descripcion": "Repartidor retiró el paquete.", "ubicacion": "Depósito Once, CABA" },
-        { "timestamp": "2026-09-17T11:05:00-03:00", "descripcion": "En camino — Av. Santa Fe y Thames.", "ubicacion": "Palermo, CABA" }
+        { "timestamp": "2026-09-18T08:25:00-03:00", "descripcion": "Pedido registrado en el sistema.", "ubicacion": "Centro de operaciones" },
+        { "timestamp": "2026-09-18T09:50:00-03:00", "descripcion": "Paquete armado y etiquetado.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-18T13:42:00-03:00", "descripcion": "Asignado a Camila Bustos.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-18T14:05:00-03:00", "descripcion": "Salió del depósito central.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-18T14:35:00-03:00", "descripcion": "En camino — Av. Santa Fe y Thames.", "ubicacion": "Palermo, CABA" }
       ],
       "repartidor": {
         "nombre": "Camila Bustos",
         "foto": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' aria-hidden='true'><rect width='64' height='64' rx='32' fill='%23FEF3E7'/><circle cx='32' cy='25' r='11' fill='%23C25818'/><path d='M10 58c2-10 12-16 22-16s20 6 22 16' fill='%23C25818'/></svg>",
-        "telefono": "+5491147771101"
+        "telefono": "+5491147771101",
+        "vehiculo": "Bicicleta eléctrica",
+        "rating": 4.8,
+        "entregas": 932
       },
       "etaMinutos": 22
     },
@@ -42,8 +52,9 @@
       "direccion": "Av. Rivadavia 5632, 2°A, Caballito, CABA",
       "estado": "preparando",
       "historial": [
-        { "timestamp": "2026-09-17T07:50:00-03:00", "descripcion": "Pedido registrado en el sistema.", "ubicacion": "Centro de operaciones" },
-        { "timestamp": "2026-09-17T08:30:00-03:00", "descripcion": "En preparación en el depósito.", "ubicacion": "Depósito Once, CABA" }
+        { "timestamp": "2026-09-18T07:50:00-03:00", "descripcion": "Pedido registrado en el sistema.", "ubicacion": "Centro de operaciones" },
+        { "timestamp": "2026-09-18T08:30:00-03:00", "descripcion": "En preparación en el depósito.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-18T13:10:00-03:00", "descripcion": "Etiquetado y embalado para ruta.", "ubicacion": "Depósito Once, CABA" }
       ],
       "repartidor": null,
       "etaMinutos": 95
@@ -54,7 +65,7 @@
       "direccion": "Tucumán 1820, Piso 7°C, San Nicolás, CABA",
       "estado": "preparando",
       "historial": [
-        { "timestamp": "2026-09-17T10:05:00-03:00", "descripcion": "Pedido registrado en el sistema.", "ubicacion": "Centro de operaciones" }
+        { "timestamp": "2026-09-18T10:05:00-03:00", "descripcion": "Pedido registrado en el sistema.", "ubicacion": "Centro de operaciones" }
       ],
       "repartidor": null,
       "etaMinutos": 140
@@ -65,17 +76,22 @@
       "direccion": "Av. San Martín 3467, La Paternal, CABA",
       "estado": "demorado",
       "historial": [
-        { "timestamp": "2026-09-17T07:10:00-03:00", "descripcion": "Pedido registrado en el sistema.", "ubicacion": "Centro de operaciones" },
-        { "timestamp": "2026-09-17T08:15:00-03:00", "descripcion": "Paquete armado y etiquetado.", "ubicacion": "Depósito Once, CABA" },
-        { "timestamp": "2026-09-17T09:45:00-03:00", "descripcion": "Repartidor retiró el paquete.", "ubicacion": "Depósito Once, CABA" },
-        { "timestamp": "2026-09-17T10:35:00-03:00", "descripcion": "Demora reportada: destinatario ausente al primer intento.", "ubicacion": "Av. San Martín 3467, CABA" }
+        { "timestamp": "2026-09-18T07:10:00-03:00", "descripcion": "Pedido registrado en el sistema.", "ubicacion": "Centro de operaciones" },
+        { "timestamp": "2026-09-18T08:15:00-03:00", "descripcion": "Paquete armado y etiquetado.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-18T13:50:00-03:00", "descripcion": "Asignado a Bruno Escobar.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-18T14:15:00-03:00", "descripcion": "Salió del depósito central.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-18T15:00:00-03:00", "descripcion": "Demora reportada: destinatario ausente al primer intento.", "ubicacion": "Av. San Martín 3467, CABA" }
       ],
       "repartidor": {
         "nombre": "Bruno Escobar",
         "foto": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' aria-hidden='true'><rect width='64' height='64' rx='32' fill='%23FEE2E2'/><circle cx='32' cy='25' r='11' fill='%23DC2626'/><path d='M10 58c2-10 12-16 22-16s20 6 22 16' fill='%23DC2626'/></svg>",
-        "telefono": "+5491147771102"
+        "telefono": "+5491147771102",
+        "vehiculo": "Auto Fiat Cronos",
+        "rating": 4.6,
+        "entregas": 612
       },
-      "etaMinutos": 180
+      "etaMinutos": 180,
+      "motivoDemora": "Destinatario ausente al primer intento. Volvemos a pasar en la próxima franja."
     },
     {
       "codigo": "RV-GH55KP",
@@ -85,15 +101,21 @@
       "historial": [
         { "timestamp": "2026-09-16T11:00:00-03:00", "descripcion": "Pedido registrado en el sistema.", "ubicacion": "Centro de operaciones" },
         { "timestamp": "2026-09-16T12:25:00-03:00", "descripcion": "Paquete armado y etiquetado.", "ubicacion": "Depósito Once, CABA" },
-        { "timestamp": "2026-09-16T15:10:00-03:00", "descripcion": "Repartidor retiró el paquete.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-16T15:18:00-03:00", "descripcion": "Asignado a Camila Bustos.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-16T15:42:00-03:00", "descripcion": "Salió del depósito central.", "ubicacion": "Depósito Once, CABA" },
         { "timestamp": "2026-09-16T16:20:00-03:00", "descripcion": "Entregado en portería.", "ubicacion": "Av. Directorio 2210, CABA" }
       ],
       "repartidor": {
         "nombre": "Camila Bustos",
         "foto": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' aria-hidden='true'><rect width='64' height='64' rx='32' fill='%23FEF3E7'/><circle cx='32' cy='25' r='11' fill='%23C25818'/><path d='M10 58c2-10 12-16 22-16s20 6 22 16' fill='%23C25818'/></svg>",
-        "telefono": "+5491147771101"
+        "telefono": "+5491147771101",
+        "vehiculo": "Bicicleta eléctrica",
+        "rating": 4.8,
+        "entregas": 932
       },
-      "etaMinutos": null
+      "etaMinutos": null,
+      "firma": "Portería",
+      "recibidoPor": "Portería (firma en libro de actas)"
     },
     {
       "codigo": "RV-JK88RD",
@@ -101,15 +123,19 @@
       "direccion": "Juncal 2540, Piso 3°D, Recoleta, CABA",
       "estado": "en_camino",
       "historial": [
-        { "timestamp": "2026-09-17T06:45:00-03:00", "descripcion": "Pedido registrado en el sistema.", "ubicacion": "Centro de operaciones" },
-        { "timestamp": "2026-09-17T07:30:00-03:00", "descripcion": "Paquete armado y etiquetado.", "ubicacion": "Depósito Once, CABA" },
-        { "timestamp": "2026-09-17T09:20:00-03:00", "descripcion": "Repartidor retiró el paquete.", "ubicacion": "Depósito Once, CABA" },
-        { "timestamp": "2026-09-17T10:10:00-03:00", "descripcion": "En camino — Av. Pueyrredón y Juncal.", "ubicacion": "Recoleta, CABA" }
+        { "timestamp": "2026-09-18T06:45:00-03:00", "descripcion": "Pedido registrado en el sistema.", "ubicacion": "Centro de operaciones" },
+        { "timestamp": "2026-09-18T07:30:00-03:00", "descripcion": "Paquete armado y etiquetado.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-18T13:25:00-03:00", "descripcion": "Asignado a Lucas Pereyra.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-18T13:48:00-03:00", "descripcion": "Salió del depósito central.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-18T14:30:00-03:00", "descripcion": "En camino — Av. Pueyrredón y Juncal.", "ubicacion": "Recoleta, CABA" }
       ],
       "repartidor": {
         "nombre": "Lucas Pereyra",
         "foto": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' aria-hidden='true'><rect width='64' height='64' rx='32' fill='%23FEF3E7'/><circle cx='32' cy='25' r='11' fill='%23E76F2C'/><path d='M10 58c2-10 12-16 22-16s20 6 22 16' fill='%23E76F2C'/></svg>",
-        "telefono": "+5491147771100"
+        "telefono": "+5491147771100",
+        "vehiculo": "Moto Honda CG 150",
+        "rating": 4.9,
+        "entregas": 1284
       },
       "etaMinutos": 12
     },
@@ -119,8 +145,8 @@
       "direccion": "Av. Boyacá 1340, Parque Chas, CABA",
       "estado": "preparando",
       "historial": [
-        { "timestamp": "2026-09-17T09:10:00-03:00", "descripcion": "Pedido registrado en el sistema.", "ubicacion": "Centro de operaciones" },
-        { "timestamp": "2026-09-17T10:05:00-03:00", "descripcion": "En preparación en el depósito.", "ubicacion": "Depósito Once, CABA" }
+        { "timestamp": "2026-09-18T09:10:00-03:00", "descripcion": "Pedido registrado en el sistema.", "ubicacion": "Centro de operaciones" },
+        { "timestamp": "2026-09-18T10:05:00-03:00", "descripcion": "En preparación en el depósito.", "ubicacion": "Depósito Once, CABA" }
       ],
       "repartidor": null,
       "etaMinutos": 75
@@ -131,15 +157,19 @@
       "direccion": "Av. Caseros 3120, Parque Patricios, CABA",
       "estado": "en_camino",
       "historial": [
-        { "timestamp": "2026-09-17T07:30:00-03:00", "descripcion": "Pedido registrado en el sistema.", "ubicacion": "Centro de operaciones" },
-        { "timestamp": "2026-09-17T08:15:00-03:00", "descripcion": "Paquete armado y etiquetado.", "ubicacion": "Depósito Once, CABA" },
-        { "timestamp": "2026-09-17T09:00:00-03:00", "descripcion": "Repartidor retiró el paquete.", "ubicacion": "Depósito Once, CABA" },
-        { "timestamp": "2026-09-17T11:25:00-03:00", "descripcion": "En camino — Av. Caseros y Monteagudo.", "ubicacion": "Parque Patricios, CABA" }
+        { "timestamp": "2026-09-18T07:30:00-03:00", "descripcion": "Pedido registrado en el sistema.", "ubicacion": "Centro de operaciones" },
+        { "timestamp": "2026-09-18T08:15:00-03:00", "descripcion": "Paquete armado y etiquetado.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-18T13:05:00-03:00", "descripcion": "Asignado a Diego Mansilla.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-18T13:22:00-03:00", "descripcion": "Salió del depósito central.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-18T14:05:00-03:00", "descripcion": "En camino — Av. Caseros y Monteagudo.", "ubicacion": "Parque Patricios, CABA" }
       ],
       "repartidor": {
         "nombre": "Diego Mansilla",
         "foto": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' aria-hidden='true'><rect width='64' height='64' rx='32' fill='%23FEF3E7'/><circle cx='32' cy='25' r='11' fill='%23E76F2C'/><path d='M10 58c2-10 12-16 22-16s20 6 22 16' fill='%23E76F2C'/></svg>",
-        "telefono": "+5491147771103"
+        "telefono": "+5491147771103",
+        "vehiculo": "Moto Yamaha FZ",
+        "rating": 4.7,
+        "entregas": 768
       },
       "etaMinutos": 18
     },
@@ -151,15 +181,21 @@
       "historial": [
         { "timestamp": "2026-09-16T15:20:00-03:00", "descripcion": "Pedido registrado en el sistema.", "ubicacion": "Centro de operaciones" },
         { "timestamp": "2026-09-16T16:05:00-03:00", "descripcion": "Paquete armado y etiquetado.", "ubicacion": "Depósito Once, CABA" },
-        { "timestamp": "2026-09-16T17:30:00-03:00", "descripcion": "Repartidor retiró el paquete.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-16T17:25:00-03:00", "descripcion": "Asignado a Camila Bustos.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-16T17:48:00-03:00", "descripcion": "Salió del depósito central.", "ubicacion": "Depósito Once, CABA" },
         { "timestamp": "2026-09-16T18:42:00-03:00", "descripcion": "Entregado al destinatario.", "ubicacion": "Av. Triunvirato 4180, CABA" }
       ],
       "repartidor": {
         "nombre": "Camila Bustos",
         "foto": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' aria-hidden='true'><rect width='64' height='64' rx='32' fill='%23FEF3E7'/><circle cx='32' cy='25' r='11' fill='%23C25818'/><path d='M10 58c2-10 12-16 22-16s20 6 22 16' fill='%23C25818'/></svg>",
-        "telefono": "+5491147771101"
+        "telefono": "+5491147771101",
+        "vehiculo": "Bicicleta eléctrica",
+        "rating": 4.8,
+        "entregas": 932
       },
-      "etaMinutos": null
+      "etaMinutos": null,
+      "firma": "M. Bustamante",
+      "recibidoPor": "Mateo Bustamante (titular)"
     },
     {
       "codigo": "RV-LM91TH",
@@ -167,17 +203,22 @@
       "direccion": "Av. Córdoba 3450, Piso 9°A, Palermo, CABA",
       "estado": "demorado",
       "historial": [
-        { "timestamp": "2026-09-17T06:30:00-03:00", "descripcion": "Pedido registrado en el sistema.", "ubicacion": "Centro de operaciones" },
-        { "timestamp": "2026-09-17T07:20:00-03:00", "descripcion": "Paquete armado y etiquetado.", "ubicacion": "Depósito Once, CABA" },
-        { "timestamp": "2026-09-17T08:35:00-03:00", "descripcion": "Repartidor retiró el paquete.", "ubicacion": "Depósito Once, CABA" },
-        { "timestamp": "2026-09-17T09:50:00-03:00", "descripcion": "Demora por corte de calle en Av. Santa Fe.", "ubicacion": "Palermo, CABA" }
+        { "timestamp": "2026-09-18T06:30:00-03:00", "descripcion": "Pedido registrado en el sistema.", "ubicacion": "Centro de operaciones" },
+        { "timestamp": "2026-09-18T07:20:00-03:00", "descripcion": "Paquete armado y etiquetado.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-18T13:00:00-03:00", "descripcion": "Asignado a Bruno Escobar.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-18T13:18:00-03:00", "descripcion": "Salió del depósito central.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-18T14:05:00-03:00", "descripcion": "Demora por corte de calle en Av. Santa Fe.", "ubicacion": "Palermo, CABA" }
       ],
       "repartidor": {
         "nombre": "Bruno Escobar",
         "foto": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' aria-hidden='true'><rect width='64' height='64' rx='32' fill='%23FEE2E2'/><circle cx='32' cy='25' r='11' fill='%23DC2626'/><path d='M10 58c2-10 12-16 22-16s20 6 22 16' fill='%23DC2626'/></svg>",
-        "telefono": "+5491147771102"
+        "telefono": "+5491147771102",
+        "vehiculo": "Auto Fiat Cronos",
+        "rating": 4.6,
+        "entregas": 612
       },
-      "etaMinutos": 220
+      "etaMinutos": 220,
+      "motivoDemora": "Corte de calle en Av. Santa Fe por obra municipal. Recalculando ruta alternativa."
     },
     {
       "codigo": "RV-VB44WE",
@@ -185,11 +226,276 @@
       "direccion": "Huaura 1140, Piso 1°B, Belgrano, CABA",
       "estado": "preparando",
       "historial": [
-        { "timestamp": "2026-09-17T10:45:00-03:00", "descripcion": "Pedido registrado en el sistema.", "ubicacion": "Centro de operaciones" },
-        { "timestamp": "2026-09-17T11:30:00-03:00", "descripcion": "En preparación en el depósito.", "ubicacion": "Depósito Once, CABA" }
+        { "timestamp": "2026-09-18T10:45:00-03:00", "descripcion": "Pedido registrado en el sistema.", "ubicacion": "Centro de operaciones" },
+        { "timestamp": "2026-09-18T11:30:00-03:00", "descripcion": "En preparación en el depósito.", "ubicacion": "Depósito Once, CABA" }
       ],
       "repartidor": null,
       "etaMinutos": 110
+    },
+    {
+      "codigo": "RV-RT12AA",
+      "cliente": "Carolina Méndez",
+      "direccion": "Av. Independencia 1820, San Cristóbal, CABA",
+      "estado": "cancelado",
+      "historial": [
+        { "timestamp": "2026-09-17T09:00:00-03:00", "descripcion": "Pedido registrado en el sistema.", "ubicacion": "Centro de operaciones" },
+        { "timestamp": "2026-09-17T09:35:00-03:00", "descripcion": "En preparación en el depósito.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-17T11:20:00-03:00", "descripcion": "Cancelación solicitada por el cliente.", "ubicacion": "Centro de operaciones" },
+        { "timestamp": "2026-09-17T11:21:00-03:00", "descripcion": "Pedido cancelado antes de asignar repartidor.", "ubicacion": "Depósito Once, CABA" }
+      ],
+      "repartidor": null,
+      "etaMinutos": null,
+      "motivoCancelacion": "Cancelación solicitada por el cliente antes de salir del depósito."
+    },
+    {
+      "codigo": "RV-KK98ZX",
+      "cliente": "Iván Rinaldi",
+      "direccion": "Av. La Plata 820, Piso 4°C, Boedo, CABA",
+      "estado": "devuelto",
+      "historial": [
+        { "timestamp": "2026-09-15T14:00:00-03:00", "descripcion": "Pedido registrado en el sistema.", "ubicacion": "Centro de operaciones" },
+        { "timestamp": "2026-09-15T15:10:00-03:00", "descripcion": "Paquete armado y etiquetado.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-15T17:20:00-03:00", "descripcion": "Asignado a Diego Mansilla.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-15T17:45:00-03:00", "descripcion": "Salió del depósito central.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-15T18:30:00-03:00", "descripcion": "Segundo intento fallido — destinatario ausente.", "ubicacion": "Av. La Plata 820, CABA" },
+        { "timestamp": "2026-09-16T09:10:00-03:00", "descripcion": "Devuelto al depósito central por superar intentos.", "ubicacion": "Depósito Once, CABA" }
+      ],
+      "repartidor": {
+        "nombre": "Diego Mansilla",
+        "foto": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' aria-hidden='true'><rect width='64' height='64' rx='32' fill='%23FEF3E7'/><circle cx='32' cy='25' r='11' fill='%23E76F2C'/><path d='M10 58c2-10 12-16 22-16s20 6 22 16' fill='%23E76F2C'/></svg>",
+        "telefono": "+5491147771103",
+        "vehiculo": "Moto Yamaha FZ",
+        "rating": 4.7,
+        "entregas": 768
+      },
+      "etaMinutos": null,
+      "motivoDevolucion": "Superó los dos intentos de entrega. El paquete vuelve al depósito para retiro o reprogramación."
+    },
+    {
+      "codigo": "RV-3H7YQF",
+      "cliente": "Paula Espíndola",
+      "direccion": "Av. Cabildo 2890, Piso 5°B, Belgrano, CABA",
+      "estado": "en_camino",
+      "historial": [
+        { "timestamp": "2026-09-18T09:20:00-03:00", "descripcion": "Pedido registrado en el sistema.", "ubicacion": "Centro de operaciones" },
+        { "timestamp": "2026-09-18T10:15:00-03:00", "descripcion": "Paquete armado y etiquetado.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-18T13:30:00-03:00", "descripcion": "Asignado a Lucas Pereyra.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-18T13:55:00-03:00", "descripcion": "Salió del depósito central.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-18T14:50:00-03:00", "descripcion": "En camino — Av. Cabildo y Juramento.", "ubicacion": "Belgrano, CABA" }
+      ],
+      "repartidor": {
+        "nombre": "Lucas Pereyra",
+        "foto": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' aria-hidden='true'><rect width='64' height='64' rx='32' fill='%23FEF3E7'/><circle cx='32' cy='25' r='11' fill='%23E76F2C'/><path d='M10 58c2-10 12-16 22-16s20 6 22 16' fill='%23E76F2C'/></svg>",
+        "telefono": "+5491147771100",
+        "vehiculo": "Moto Honda CG 150",
+        "rating": 4.9,
+        "entregas": 1284
+      },
+      "etaMinutos": 8
+    },
+    {
+      "codigo": "RV-ZX66PL",
+      "cliente": "Federico Cardozo",
+      "direccion": "Av. Scalabrini Ortiz 2240, Piso 2°, Palermo, CABA",
+      "estado": "entregado",
+      "historial": [
+        { "timestamp": "2026-09-17T10:00:00-03:00", "descripcion": "Pedido registrado en el sistema.", "ubicacion": "Centro de operaciones" },
+        { "timestamp": "2026-09-17T11:05:00-03:00", "descripcion": "Paquete armado y etiquetado.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-17T14:10:00-03:00", "descripcion": "Asignado a Camila Bustos.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-17T14:35:00-03:00", "descripcion": "Salió del depósito central.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-17T15:20:00-03:00", "descripcion": "Entregado al destinatario.", "ubicacion": "Av. Scalabrini Ortiz 2240, CABA" }
+      ],
+      "repartidor": {
+        "nombre": "Camila Bustos",
+        "foto": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' aria-hidden='true'><rect width='64' height='64' rx='32' fill='%23FEF3E7'/><circle cx='32' cy='25' r='11' fill='%23C25818'/><path d='M10 58c2-10 12-16 22-16s20 6 22 16' fill='%23C25818'/></svg>",
+        "telefono": "+5491147771101",
+        "vehiculo": "Bicicleta eléctrica",
+        "rating": 4.8,
+        "entregas": 932
+      },
+      "etaMinutos": null,
+      "firma": "F. Cardozo",
+      "recibidoPor": "Federico Cardozo (titular)"
+    },
+    {
+      "codigo": "RV-PP55BM",
+      "cliente": "Camila Garmendia",
+      "direccion": "Av. Nazca 1140, Piso 6°A, Villa del Parque, CABA",
+      "estado": "en_camino",
+      "historial": [
+        { "timestamp": "2026-09-18T08:00:00-03:00", "descripcion": "Pedido registrado en el sistema.", "ubicacion": "Centro de operaciones" },
+        { "timestamp": "2026-09-18T09:05:00-03:00", "descripcion": "Paquete armado y etiquetado.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-18T13:15:00-03:00", "descripcion": "Asignado a Diego Mansilla.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-18T13:40:00-03:00", "descripcion": "Salió del depósito central.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-18T14:55:00-03:00", "descripcion": "En camino — Av. Nazca y Cuenca.", "ubicacion": "Villa del Parque, CABA" }
+      ],
+      "repartidor": {
+        "nombre": "Diego Mansilla",
+        "foto": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' aria-hidden='true'><rect width='64' height='64' rx='32' fill='%23FEF3E7'/><circle cx='32' cy='25' r='11' fill='%23E76F2C'/><path d='M10 58c2-10 12-16 22-16s20 6 22 16' fill='%23E76F2C'/></svg>",
+        "telefono": "+5491147771103",
+        "vehiculo": "Moto Yamaha FZ",
+        "rating": 4.7,
+        "entregas": 768
+      },
+      "etaMinutos": 28
+    },
+    {
+      "codigo": "RV-FF32QQ",
+      "cliente": "Tomás Albariño",
+      "direccion": "Av. Warnes 980, Piso 1°B, Villa Crespo, CABA",
+      "estado": "demorado",
+      "historial": [
+        { "timestamp": "2026-09-18T07:30:00-03:00", "descripcion": "Pedido registrado en el sistema.", "ubicacion": "Centro de operaciones" },
+        { "timestamp": "2026-09-18T08:25:00-03:00", "descripcion": "Paquete armado y etiquetado.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-18T13:20:00-03:00", "descripcion": "Asignado a Bruno Escobar.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-18T13:45:00-03:00", "descripcion": "Salió del depósito central.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-18T14:35:00-03:00", "descripcion": "Demora por lluvia fuerte en CABA.", "ubicacion": "Villa Crespo, CABA" }
+      ],
+      "repartidor": {
+        "nombre": "Bruno Escobar",
+        "foto": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' aria-hidden='true'><rect width='64' height='64' rx='32' fill='%23FEE2E2'/><circle cx='32' cy='25' r='11' fill='%23DC2626'/><path d='M10 58c2-10 12-16 22-16s20 6 22 16' fill='%23DC2626'/></svg>",
+        "telefono": "+5491147771102",
+        "vehiculo": "Auto Fiat Cronos",
+        "rating": 4.6,
+        "entregas": 612
+      },
+      "etaMinutos": 150,
+      "motivoDemora": "Lluvia fuerte en la zona — protocolo de seguridad vial activado."
+    },
+    {
+      "codigo": "RV-YY09NN",
+      "cliente": "Roxana Maidana",
+      "direccion": "Honduras 3880, 3°B, Palermo, CABA",
+      "estado": "entregado",
+      "historial": [
+        { "timestamp": "2026-09-17T13:00:00-03:00", "descripcion": "Pedido registrado en el sistema.", "ubicacion": "Centro de operaciones" },
+        { "timestamp": "2026-09-17T13:50:00-03:00", "descripcion": "Paquete armado y etiquetado.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-17T16:30:00-03:00", "descripcion": "Asignado a Camila Bustos.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-17T16:55:00-03:00", "descripcion": "Salió del depósito central.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-17T17:38:00-03:00", "descripcion": "Entregado al destinatario.", "ubicacion": "Honduras 3880, CABA" }
+      ],
+      "repartidor": {
+        "nombre": "Camila Bustos",
+        "foto": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' aria-hidden='true'><rect width='64' height='64' rx='32' fill='%23FEF3E7'/><circle cx='32' cy='25' r='11' fill='%23C25818'/><path d='M10 58c2-10 12-16 22-16s20 6 22 16' fill='%23C25818'/></svg>",
+        "telefono": "+5491147771101",
+        "vehiculo": "Bicicleta eléctrica",
+        "rating": 4.8,
+        "entregas": 932
+      },
+      "etaMinutos": null,
+      "firma": "R. Maidana",
+      "recibidoPor": "Roxana Maidana (titular)"
+    },
+    {
+      "codigo": "RV-CC47BB",
+      "cliente": "Hernán Olivera",
+      "direccion": "Av. Entre Ríos 850, 4°C, Constitución, CABA",
+      "estado": "preparando",
+      "historial": [
+        { "timestamp": "2026-09-18T11:30:00-03:00", "descripcion": "Pedido registrado en el sistema.", "ubicacion": "Centro de operaciones" },
+        { "timestamp": "2026-09-18T12:10:00-03:00", "descripcion": "En preparación en el depósito.", "ubicacion": "Depósito Once, CABA" }
+      ],
+      "repartidor": null,
+      "etaMinutos": 60
+    },
+    {
+      "codigo": "RV-MM88SS",
+      "cliente": "Lara Cabrera",
+      "direccion": "Av. San Pedrito 240, Piso 2°A, Flores, CABA",
+      "estado": "cancelado",
+      "historial": [
+        { "timestamp": "2026-09-16T16:00:00-03:00", "descripcion": "Pedido registrado en el sistema.", "ubicacion": "Centro de operaciones" },
+        { "timestamp": "2026-09-16T17:10:00-03:00", "descripcion": "Paquete armado y etiquetado.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-16T18:25:00-03:00", "descripcion": "Cancelación solicitada por el cliente antes de salir.", "ubicacion": "Centro de operaciones" },
+        { "timestamp": "2026-09-16T18:30:00-03:00", "descripcion": "Pedido cancelado — paquete reintegrado al depósito.", "ubicacion": "Depósito Once, CABA" }
+      ],
+      "repartidor": null,
+      "etaMinutos": null,
+      "motivoCancelacion": "Cancelación solicitada por el cliente antes de salir del depósito."
+    },
+    {
+      "codigo": "RV-VV11DF",
+      "cliente": "Sebastián Irurzun",
+      "direccion": "Av. Montes de Oca 1010, Piso 6°, Barracas, CABA",
+      "estado": "devuelto",
+      "historial": [
+        { "timestamp": "2026-09-14T10:00:00-03:00", "descripcion": "Pedido registrado en el sistema.", "ubicacion": "Centro de operaciones" },
+        { "timestamp": "2026-09-14T11:15:00-03:00", "descripcion": "Paquete armado y etiquetado.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-14T14:30:00-03:00", "descripcion": "Asignado a Diego Mansilla.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-14T14:55:00-03:00", "descripcion": "Salió del depósito central.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-14T15:40:00-03:00", "descripcion": "Dirección incorrecta reportada por el destinatario.", "ubicacion": "Av. Montes de Oca 1010, CABA" },
+        { "timestamp": "2026-09-15T08:00:00-03:00", "descripcion": "Devuelto al depósito central para resolución.", "ubicacion": "Depósito Once, CABA" }
+      ],
+      "repartidor": {
+        "nombre": "Diego Mansilla",
+        "foto": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' aria-hidden='true'><rect width='64' height='64' rx='32' fill='%23FEF3E7'/><circle cx='32' cy='25' r='11' fill='%23E76F2C'/><path d='M10 58c2-10 12-16 22-16s20 6 22 16' fill='%23E76F2C'/></svg>",
+        "telefono": "+5491147771103",
+        "vehiculo": "Moto Yamaha FZ",
+        "rating": 4.7,
+        "entregas": 768
+      },
+      "etaMinutos": null,
+      "motivoDevolucion": "Dirección incorrecta confirmada por el destinatario. Contactanos para reprogramar."
+    },
+    {
+      "codigo": "RV-NN76LK",
+      "cliente": "Daniela Peredo",
+      "direccion": "Av. Cramer 2210, Piso 3°B, Belgrano, CABA",
+      "estado": "entregado",
+      "historial": [
+        { "timestamp": "2026-09-16T08:00:00-03:00", "descripcion": "Pedido registrado en el sistema.", "ubicacion": "Centro de operaciones" },
+        { "timestamp": "2026-09-16T09:10:00-03:00", "descripcion": "Paquete armado y etiquetado.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-16T12:30:00-03:00", "descripcion": "Asignado a Lucas Pereyra.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-16T12:55:00-03:00", "descripcion": "Salió del depósito central.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-16T13:48:00-03:00", "descripcion": "Entregado al destinatario.", "ubicacion": "Av. Cramer 2210, CABA" }
+      ],
+      "repartidor": {
+        "nombre": "Lucas Pereyra",
+        "foto": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' aria-hidden='true'><rect width='64' height='64' rx='32' fill='%23FEF3E7'/><circle cx='32' cy='25' r='11' fill='%23E76F2C'/><path d='M10 58c2-10 12-16 22-16s20 6 22 16' fill='%23E76F2C'/></svg>",
+        "telefono": "+5491147771100",
+        "vehiculo": "Moto Honda CG 150",
+        "rating": 4.9,
+        "entregas": 1284
+      },
+      "etaMinutos": null,
+      "firma": "D. Peredo",
+      "recibidoPor": "Daniela Peredo (titular)"
+    },
+    {
+      "codigo": "RV-HH05TR",
+      "cliente": "Mariano Quinteros",
+      "direccion": "Av. Estado de Israel 4420, Piso 1°A, Villa Crespo, CABA",
+      "estado": "preparando",
+      "historial": [
+        { "timestamp": "2026-09-18T12:30:00-03:00", "descripcion": "Pedido registrado en el sistema.", "ubicacion": "Centro de operaciones" },
+        { "timestamp": "2026-09-18T13:15:00-03:00", "descripcion": "En preparación en el depósito.", "ubicacion": "Depósito Once, CABA" }
+      ],
+      "repartidor": null,
+      "etaMinutos": 50
+    },
+    {
+      "codigo": "RV-BB14WR",
+      "cliente": "Romina Echeverría",
+      "direccion": "Av. Juan B. Justo 5900, Piso 4°B, Caballito, CABA",
+      "estado": "entregado",
+      "historial": [
+        { "timestamp": "2026-09-15T07:30:00-03:00", "descripcion": "Pedido registrado en el sistema.", "ubicacion": "Centro de operaciones" },
+        { "timestamp": "2026-09-15T08:25:00-03:00", "descripcion": "Paquete armado y etiquetado.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-15T11:40:00-03:00", "descripcion": "Asignado a Camila Bustos.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-15T12:05:00-03:00", "descripcion": "Salió del depósito central.", "ubicacion": "Depósito Once, CABA" },
+        { "timestamp": "2026-09-15T13:05:00-03:00", "descripcion": "Entregado en portería.", "ubicacion": "Av. Juan B. Justo 5900, CABA" }
+      ],
+      "repartidor": {
+        "nombre": "Camila Bustos",
+        "foto": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' aria-hidden='true'><rect width='64' height='64' rx='32' fill='%23FEF3E7'/><circle cx='32' cy='25' r='11' fill='%23C25818'/><path d='M10 58c2-10 12-16 22-16s20 6 22 16' fill='%23C25818'/></svg>",
+        "telefono": "+5491147771101",
+        "vehiculo": "Bicicleta eléctrica",
+        "rating": 4.8,
+        "entregas": 932
+      },
+      "etaMinutos": null,
+      "firma": "Portería",
+      "recibidoPor": "Portería (firma en libro de actas)"
     }
   ]
 }

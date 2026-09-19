@@ -1,0 +1,159 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import ConsultaForm from "../../components/ConsultaForm.tsx";
+import RecentLookups from "../../components/RecentLookups.tsx";
+import ScanQRMock from "../../components/ScanQRMock.astro";
+import NotificacionesCard from "../../components/NotificacionesCard.tsx";
+import { getTodosLosPedidos } from "../../lib/pedidos";
+
+const total = getTodosLosPedidos().length;
+
+const codigosDestacados: Array<{
+  codigo: string;
+  cliente: string;
+  estado: string;
+  barrio: string;
+}> = [
+  { codigo: "RV-AB12CD", cliente: "Mariana Sosa", estado: "entregado", barrio: "Almagro" },
+  { codigo: "RV-7F9K22", cliente: "Diego Almirón", estado: "en_camino", barrio: "Palermo" },
+  { codigo: "RV-WX42B7", cliente: "Lucía Reynoso", estado: "demorado", barrio: "La Paternal" },
+  { codigo: "RV-RT12AA", cliente: "Carolina Méndez", estado: "cancelado", barrio: "San Cristóbal" },
+  { codigo: "RV-KK98ZX", cliente: "Iván Rinaldi", estado: "devuelto", barrio: "Boedo" },
+  { codigo: "RV-Q3X9LM", cliente: "Florencia Quiroga", estado: "preparando", barrio: "Caballito" },
+];
+
+const labelEstado: Record<string, string> = {
+  preparando: "Preparando",
+  en_camino: "En camino",
+  entregado: "Entregado",
+  demorado: "Demorado",
+  cancelado: "Cancelado",
+  devuelto: "Devuelto",
+};
+
+const tonesEstado: Record<string, string> = {
+  preparando: "bg-state-preparando-bg text-state-preparando-text ring-state-preparando-ring",
+  en_camino: "bg-state-en-camino-bg text-state-en-camino-text ring-state-en-camino-ring",
+  entregado: "bg-state-entregado-bg text-state-entregado-text ring-state-entregado-ring",
+  demorado: "bg-state-demorado-bg text-state-demorado-text ring-state-demorado-ring",
+  cancelado: "bg-state-cancelado-bg text-state-cancelado-text ring-state-cancelado-ring",
+  devuelto: "bg-state-devuelto-bg text-state-devuelto-text ring-state-devuelto-ring",
+};
+---
+
+<Layout
+  title="Rastrear pedido · Reparto Veloz"
+  description="Ingresá tu código de pedido RV-XXXXXX y mirá el recorrido en tiempo real. Si tenés un código a mano, también podés tipearlo directamente."
+  currentPath="/rastrear"
+>
+  <section
+    aria-labelledby="hub-heading"
+    class="border-b border-gris"
+  >
+    <div
+      aria-hidden="true"
+      class="absolute inset-x-0 -z-10 h-[420px]"
+      style="background:
+        radial-gradient(60% 60% at 10% 20%, rgba(231,111,44,0.10), transparent 70%),
+        radial-gradient(60% 60% at 90% 80%, rgba(27,40,69,0.06), transparent 65%);"
+    ></div>
+
+    <div
+      class="mx-auto grid max-w-6xl grid-cols-1 gap-10 px-4 pb-12 pt-10 sm:px-6 sm:pb-16 sm:pt-14 lg:grid-cols-12 lg:gap-10"
+    >
+      <div class="lg:col-span-6">
+        <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-muted">
+          Rastreo de envíos
+        </p>
+        <h1
+          id="hub-heading"
+          class="mt-3 text-[34px] font-semibold leading-[1.05] tracking-tight text-ink sm:text-[44px] lg:text-[52px]"
+        >
+          Rastreá tu pedido <br class="hidden sm:block" />
+          en tiempo real.
+        </h1>
+        <p
+          class="mt-4 max-w-[48ch] text-[16px] leading-relaxed text-ink-soft sm:text-[17px]"
+        >
+          Tipeá el código <span class="font-mono">RV-XXXXXX</span> que figura en
+          tu comprobante y mirá el recorrido paso a paso.
+        </p>
+
+        <div class="mt-6 rounded-[1.75rem] border border-gris bg-papel-soft p-5 sm:p-6">
+          <ConsultaForm client:load />
+
+          <div class="mt-5 border-t border-gris pt-4">
+            <p
+              class="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-muted"
+            >
+              Búsquedas recientes
+            </p>
+            <div class="mt-2">
+              <RecentLookups client:load />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="space-y-6 lg:col-span-6">
+        <ScanQRMock />
+
+        <NotificacionesCard client:load />
+      </div>
+    </div>
+  </section>
+
+  <section
+    aria-labelledby="destacados-heading"
+    class="border-b border-gris bg-papel-soft py-12 sm:py-16"
+  >
+    <div class="mx-auto max-w-6xl px-4 sm:px-6">
+      <div class="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-muted">
+            Pedidos de muestra
+          </p>
+          <h2
+            id="destacados-heading"
+            class="mt-2 max-w-[24ch] text-[26px] font-semibold tracking-tight text-ink sm:text-[30px]"
+          >
+            Tocá uno y mirá el recorrido.
+          </h2>
+        </div>
+        <p class="text-[12px] text-ink-soft">
+          {total} pedidos en la base · 6 estados representados
+        </p>
+      </div>
+
+      <ul class="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          codigosDestacados.map((row) => (
+            <li>
+              <a
+                href={`/rastrear/${row.codigo}`}
+                class="group flex h-full items-center justify-between gap-3 rounded-2xl border border-gris bg-papel p-4 transition-colors hover:border-accent hover:bg-accent-soft/40"
+              >
+                <div class="min-w-0">
+                  <p class="font-mono text-[14px] tracking-[0.12em] text-navy">
+                    {row.codigo}
+                  </p>
+                  <p class="mt-1 truncate text-[12px] text-ink-soft">
+                    {row.cliente} · {row.barrio}
+                  </p>
+                </div>
+                <span
+                  class:list={[
+                    "shrink-0 inline-flex items-center gap-1 rounded-full px-2.5 py-1 font-mono text-[10px] font-bold uppercase tracking-[0.16em] ring-2",
+                    tonesEstado[row.estado],
+                  ]}
+                >
+                  {labelEstado[row.estado]}
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+</Layout>

@@ -16,27 +16,33 @@ repartidores necesitan que las incidencias se reporten sin llamadas.
 
 ## Solución
 
-Una web minimalista con dos flujos:
+Una web minimalista con tres flujos:
 
-1. **Búsqueda por código** (`RV-XXXXXX`) — el cliente tipea el código, valida
-   formato, ve el estado actual, el timeline, el repartidor asignado y la ETA.
-2. **Página directa por código** (`/rastrear/RV-AB12CD`) — la misma vista, lista
-   para abrir desde un email o un SMS.
+1. **Búsqueda por código** (`RV-XXXXXX`) — el cliente tipea el código en el
+   home, valida formato y cae en la vista de seguimiento.
+2. **Hub de rastreo** (`/rastrear`) — formulario de consulta, búsquedas
+   recientes (localStorage), códigos destacados y un mock de escaneo QR.
+3. **Página directa por código** (`/rastrear/RV-AB12CD`) — la vista de
+   seguimiento completa, lista para abrir desde un email o un SMS.
 
-Cuatro estados bien diferenciados visualmente, con su propio color e icono SVG
+Seis estados bien diferenciados visualmente, con su propio color e icono SVG
 inline (sin librería externa):
 
-| Estado        | Color              | Significado                                      |
-|---------------|--------------------|--------------------------------------------------|
-| `preparando`  | gris azulado       | En el depósito, armando el paquete               |
-| `en_camino`   | naranja (accent)   | Repartidor en ruta con ETA                       |
-| `entregado`   | verde              | Entrega completada con firma del destinatario    |
-| `demorado`    | rojo               | Requiere atención (destinatario ausente, etc.)   |
+| Estado        | Color              | Significado                                              |
+|---------------|--------------------|----------------------------------------------------------|
+| `preparando`  | gris azulado       | En el depósito, armando el paquete                       |
+| `en_camino`   | naranja (accent)   | Repartidor en ruta con ETA                               |
+| `entregado`   | verde              | Entrega completada con firma del destinatario            |
+| `demorado`    | rojo               | Requiere atención (destinatario ausente, etc.)           |
+| `cancelado`   | gris pizarra       | Cancelado antes de salir del depósito                    |
+| `devuelto`    | violeta            | El paquete volvió al depósito central                    |
 
 ## Stack
 
 - **Astro 7.3** (output: `static`, `getStaticPaths` por cada pedido en `pedidos.json`)
-- **Preact 10** vía `@astrojs/preact` — solo dos islas hidratadas
+- **Preact 10** vía `@astrojs/preact` — seis islas hidratadas
+  (`ConsultaForm`, `PedidoTracker`, `RatingForm`, `RecentLookups`,
+  `NotificacionesCard`, `ProblemReport`)
 - **Tailwind CSS 4** vía `@tailwindcss/vite` (sin `tailwind.config.js`,
   todo declarado con `@theme` en `src/styles/global.css`)
 - **TypeScript** estricto (`@astrojs/check` para el typecheck)
@@ -61,25 +67,32 @@ directamente la vista de seguimiento.
 ```
 src/
 ├── components/
-│   ├── Header.astro          # Logo + nav (Inicio, Rastrear)
-│   ├── Footer.astro          # Teléfono, email, horario, demo disclaimer
-│   ├── PedidoTracker.tsx     # isla Preact — badge + timeline + mapa + repartidor + ETA
-│   └── ConsultaForm.tsx      # isla Preact — input + 4 estados (idle/cargando/error/encontrado)
+│   ├── Header.astro            # Logo + nav (Inicio, Rastrear)
+│   ├── Footer.astro            # Teléfono, email, horario, demo disclaimer
+│   ├── ScanQRMock.astro        # Mock estático de escaneo QR para /rastrear
+│   ├── ComprobanteEntrega.astro# Recibo imprimible para pedidos `entregado`
+│   ├── PedidoTracker.tsx       # isla Preact — badge + timeline + mapa + repartidor + ETA
+│   ├── ConsultaForm.tsx        # isla Preact — input + 3 estados (idle/cargando/error)
+│   ├── RatingForm.tsx          # isla Preact — calificación post-entrega
+│   ├── RecentLookups.tsx       # isla Preact — últimos códigos consultados (localStorage)
+│   ├── NotificacionesCard.tsx  # isla Preact — toggles de notificación
+│   └── ProblemReport.tsx       # isla Preact — reporte de problema (demorado/en_camino)
 ├── data/
-│   └── pedidos.json          # 8 pedidos mock, 4 estados representados
+│   └── pedidos.json            # 25 pedidos mock, 6 estados representados
 ├── layouts/
-│   └── Layout.astro          # SEO base, OG, fonts, header, footer, skip-link
+│   └── Layout.astro            # SEO base, OG, fonts, header, footer, skip-link
 ├── lib/
-│   └── pedidos.ts            # buscarPorCodigo + getTodosLosPedidos + helpers
+│   └── pedidos.ts              # buscarPorCodigo + getTodosLosPedidos + helpers
 ├── pages/
-│   ├── index.astro           # Hero + instrucciones + form + "Cómo funciona"
-│   ├── 404.astro             # Friendly not-found + form + WhatsApp
+│   ├── index.astro             # Hero + instrucciones + form + "Cómo funciona"
+│   ├── 404.astro               # Friendly not-found + form + WhatsApp
 │   └── rastrear/
-│       └── [codigo].astro    # getStaticPaths → 1 página estática por pedido
+│       ├── index.astro         # Hub: form + recientes + QR mock + códigos destacados
+│       └── [codigo].astro      # getStaticPaths → 1 página estática por pedido
 ├── styles/
-│   └── global.css            # @theme con paleta y tipografía
+│   └── global.css              # @theme con paleta y tipografía
 └── types/
-    └── pedido.ts             # Tipos compartidos + ESTADO_META
+    └── pedido.ts               # Tipos compartidos + ESTADO_META + ESTADOS_PROBLEMA
 ```
 
 ## Decisiones técnicas
@@ -94,10 +107,11 @@ src/
 - **SVG inline en vez de librería de iconos.** El paquete prohíbe dependencias
   extra de iconos. Los 4 SVGs de estado, el mapa esquemático y la marca son
   inline — cero requests adicionales y se tiñen con `currentColor`.
-- **Sin `@fontsource`.** Tipografías declaradas en `@theme` con fallback
-  `system-ui` para no fethear fonts externos en el primer paint (decisión
-  consciente para la demo: respeta `prefers-reduced-motion` y no bloquea
-  LCP).
+- **Sin `@fontsource` externo, pero sí self-hosted.** Tipografías Plus
+  Jakarta Sans + JetBrains Mono cargadas vía
+  `@fontsource/plus-jakarta-sans` y `@fontsource/jetbrains-mono` con sólo
+  el subset latin (no cyrillic/vietnamese). Self-hosting evita un fetch
+  externo, mejora LCP y mantiene todo offline-friendly sin CDN de fonts.
 - **Estado tipado discriminado.** `ConsultaForm` maneja 4 estados
   (`idle | cargando | error`) con `useState` y TS discriminado. La validación
   inline distingue formato inválido de código inexistente — son dos errores
@@ -121,12 +135,15 @@ src/
 
 ## Performance
 
-- 2 islas Preact total: `ConsultaForm` (~10 KB) + `PedidoTracker` (~11 KB).
+- 6 islas Preact total: `ConsultaForm`, `PedidoTracker`, `RatingForm`,
+  `RecentLookups`, `NotificacionesCard`, `ProblemReport`. Se hidratan sólo
+  en la página donde se usan (`ConsultaForm` en home + hub; el resto, en
+  sus rutas específicas).
 - Runtime Preact compartido (~10 KB), chunks cacheables.
-- Sin fonts externas bloqueantes.
-- CSS único (`pedidos.CGlxgmSF.css`, ~25 KB) con purge automático de Tailwind.
-- Páginas de tracking prerenderizadas a HTML estático: cero JS si el usuario
-  no interactúa con el form o el badge.
+- Fonts self-hosted (subset), sin requests externos bloqueantes.
+- CSS único con purge automático de Tailwind.
+- Páginas de tracking prerenderizadas a HTML estático: cero JS si el
+  usuario no interactúa con el form, el badge o las islas.
 
 ## Disclaimer
 

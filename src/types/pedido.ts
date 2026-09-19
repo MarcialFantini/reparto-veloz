@@ -3,7 +3,13 @@
  * Imported by data files, helpers, and Preact components.
  */
 
-export type EstadoPedido = "preparando" | "en_camino" | "entregado" | "demorado";
+export type EstadoPedido =
+  | "preparando"
+  | "en_camino"
+  | "entregado"
+  | "demorado"
+  | "cancelado"
+  | "devuelto";
 
 export interface HistorialEvento {
   /** ISO timestamp. */
@@ -20,6 +26,12 @@ export interface Repartidor {
   foto: string;
   /** Phone number as E.164-ish string, e.g. "+5491141234567". */
   telefono: string;
+  /** Vehicle description, e.g. "Moto Honda CG 150". */
+  vehiculo?: string;
+  /** Average rating from past deliveries, 0-5. */
+  rating?: number;
+  /** Completed deliveries counter (seed). */
+  entregas?: number;
 }
 
 export interface Reprogramado {
@@ -37,10 +49,20 @@ export interface Pedido {
   estado: EstadoPedido;
   historial: HistorialEvento[];
   repartidor: Repartidor | null;
-  /** Estimated minutes until delivery. null when status === "entregado". */
+  /** Estimated minutes until delivery. null when terminal (entregado, cancelado, devuelto). */
   etaMinutos: number | null;
   /** Set when the recipient rescheduled the visit (demorado → preparando). */
   reprogramado?: Reprogramado | null;
+  /** Reason for the delay, shown on demorado orders. */
+  motivoDemora?: string;
+  /** Reason for cancellation, shown on cancelado orders. */
+  motivoCancelacion?: string;
+  /** Reason for return, shown on devuelto orders. */
+  motivoDevolucion?: string;
+  /** Signature short id / initials, set on entregado orders. */
+  firma?: string;
+  /** Who actually received the package (titular, portería, etc.). */
+  recibidoPor?: string;
 }
 
 /** Helpful UI metadata for each estado. Kept here so the same
@@ -88,4 +110,36 @@ export const ESTADO_META: Record<EstadoPedido, EstadoMeta> = {
     ringClass: "ring-state-demorado-ring",
     dotClass: "bg-state-demorado-dot",
   },
+  cancelado: {
+    label: "Cancelado",
+    descripcion: "Este pedido fue cancelado antes de salir del depósito.",
+    bgClass: "bg-state-cancelado-bg",
+    textClass: "text-state-cancelado-text",
+    ringClass: "ring-state-cancelado-ring",
+    dotClass: "bg-state-cancelado-dot",
+  },
+  devuelto: {
+    label: "Devuelto",
+    descripcion: "El paquete volvió al depósito central.",
+    bgClass: "bg-state-devuelto-bg",
+    textClass: "text-state-devuelto-text",
+    ringClass: "ring-state-devuelto-ring",
+    dotClass: "bg-state-devuelto-dot",
+  },
 };
+
+/** Statuses where the recipient can report a problem. */
+export const ESTADOS_PROBLEMA: ReadonlyArray<EstadoPedido> = [
+  "demorado",
+  "en_camino",
+];
+
+/** Statuses where the live ETA simulation toggle is meaningful. */
+export const ESTADOS_LIVE: ReadonlyArray<EstadoPedido> = ["en_camino"];
+
+/** Statuses considered terminal — no live ETA, no problem report. */
+export const ESTADOS_TERMINALES: ReadonlyArray<EstadoPedido> = [
+  "entregado",
+  "cancelado",
+  "devuelto",
+];

@@ -1,0 +1,187 @@
+---
+/**
+ * Printable receipt / comprobante de entrega.
+ * Renders for `entregado` orders. The `rv-comprobante` class is targeted
+ * by `@media print` in src/styles/global.css so the receipt prints clean:
+ * white background, no shadows, no header/footer, no buttons.
+ */
+import type { Pedido } from "../types/pedido";
+import { ESTADO_META } from "../types/pedido";
+
+interface Props {
+  pedido: Pedido;
+}
+
+const { pedido } = Astro.props;
+
+const ultimoEvento = pedido.historial[pedido.historial.length - 1];
+const fechaEntrega = ultimoEvento
+  ? new Date(ultimoEvento.timestamp).toLocaleString("es-AR", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    })
+  : "—";
+
+const emitido = new Date().toLocaleString("es-AR", {
+  day: "2-digit",
+  month: "long",
+  year: "numeric",
+});
+
+const meta = ESTADO_META[pedido.estado];
+---
+
+<section
+  id="comprobante-entrega"
+  aria-labelledby="comprobante-heading"
+  class="rv-comprobante mt-10 rounded-[1.75rem] border border-gris bg-papel-soft p-6 sm:p-8"
+>
+  <header class="flex flex-wrap items-start justify-between gap-4 border-b border-gris pb-5">
+    <div class="flex items-center gap-3">
+      <span
+        aria-hidden="true"
+        class="grid h-10 w-10 place-items-center rounded-xl bg-navy text-white ring-1 ring-navy-soft/40"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="h-5 w-5"
+        >
+          <path d="M2 7h11v9H2z"></path>
+          <path d="M13 10h4l3 3v3h-7"></path>
+          <circle cx="6.5" cy="17.5" r="1.6"></circle>
+          <circle cx="17" cy="17.5" r="1.6"></circle>
+        </svg>
+      </span>
+      <div>
+        <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-muted">
+          Comprobante de entrega
+        </p>
+        <h2
+          id="comprobante-heading"
+          class="text-[18px] font-semibold tracking-tight text-navy sm:text-[20px]"
+        >
+          Reparto Veloz SRL
+        </h2>
+      </div>
+    </div>
+
+    <span
+      class="inline-flex items-center gap-2 rounded-full px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.16em] ring-2"
+      class:list={[`${meta.bgClass} ${meta.textClass} ${meta.ringClass}`]}
+      aria-label={`Estado del envío: ${meta.label}`}
+    >
+      {meta.label}
+    </span>
+  </header>
+
+  <dl class="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
+    <div>
+      <dt class="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-muted">
+        Código de pedido
+      </dt>
+      <dd class="mt-1 font-mono text-[18px] font-semibold tabular tracking-[0.12em] text-navy">
+        {pedido.codigo}
+      </dd>
+    </div>
+    <div>
+      <dt class="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-muted">
+        Entregado el
+      </dt>
+      <dd class="mt-1 text-[14px] font-semibold text-navy">{fechaEntrega}</dd>
+    </div>
+    <div>
+      <dt class="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-muted">
+        Destinatario
+      </dt>
+      <dd class="mt-1 text-[14px] font-semibold text-navy">{pedido.cliente}</dd>
+    </div>
+    <div>
+      <dt class="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-muted">
+        Dirección de entrega
+      </dt>
+      <dd class="mt-1 text-[14px] text-navy">{pedido.direccion}</dd>
+    </div>
+    {
+      pedido.recibidoPor && (
+        <div>
+          <dt class="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-muted">
+            Recibido por
+          </dt>
+          <dd class="mt-1 text-[14px] text-navy">{pedido.recibidoPor}</dd>
+        </div>
+      )
+    }
+    {
+      pedido.firma && (
+        <div>
+          <dt class="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-muted">
+            Firma / confirmación
+          </dt>
+          <dd class="mt-1 font-mono text-[14px] uppercase tracking-[0.12em] text-navy">
+            {pedido.firma}
+          </dd>
+        </div>
+      )
+    }
+    {
+      pedido.repartidor && (
+        <div class="sm:col-span-2">
+          <dt class="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-muted">
+            Repartidor
+          </dt>
+          <dd class="mt-1 text-[14px] text-navy">
+            {pedido.repartidor.nombre}
+            {pedido.repartidor.vehiculo && (
+              <span class="text-ink-soft"> · {pedido.repartidor.vehiculo}</span>
+            )}
+          </dd>
+        </div>
+      )
+    }
+  </dl>
+
+  <section class="mt-6 border-t border-gris pt-5">
+    <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-muted">
+      Línea de tiempo
+    </p>
+    <ol class="mt-3 space-y-1.5">
+      {
+        pedido.historial.map((evento) => (
+          <li class="flex flex-wrap items-baseline gap-x-3 gap-y-0.5 text-[12px]">
+            <span class="font-mono tabular text-ink-muted">
+              {new Date(evento.timestamp).toLocaleString("es-AR", {
+                day: "2-digit",
+                month: "short",
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: false,
+              })}
+            </span>
+            <span class="font-semibold text-navy">{evento.descripcion}</span>
+            <span class="text-ink-soft">· {evento.ubicacion}</span>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <footer class="mt-6 flex flex-wrap items-end justify-between gap-3 border-t border-gris pt-4 text-[11px] text-ink-soft">
+    <p>
+      Comprobante emitido el <span class="font-mono">{emitido}</span>. Este
+      documento certifica la entrega del pedido arriba indicado.
+    </p>
+    <p class="font-mono uppercase tracking-[0.18em]">
+      Reparto Veloz SRL · CUIT 30-71234567-8
+    </p>
+  </footer>
+</section>

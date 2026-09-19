@@ -948,7 +948,7 @@ export default function PedidoTracker({ pedido }: Props) {
               const dotInner = isCurrent || isCurrentDelayed ? (
                 <span aria-hidden="true" class={`h-2 w-2 rounded-full ${meta.dotClass}`}></span>
               ) : (
-                <IconoCheck className={`h-3 w-3 ${i === pedidoActual.historial.length - 1 && pedidoActual.estado === "entregado" ? "text-white" : "text-white"}`} />
+                <IconoCheck className={`h-3 w-3 text-white`} />
               );
               return (
                 <li class="relative flex gap-4 pb-6 last:pb-0">
@@ -1079,5 +1079,9 @@ function estadoRecorridoLabel(estado: EstadoPedido): string {
       return "Recorrido en pausa";
     case "entregado":
       return "Recorrido completado";
+    case "cancelado":
+      return "Sin recorrido activo";
+    case "devuelto":
+      return "Recorrido revertido";
   }
 }

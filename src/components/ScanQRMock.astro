@@ -1,0 +1,127 @@
+---
+/**
+ * Static "fake camera" QR scan mockup for the home page.
+ * No actual camera access — this is a brand illustration that signals
+ * "podés escanear el QR del ticket", paired with a CTA that opens
+ * the tracking flow.
+ */
+---
+
+<div class="rounded-[1.75rem] border border-gris bg-papel-soft p-5 sm:p-6">
+  <div class="flex items-start justify-between gap-3">
+    <div>
+      <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-muted">
+        Atajo rápido
+      </p>
+      <h3 class="mt-1 text-[18px] font-semibold tracking-tight text-navy sm:text-[20px]">
+        Escaneá el QR de tu ticket
+      </h3>
+      <p class="mt-1 max-w-[40ch] text-[13px] leading-relaxed text-ink-soft">
+        Apuntá la cámara al código QR del comprobante y te llevamos directo a
+        la vista de seguimiento.
+      </p>
+    </div>
+    <span
+      aria-hidden="true"
+      class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-ink text-papel ring-1 ring-ink"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.6"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="h-5 w-5"
+      >
+        <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+        <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+        <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+        <line x1="14" y1="14" x2="14" y2="17"></line>
+        <line x1="17" y1="14" x2="17" y2="14"></line>
+        <line x1="20" y1="14" x2="20" y2="20"></line>
+        <line x1="14" y1="20" x2="20" y2="20"></line>
+      </svg>
+    </span>
+  </div>
+
+  <div
+    class="relative mt-5 aspect-[4/3] w-full overflow-hidden rounded-2xl border border-gris bg-papel"
+    aria-hidden="true"
+  >
+    <div class="absolute inset-0 bg-[linear-gradient(135deg,#fef3e7_0%,#ffffff_55%,#eef1f6_100%)]"></div>
+
+    <div class="absolute inset-6 grid grid-cols-3 grid-rows-3 gap-1.5">
+      {
+        Array.from({ length: 9 }).map((_, i) => (
+          <div
+            class="rounded-md"
+            class:list={[
+              i % 2 === 0 ? "bg-ink/85" : "bg-ink/30",
+              i === 4 ? "bg-ink/55" : "",
+            ]}
+          />
+        ))
+      }
+    </div>
+
+    <span
+      class="pointer-events-none absolute inset-6 rounded-md ring-2 ring-accent"
+    ></span>
+
+    <span
+      class="pointer-events-none absolute left-6 right-6 top-6 h-0.5 bg-accent/90 shadow-[0_0_12px_rgba(231,111,44,0.6)]"
+      style="animation: rv-scan-line 2.6s ease-in-out infinite;"
+    ></span>
+
+    <span
+      class="pointer-events-none absolute inset-6 rounded-md ring-2 ring-accent/40"
+      style="animation: rv-scan-ring 2.6s ease-in-out infinite;"
+    ></span>
+  </div>
+
+  <div class="mt-4 flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
+    <p class="text-[12px] text-ink-soft">
+      O tipeá el código en el formulario de la derecha.
+    </p>
+    <a
+      href="/#rastrear"
+      class="inline-flex h-10 items-center gap-2 rounded-full bg-papel px-4 text-[12px] font-semibold uppercase tracking-[0.14em] text-ink ring-1 ring-gris transition-colors hover:text-accent-deep hover:ring-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy"
+    >
+      Ir al formulario
+      <span aria-hidden="true">→</span>
+    </a>
+  </div>
+</div>
+
+<style>
+  @keyframes rv-scan-line {
+    0%,
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    50% {
+      transform: translateY(calc(100% - 0.125rem));
+      opacity: 0.7;
+    }
+  }
+  @keyframes rv-scan-ring {
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 0.7;
+    }
+    50% {
+      transform: scale(1.04);
+      opacity: 0.3;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [style*="rv-scan-line"],
+    [style*="rv-scan-ring"] {
+      animation: none !important;
+    }
+  }
+</style>

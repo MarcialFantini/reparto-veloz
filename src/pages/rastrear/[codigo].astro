@@ -2,11 +2,14 @@
 import Layout from "../../layouts/Layout.astro";
 import PedidoTracker from "../../components/PedidoTracker.tsx";
 import RatingForm from "../../components/RatingForm.tsx";
+import ProblemReport from "../../components/ProblemReport.tsx";
+import ComprobanteEntrega from "../../components/ComprobanteEntrega.astro";
 import {
   buscarPorCodigo,
   getTodosLosCodigos,
   normalizarCodigo,
 } from "../../lib/pedidos";
+import { ESTADOS_PROBLEMA } from "../../types/pedido";
 import type { Pedido } from "../../types/pedido";
 
 // Astro static-path generation. One page per codigo at build time.
@@ -22,7 +25,18 @@ const codigo = normalizarCodigo(rawParam);
 // getStaticPaths filtered by codigo), so buscarPorCodigo always resolves.
 // We still call it instead of indexing to keep the page logic honest
 // for the static-site 404 path (404.astro covers unknown codes).
+//
+// Defensive note: `pedido` may still resolve to `null` if `pedidos.json`
+// is edited between `getStaticPaths` and the actual page render — e.g.
+// someone removes a codigo locally right before committing. The inline
+// fallback below catches that race so we never render a half-broken
+// page; 404.astro is the primary surface for URLs that never matched.
 const pedido: Pedido | null = buscarPorCodigo(codigo);
+
+// Where the recipient can still surface an incident (en_camino / demorado).
+const permiteReporte = pedido
+  ? ESTADOS_PROBLEMA.includes(pedido.estado)
+  : false;
 ---
 
 <Layout
@@ -51,6 +65,20 @@ const pedido: Pedido | null = buscarPorCodigo(codigo);
           />
         </div>
 
+        {
+          permiteReporte && (
+            <div class="mt-10">
+              <ProblemReport codigo={pedido.codigo} client:load />
+            </div>
+          )
+        }
+
+        {
+          pedido.estado === "entregado" && (
+            <ComprobanteEntrega pedido={pedido} />
+          )
+        }
+
         <div class="mt-10 flex flex-col items-start justify-between gap-3 rounded-2xl border border-gris bg-papel-soft p-5 sm:flex-row sm:items-center sm:p-6">
           <div>
             <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-muted">
@@ -72,6 +100,10 @@ const pedido: Pedido | null = buscarPorCodigo(codigo);
         </div>
       </section>
     ) : (
+      /* Defensive inline not-found. 404.astro is the canonical handler
+       * for URLs that were never generated; this branch only covers the
+       * race where `pedidos.json` was edited between getStaticPaths and
+       * page render (a codigo removed locally before deploy). */
       <section class="mx-auto max-w-2xl px-4 pb-16 pt-12 sm:px-6 sm:pb-20 sm:pt-16">
         <div class="rounded-2xl border border-gris bg-papel-soft p-6 sm:p-8">
           <div

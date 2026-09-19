@@ -107,6 +107,16 @@
   --color-state-demorado-ring: #fca5a5;
   --color-state-demorado-dot: #dc2626;
 
+  --color-state-cancelado-bg: #f1f5f9;
+  --color-state-cancelado-text: #475569;
+  --color-state-cancelado-ring: #cbd5e1;
+  --color-state-cancelado-dot: #64748b;
+
+  --color-state-devuelto-bg: #ede9fe;
+  --color-state-devuelto-text: #4c1d95;
+  --color-state-devuelto-ring: #c4b5fd;
+  --color-state-devuelto-dot: #7c3aed;
+
   /* ---- Typography — Plus Jakarta Sans (UI) + JetBrains Mono (codes) ---- */
   --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system,
     "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -178,4 +188,73 @@ body {
 .surface-navy {
   background-color: var(--color-navy);
   color: var(--color-ink-inverse);
+}
+
+/* ===========================================================
+ * Live-mode keyframe — used by the "Ver repartidor en vivo"
+ * toggle in PedidoTracker. Runs the courier dot along the
+ * route twice as fast as the static animateMotion fallback
+ * and keeps the trail transparent for a "live GPS" feel.
+ * =========================================================== */
+@keyframes rv-live-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 0.55;
+  }
+}
+
+.rv-live-dot {
+  animation: rv-live-pulse 0.9s ease-in-out infinite;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rv-live-dot {
+    animation: none;
+  }
+}
+
+/* Used by the comprobante card so the "live" indicator can
+ * sit on the printed page when the user exports to PDF. */
+@media print {
+  /* Hide navigation / interactive bits on print. */
+  header.sticky,
+  footer,
+  .no-print,
+  .rv-no-print {
+    display: none !important;
+  }
+
+  /* Reset background to white so the comprobante prints clean. */
+  html,
+  body {
+    background: #ffffff !important;
+    color: #0f1112 !important;
+  }
+
+  /* Comprobante: span the full page, no shadow, no soft cards. */
+  .rv-comprobante {
+    border: 1px solid #0f1112 !important;
+    background: #ffffff !important;
+    box-shadow: none !important;
+    page-break-inside: avoid;
+  }
+
+  a {
+    color: inherit !important;
+    text-decoration: none !important;
+  }
+
+  /* Each section inside the comprobante should not break. */
+  .rv-comprobante section,
+  .rv-comprobante header,
+  .rv-comprobante dl {
+    page-break-inside: avoid;
+  }
 }

@@ -23,7 +23,7 @@ const EJEMPLO_CODIGO = "RV-AB12CD";
       style="background:
         radial-gradient(60% 50% at 12% 18%, rgba(231,111,44,0.10), transparent 70%),
         radial-gradient(60% 60% at 92% 90%, rgba(15,17,18,0.06), transparent 65%),
-        linear-gradient(180deg, #F8F6F2, #FBFAF6);"
+        linear-gradient(180deg, var(--color-mist), #FFFFFF);"
     >
     </div>
 
@@ -276,13 +276,13 @@ const EJEMPLO_CODIGO = "RV-AB12CD";
         id="estados-heading"
         class="mt-2 max-w-[28ch] text-[28px] font-semibold tracking-tight text-ink sm:text-[34px]"
       >
-        Cuatro estados. Cero ambigüedad.
+        Seis estados. Cero ambigüedad.
       </h2>
       <p class="mt-3 max-w-[58ch] text-[14px] leading-relaxed text-ink-soft">
         Cada pedido pasa por estos estados, en este orden. Cuando algo se desvía, lo marcamos como demorado y explicamos por qué.
       </p>
 
-      <ol class="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 sm:gap-5">
+      <ol class="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 sm:gap-5">
         {
           [
             {
@@ -313,6 +313,20 @@ const EJEMPLO_CODIGO = "RV-AB12CD";
               desc: "El envío tuvo una pausa. Mostramos el motivo y el nuevo ETA.",
               detail: "ETA recalculado",
             },
+            {
+              n: "05",
+              label: "Cancelado",
+              tone: "cancelado",
+              desc: "El envío fue anulado antes de salir del depósito. Te devolvemos el importe.",
+              detail: "Cierre sin entrega",
+            },
+            {
+              n: "06",
+              label: "Devuelto",
+              tone: "devuelto",
+              desc: "El paquete volvió al depósito central tras un intento fallido.",
+              detail: "Reasignación en curso",
+            },
           ].map((s) => (
             <li class="rounded-2xl border border-gris bg-papel p-5 sm:p-6">
               <div class="flex items-center justify-between gap-3">
@@ -326,6 +340,8 @@ const EJEMPLO_CODIGO = "RV-AB12CD";
                     s.tone === "en_camino" && "bg-state-en-camino-bg text-state-en-camino-text ring-state-en-camino-ring",
                     s.tone === "entregado" && "bg-state-entregado-bg text-state-entregado-text ring-state-entregado-ring",
                     s.tone === "demorado" && "bg-state-demorado-bg text-state-demorado-text ring-state-demorado-ring",
+                    s.tone === "cancelado" && "bg-state-cancelado-bg text-state-cancelado-text ring-state-cancelado-ring",
+                    s.tone === "devuelto" && "bg-state-devuelto-bg text-state-devuelto-text ring-state-devuelto-ring",
                   ]}
                 >
                   {s.label}
