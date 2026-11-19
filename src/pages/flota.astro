@@ -1,0 +1,402 @@
+---
+import Layout from '../layouts/Layout.astro';
+import CityMap from '../components/CityMap.astro';
+import ActivityFeed from '../components/ActivityFeed.astro';
+import { MAP_SIZE } from '../data/map';
+import { DRIVERS } from '../data/catalog';
+---
+
+<Layout title="Flota en vivo · Logística Andina (demo)" view="flota" page="fleet">
+  <div class="wrap">
+    <div class="ops-head">
+      <div>
+        <p class="eyebrow">Centro de control · Córdoba</p>
+        <h1 class="ops-title display">Flota en vivo</h1>
+        <p class="ops-lead">Todos los camiones en ruta, moviéndose al ritmo del reloj. Tocá un camión para ver chofer, carga y próximas paradas.</p>
+      </div>
+    </div>
+
+    <div class="kpis" data-fleet-kpis>
+      <div class="kpi kpi--accent"><span class="kpi__label">Camiones en ruta</span><span class="kpi__value display" data-kpi="active">–</span></div>
+      <div class="kpi"><span class="kpi__label">Detenidos por incidencia</span><span class="kpi__value display" data-kpi="stuck">–</span></div>
+      <div class="kpi"><span class="kpi__label">Bultos en la calle</span><span class="kpi__value display" data-kpi="parcels">–</span></div>
+      <div class="kpi"><span class="kpi__label">Esperando salida</span><span class="kpi__value display" data-kpi="waiting">–</span></div>
+    </div>
+
+    <div class="fleet ops-grid">
+      <section class="panel fleet__map" aria-labelledby="fleet-map-title">
+        <h2 class="sr-only" id="fleet-map-title">Mapa de la flota</h2>
+        <svg class="fleet__svg" viewBox={`0 0 ${MAP_SIZE} ${MAP_SIZE}`} role="group" aria-label="Mapa de Córdoba con los camiones en ruta" data-fleet-svg>
+          <CityMap />
+          <g data-fleet-routes></g>
+          <g data-fleet-stops></g>
+          <g data-fleet-trucks></g>
+        </svg>
+        <div class="fleet__legend" aria-hidden="true">
+          <span><i class="lg lg--move"></i>En ruta</span>
+          <span><i class="lg lg--stuck"></i>Detenido</span>
+          <span><i class="lg lg--sel"></i>Seleccionado</span>
+        </div>
+      </section>
+
+      <aside class="panel fleet__detail" aria-live="polite" data-fleet-detail>
+        <p class="fleet__empty">Elegí un camión en el mapa o en la lista para ver su detalle.</p>
+      </aside>
+
+      <section class="panel fleet__list" aria-labelledby="fleet-list-title">
+        <h2 class="panel__title" id="fleet-list-title">Camiones en ruta <span class="badge badge--muted" data-fleet-count>0</span></h2>
+        <ul class="trucks" data-fleet-list>
+          {
+            Array.from({ length: 4 }, () => (
+              <li class="skeleton-only trucks__sk">
+                <span class="skeleton" style="width: 40px; height: 40px; border-radius: 50%" />
+                <span class="skeleton" style="height: 14px; width: 60%" />
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <div class="fleet__activity">
+        <ActivityFeed limit={10} />
+      </div>
+    </div>
+
+    <template data-driver-options>
+      {DRIVERS.map((d) => <option value={d.id}>{d.name} · {d.truck}</option>)}
+    </template>
+  </div>
+</Layout>
+
+<style is:global>
+  .fleet__svg {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+  }
+
+  .froute {
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 2;
+    stroke-dasharray: 2 5;
+    stroke-linecap: round;
+    opacity: 0;
+    transition: opacity 200ms;
+  }
+
+  .froute.is-selected {
+    opacity: 1;
+    stroke: var(--st-en-camino);
+    stroke-width: 5;
+    stroke-dasharray: none;
+  }
+
+  .fstop circle {
+    fill: var(--card);
+    stroke: var(--ink);
+    stroke-width: 2.5;
+  }
+
+  .fstop.is-final circle {
+    fill: var(--st-en-camino);
+  }
+
+  .fstop text {
+    font-family: var(--display);
+    font-size: 10px;
+    font-weight: 600;
+    text-anchor: middle;
+    fill: var(--ink);
+  }
+
+  .fstop.is-final text {
+    fill: #fff;
+  }
+
+  .ftruck {
+    cursor: pointer;
+    outline: none;
+  }
+
+  .ftruck__halo {
+    fill: var(--st-en-camino);
+    opacity: 0;
+  }
+
+  .ftruck__bg {
+    fill: var(--card);
+    stroke: var(--ink);
+    stroke-width: 2;
+  }
+
+  .ftruck__cargo {
+    fill: var(--ink);
+  }
+
+  .ftruck__cab {
+    fill: var(--st-preparando);
+    stroke: var(--ink);
+    stroke-width: 1.5;
+  }
+
+  .ftruck__tag rect {
+    fill: var(--ink);
+  }
+
+  .ftruck__tag text {
+    font-family: var(--body);
+    font-size: 8px;
+    font-weight: 800;
+    fill: var(--paper);
+    text-anchor: middle;
+  }
+
+  .ftruck.is-stuck .ftruck__bg {
+    fill: #b3261e;
+  }
+
+  .ftruck.is-stuck .ftruck__tag rect {
+    fill: #b3261e;
+  }
+
+  .ftruck.is-selected .ftruck__halo {
+    opacity: 0.35;
+  }
+
+  .ftruck.is-selected .ftruck__bg {
+    stroke-width: 3;
+  }
+
+  .ftruck:focus-visible .ftruck__bg {
+    stroke: var(--st-recibido);
+    stroke-width: 4;
+  }
+
+  .trucks {
+    display: grid;
+    gap: 4px;
+    margin: 12px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .trucks__sk {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px;
+  }
+
+  .trow {
+    display: grid;
+    grid-template-columns: 40px 1fr auto;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 8px;
+    border: 0;
+    border-radius: 12px;
+    background: transparent;
+    text-align: left;
+  }
+
+  .trow:hover {
+    background: var(--paper-2);
+  }
+
+  .trow[aria-pressed='true'] {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .trow[aria-pressed='true'] .trow__sub {
+    color: var(--line);
+  }
+
+  .trow__main {
+    display: grid;
+    min-width: 0;
+  }
+
+  .trow__name {
+    font-weight: 800;
+    font-size: 0.9375rem;
+  }
+
+  .trow__sub {
+    font-size: 0.8125rem;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .trow__eta {
+    font-family: var(--display);
+    font-size: 1.35rem;
+    text-align: right;
+  }
+
+  .trow__bar {
+    grid-column: 2 / -1;
+    height: 5px;
+    border-radius: 3px;
+    background: var(--paper-2);
+    overflow: hidden;
+  }
+
+  .trow__bar span {
+    display: block;
+    height: 100%;
+    background: var(--st-en-camino);
+    transform-origin: 0 50%;
+  }
+
+  .trow.is-stuck .trow__bar span {
+    background: #b3261e;
+  }
+
+  .fleet__empty {
+    color: var(--muted);
+  }
+
+  .fdetail {
+    display: grid;
+    gap: 14px;
+  }
+
+  .fdetail__who {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .fdetail__who .avatar {
+    width: 52px;
+    height: 52px;
+    font-size: 1.3rem;
+  }
+
+  .fdetail__name {
+    font-weight: 800;
+    font-size: 1.125rem;
+  }
+
+  .fdetail__meta {
+    font-size: 0.8125rem;
+    color: var(--muted);
+  }
+
+  .fdetail__eta {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .fdetail__eta .display {
+    font-size: 2.6rem;
+  }
+
+  .fdetail__eta.is-stuck {
+    background: #b3261e;
+  }
+
+  .fdetail__section {
+    font-size: 0.8125rem;
+    font-weight: 800;
+    color: var(--muted);
+  }
+
+  .fdetail__stops,
+  .fdetail__items {
+    display: grid;
+    gap: 4px;
+    margin: 6px 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.875rem;
+  }
+
+  .fdetail__stops li {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 6px 0;
+    border-bottom: 1px dashed var(--line);
+  }
+
+  .fdetail__stops li.is-done {
+    color: var(--muted);
+    text-decoration: line-through;
+  }
+
+  .fdetail__items li {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .fdetail__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .fdetail__reassign {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    gap: 8px;
+  }
+
+  .fdetail__reassign .field {
+    flex: 1 1 180px;
+  }
+
+  .fleet__legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 10px;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--ink-2);
+  }
+
+  .lg {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin-right: 6px;
+    vertical-align: -1px;
+    border-radius: 50%;
+    border: 2px solid var(--ink);
+    background: var(--card);
+  }
+
+  .lg--stuck {
+    background: #b3261e;
+  }
+
+  .lg--sel {
+    background: var(--st-en-camino);
+  }
+
+  @media (min-width: 1000px) {
+    .fleet {
+      grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+      grid-template-areas: 'map detail' 'map list' 'activity list';
+      align-items: start;
+    }
+    .fleet__map { grid-area: map; }
+    .fleet__detail { grid-area: detail; }
+    .fleet__list { grid-area: list; }
+    .fleet__activity { grid-area: activity; }
+  }
+</style>

@@ -1,154 +1,92 @@
-# 05 — Tracker de pedidos · Reparto Veloz
+# tracker-pedidos · Logística Andina (demo)
 
-> Demo de portfolio: sistema de seguimiento de pedidos para un cliente ficticio
-> de delivery en CABA. Construido 100% estático (sin backend) con Preact, Tailwind
-> v4 y Astro 7.
+Demo de portfolio: un sistema de gestión de transporte (TMS) para **Logística Andina**, un mayorista ficticio de Córdoba, Argentina. Tiene una vista para el cliente, que sigue su pedido desde el celular, y un centro de control con flota en vivo, pedidos, depósito, repartidores, métricas e incidencias. Todo se mueve con un único reloj simulado.
 
----
-
-## Problema
-
-En el sector de delivery urbano, la consulta por WhatsApp sigue siendo el canal
-principal para "¿dónde está mi pedido?". Eso sobrecarga al equipo de soporte y
-frena la operación. Los clientes necesitan **una vista directa del estado del
-envío** — con código de pedido, sin login, accesible desde el celular — y los
-repartidores necesitan que las incidencias se reporten sin llamadas.
-
-## Solución
-
-Una web minimalista con tres flujos:
-
-1. **Búsqueda por código** (`RV-XXXXXX`) — el cliente tipea el código en el
-   home, valida formato y cae en la vista de seguimiento.
-2. **Hub de rastreo** (`/rastrear`) — formulario de consulta, búsquedas
-   recientes (localStorage), códigos destacados y un mock de escaneo QR.
-3. **Página directa por código** (`/rastrear/RV-AB12CD`) — la vista de
-   seguimiento completa, lista para abrir desde un email o un SMS.
-
-Seis estados bien diferenciados visualmente, con su propio color e icono SVG
-inline (sin librería externa):
-
-| Estado        | Color              | Significado                                              |
-|---------------|--------------------|----------------------------------------------------------|
-| `preparando`  | gris azulado       | En el depósito, armando el paquete                       |
-| `en_camino`   | naranja (accent)   | Repartidor en ruta con ETA                               |
-| `entregado`   | verde              | Entrega completada con firma del destinatario            |
-| `demorado`    | rojo               | Requiere atención (destinatario ausente, etc.)           |
-| `cancelado`   | gris pizarra       | Cancelado antes de salir del depósito                    |
-| `devuelto`    | violeta            | El paquete volvió al depósito central                    |
+> Marca, pedidos, clientes y choferes son ficticios. La interfaz muestra siempre la marca "Demo".
 
 ## Stack
 
-- **Astro 7.3** (output: `static`, `getStaticPaths` por cada pedido en `pedidos.json`)
-- **Preact 10** vía `@astrojs/preact` — seis islas hidratadas
-  (`ConsultaForm`, `PedidoTracker`, `RatingForm`, `RecentLookups`,
-  `NotificacionesCard`, `ProblemReport`)
-- **Tailwind CSS 4** vía `@tailwindcss/vite` (sin `tailwind.config.js`,
-  todo declarado con `@theme` en `src/styles/global.css`)
-- **TypeScript** estricto (`@astrojs/check` para el typecheck)
-- **Sin backend** — los datos son mocks en `src/data/pedidos.json`
-- **Sin librería de iconos** — todos los SVG son inline
+- Astro 7 (salida 100 % estática) + TypeScript estricto
+- CSS con variables, sin framework de UI
+- GSAP 3 con Flip, MotionPathPlugin y ScrollToPlugin; View Transitions de Astro (`ClientRouter`); SVG, CSS 3D y canvas
+- Sin backend, sin APIs, sin mapas de terceros. Todo corre en el navegador.
 
 ## Cómo correrlo
 
+Requiere Node 22.12 o superior y pnpm.
+
 ```bash
-pnpm install        # 1 sola vez
-pnpm dev            # dev server en http://localhost:4321
-pnpm build          # genera dist/ estático
-pnpm preview        # sirve dist/ para verificar
-pnpm astro check    # type-check + diagnóstico Astro → 0 errores esperado
+pnpm install
+pnpm dev        # http://localhost:4321
+pnpm build      # genera dist/
+pnpm preview    # sirve dist/
+pnpm check      # astro check (tipos)
 ```
 
-Para probar, tirá el código `RV-AB12CD` en el formulario del home — abre
-directamente la vista de seguimiento.
+## Vistas
 
-## Estructura
+| Ruta | Qué hace |
+| --- | --- |
+| `/` | **Cliente**: escribís un número de pedido y el número viaja a la ficha con una View Transition. Mobile first. |
+| `/pedido/LA-xxxx` | **Ficha del pedido**: etapas con microilustraciones, mapa en vivo con el camión sobre la ruta, empaque en una caja 3D, firma con el dedo y calificación. |
+| `/flota` | **Flota**: todos los camiones en ruta moviéndose a la vez sobre el mapa. Al tocar uno ves chofer, carga y próximas paradas; podés reasignarlo o resolver su incidencia. |
+| `/pedidos` | **Pedidos**: tabla con búsqueda, filtros por estado, barrio y chofer, orden por columna, exportación a CSV, detalle en un panel lateral y alta de pedidos nuevos. |
+| `/deposito` | **Depósito**: kanban que se reordena solo con Flip, con contadores por estado. |
+| `/repartidores` | **Repartidores**: estado de cada chofer, entregas del día, puntualidad, bultos, calificación y próximos pedidos. |
+| `/metricas` | **Métricas**: puntualidad, tiempo promedio, entregas por hora y puntualidad acumulada, con gráficos en vivo (tooltip, teclado y vista de tabla). |
+| `/incidencias` | **Incidencias**: demoras, fallas de vehículo y clientes ausentes con contador en vivo. Se resuelven, se reprograman o se reasignan a otro chofer. |
+| `/poster` | Composición de 1600x900 usada para generar el póster. |
 
+## En vivo
+
+- Un solo reloj simulado mueve todo: indicador **EN VIVO**, pausa, velocidades **1x / 4x / 10x** y **+1 h**.
+- Los pedidos avanzan solos, entran pedidos nuevos simulados y aparecen incidencias. Mientras una incidencia está abierta, el camión se detiene y la hora de llegada se corre. Si nadie actúa, el centro de control la cierra a los 40 minutos.
+- Feed de **actividad en vivo**, **centro de notificaciones** con contador de no leídas y avisos que se deslizan dentro de la interfaz.
+- Cada acción (crear un pedido, reasignar, resolver, firmar, calificar, empacar) cambia el estado compartido y se ve en todas las vistas. Se guarda en `localStorage`; **Reiniciar demo** borra todo.
+
+## Teclado
+
+| Atajo | Acción |
+| --- | --- |
+| `Ctrl/Cmd + K` o `/` | Paleta de comandos: pedidos, choferes, vistas y acciones |
+| `P` | Pausar o reanudar |
+| `1` `2` `3` | Velocidad 1x, 4x, 10x |
+| `H` | Adelantar 1 hora |
+| `N` | Nuevo pedido |
+| `G` y luego `C` `F` `P` `D` `R` `M` `I` | Ir a Cliente, Flota, Pedidos, Depósito, Repartidores, Métricas o Incidencias |
+| `?` | Ayuda de atajos |
+
+## Datos y modelo
+
+- `src/data/random.ts`: generador pseudoaleatorio determinista (mulberry32) con semilla fija.
+- `src/data/orders.ts`: 30 pedidos base más pedidos simulados que llegan con el reloj, cada uno con historial, productos, ruta, chofer y, algunos, una incidencia sembrada.
+- `src/data/map.ts`: el mapa de Córdoba dibujado a mano como grafo. El mismo grafo dibuja el mapa y arma las rutas.
+- `src/lib/status.ts`: el modelo. Todo es una función pura del minuto simulado más las acciones del usuario (pedidos creados, reasignaciones, incidencias resueltas), así que todas las vistas derivan la misma verdad.
+- `src/lib/sim.ts`: el reloj compartido y las acciones, con persistencia en `localStorage`.
+
+## Modo vitrina (para grabar el video)
+
+Abrí `http://localhost:4321/?showcase`. Recorre solo, sin cursor y en un loop de unos 30 segundos: ingreso con View Transition, ficha con el camión en el mapa y el empaque, flota con un camión seleccionado, búsqueda y detalle en Pedidos, métricas a 10x, una incidencia resuelta, el depósito con la paleta de comandos, y vuelta al inicio. No escribe nada en `localStorage`.
+
+Para grabar:
+
+1. `pnpm build && pnpm preview`.
+2. Abrí `http://localhost:4321/?showcase` en una ventana de 1600x900 (o de 390 px de ancho para la versión mobile).
+3. Grabá con cualquier capturador (OBS, la herramienta de recortes de Windows, QuickTime). Para un clip de 10 segundos, cortá el tramo de la ficha o el de la flota.
+
+## Póster
+
+`public/poster.jpg` (1600x900) se captura de la página real `/poster` con Playwright:
+
+```bash
+pnpm exec playwright install chromium   # una sola vez
+pnpm build
+pnpm poster
 ```
-src/
-├── components/
-│   ├── Header.astro            # Logo + nav (Inicio, Rastrear)
-│   ├── Footer.astro            # Teléfono, email, horario, demo disclaimer
-│   ├── ScanQRMock.astro        # Mock estático de escaneo QR para /rastrear
-│   ├── ComprobanteEntrega.astro# Recibo imprimible para pedidos `entregado`
-│   ├── PedidoTracker.tsx       # isla Preact — badge + timeline + mapa + repartidor + ETA
-│   ├── ConsultaForm.tsx        # isla Preact — input + 3 estados (idle/cargando/error)
-│   ├── RatingForm.tsx          # isla Preact — calificación post-entrega
-│   ├── RecentLookups.tsx       # isla Preact — últimos códigos consultados (localStorage)
-│   ├── NotificacionesCard.tsx  # isla Preact — toggles de notificación
-│   └── ProblemReport.tsx       # isla Preact — reporte de problema (demorado/en_camino)
-├── data/
-│   └── pedidos.json            # 25 pedidos mock, 6 estados representados
-├── layouts/
-│   └── Layout.astro            # SEO base, OG, fonts, header, footer, skip-link
-├── lib/
-│   └── pedidos.ts              # buscarPorCodigo + getTodosLosPedidos + helpers
-├── pages/
-│   ├── index.astro             # Hero + instrucciones + form + "Cómo funciona"
-│   ├── 404.astro               # Friendly not-found + form + WhatsApp
-│   └── rastrear/
-│       ├── index.astro         # Hub: form + recientes + QR mock + códigos destacados
-│       └── [codigo].astro      # getStaticPaths → 1 página estática por pedido
-├── styles/
-│   └── global.css              # @theme con paleta y tipografía
-└── types/
-    └── pedido.ts               # Tipos compartidos + ESTADO_META + ESTADOS_PROBLEMA
-```
 
-## Decisiones técnicas
+## Calidad
 
-- **Preact en vez de React.** El proyecto sigue la convención del resto del
-  portfolio: ~10KB de runtime Preact vs ~45KB de React, mismo modelo mental.
-  `@astrojs/preact` configura `tsconfig.json` con `jsxImportSource: "preact"`.
-- **`output: 'static'` con `getStaticPaths`.** Una página estática por cada
-  pedido conocido → deploy trivial a cualquier CDN. El "no encontrado" se
-  cubre con `src/pages/404.astro` para URLs desconocidas, y con validación
-  inline en el formulario para evitar navegar a códigos inexistentes.
-- **SVG inline en vez de librería de iconos.** El paquete prohíbe dependencias
-  extra de iconos. Los 4 SVGs de estado, el mapa esquemático y la marca son
-  inline — cero requests adicionales y se tiñen con `currentColor`.
-- **Sin `@fontsource` externo, pero sí self-hosted.** Tipografías Plus
-  Jakarta Sans + JetBrains Mono cargadas vía
-  `@fontsource/plus-jakarta-sans` y `@fontsource/jetbrains-mono` con sólo
-  el subset latin (no cyrillic/vietnamese). Self-hosting evita un fetch
-  externo, mejora LCP y mantiene todo offline-friendly sin CDN de fonts.
-- **Estado tipado discriminado.** `ConsultaForm` maneja 4 estados
-  (`idle | cargando | error`) con `useState` y TS discriminado. La validación
-  inline distingue formato inválido de código inexistente — son dos errores
-  con copy distinto.
-- **`pnpm-workspace.yaml` con `minimumReleaseAgeExclude`.** El proyecto vive en
-  un directorio donde pnpm global aplica una política de release age que
-  bloquea versiones recientes de astro/preact. El workspace local lista las
-  excepciones puntuales — workaround documentado y no invasivo.
-
-## Accesibilidad
-
-- Skip-link al `<main>` desde cualquier punto.
-- `<label>` real asociada al input (no `placeholder`-as-label).
-- `aria-live="polite"` anuncia "Buscando pedido" al hacer submit.
-- Errores de validación con `role="alert"` y borde rojo de alto contraste.
-- Cada estado tiene par fg/bg verificado ≥4.5:1 (AA).
-- `prefers-reduced-motion: reduce` honrado: se desactivan animaciones de
-  pulse y `animateMotion` del mapa.
-- Foco visible con outline naranja (no se oculta).
-- Formato del código anunciado con texto, no solo placeholder.
-
-## Performance
-
-- 6 islas Preact total: `ConsultaForm`, `PedidoTracker`, `RatingForm`,
-  `RecentLookups`, `NotificacionesCard`, `ProblemReport`. Se hidratan sólo
-  en la página donde se usan (`ConsultaForm` en home + hub; el resto, en
-  sus rutas específicas).
-- Runtime Preact compartido (~10 KB), chunks cacheables.
-- Fonts self-hosted (subset), sin requests externos bloqueantes.
-- CSS único con purge automático de Tailwind.
-- Páginas de tracking prerenderizadas a HTML estático: cero JS si el
-  usuario no interactúa con el form, el badge o las islas.
-
-## Disclaimer
-
-Esta demo **no tiene backend**. Los pedidos, repartidores e historial viven
-en `src/data/pedidos.json` y se compilan al HTML en build time. Para conectar
-a una API real, reemplazar las llamadas en `src/lib/pedidos.ts` por `fetch()`
-y cambiar `output: 'static'` por `output: 'server'` (o `'hybrid'` si sólo la
-ruta `/rastrear/[codigo]` necesita SSR).
+- Animaciones con `transform` y `opacity` (más SVG y canvas).
+- `prefers-reduced-motion`: versión estática completa (sin loops, sin vuelos, sin transiciones).
+- Mobile first, con composición propia a 390 px en todas las vistas.
+- Navegable con teclado, con foco visible, diálogos nativos y alternativas a cada gesto (por ejemplo, "Firmar por mí").

@@ -1,0 +1,137 @@
+---
+/** Hand-drawn base map of Córdoba (an SVG <g>, embedded by LiveMap and the warehouse view). */
+import { DEPOT, HOODS, MAP_EDGES, MAP_SIZE, PARK, RIVER, RIVER_NAME, edgePath } from '../data/map';
+
+const ring = MAP_EDGES.filter((e) => e.street === 'Av. Circunvalación');
+const inner = MAP_EDGES.filter((e) => e.street === 'Bulevares');
+const radials = MAP_EDGES.filter((e) => e.street !== 'Av. Circunvalación' && e.street !== 'Bulevares');
+---
+
+<g class="city" aria-hidden="true">
+  <defs>
+    <pattern id="city-blocks" width="13" height="13" patternUnits="userSpaceOnUse" patternTransform="rotate(9)">
+      <path d="M0 0h13M0 0v13" class="city__block-line"></path>
+    </pattern>
+  </defs>
+  <rect class="city__bg" x="0" y="0" width={MAP_SIZE} height={MAP_SIZE} rx="18"></rect>
+  <circle cx="200" cy="200" r="190" fill="url(#city-blocks)"></circle>
+  {HOODS.map((h, i) => <path class="city__hood" d={h.d} data-tone={i % 3} />)}
+  <path class="city__park" d={PARK.d}></path>
+  <path class="city__river" d={RIVER}></path>
+  <g class="city__casing">
+    {ring.map((e) => <path d={edgePath(e)} class="w-ring" />)}
+    {radials.map((e) => <path d={edgePath(e)} class="w-radial" />)}
+    {inner.map((e) => <path d={edgePath(e)} class="w-inner" />)}
+  </g>
+  <g class="city__road">
+    {ring.map((e) => <path d={edgePath(e)} class="w-ring" />)}
+    {radials.map((e) => <path d={edgePath(e)} class="w-radial" />)}
+    {inner.map((e) => <path d={edgePath(e)} class="w-inner" />)}
+  </g>
+  <g class="city__labels">
+    {HOODS.map((h) => <text x={h.lx} y={h.ly + 3}>{h.name}</text>)}
+    <text class="city__river-label" x="40" y="120">{RIVER_NAME}</text>
+    <text class="city__ring-label" x="200" y="22">Av. Circunvalación</text>
+  </g>
+  <g class="city__depot" transform={`translate(${DEPOT.x} ${DEPOT.y})`}>
+    <rect x="-13" y="-11" width="26" height="22" rx="4"></rect>
+    <path d="M-7 -1 0 -6l7 5v7h-14z"></path>
+    <text x="0" y="24">Depósito</text>
+  </g>
+</g>
+
+<style>
+  .city__bg {
+    fill: #e9e2d2;
+  }
+  .city__block-line {
+    fill: none;
+    stroke: #ddd3bf;
+    stroke-width: 1.2;
+  }
+  .city__hood {
+    fill: #ddd4c0;
+    stroke: #c5baa2;
+    stroke-width: 1.2;
+    stroke-dasharray: 3 3;
+  }
+  .city__hood[data-tone='1'] {
+    fill: #e2dac7;
+  }
+  .city__hood[data-tone='2'] {
+    fill: #d8cfba;
+  }
+  .city__park {
+    fill: #b8cf9f;
+    stroke: #8fae75;
+    stroke-width: 1.2;
+  }
+  .city__river {
+    fill: none;
+    stroke: #8fb9cc;
+    stroke-width: 7;
+    stroke-linecap: round;
+  }
+  .city__casing path,
+  .city__road path {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .city__casing path {
+    stroke: #8e8471;
+  }
+  .city__road path {
+    stroke: #fffcf6;
+  }
+  .city__casing .w-ring {
+    stroke-width: 9;
+  }
+  .city__road .w-ring {
+    stroke-width: 6;
+  }
+  .city__casing .w-radial {
+    stroke-width: 6.5;
+  }
+  .city__road .w-radial {
+    stroke-width: 4;
+  }
+  .city__casing .w-inner {
+    stroke-width: 5;
+  }
+  .city__road .w-inner {
+    stroke-width: 3;
+  }
+  .city__labels text {
+    font-family: var(--body);
+    font-size: 9px;
+    font-weight: 800;
+    fill: #6b645a;
+    text-anchor: middle;
+    paint-order: stroke;
+    stroke: #e9e2d2;
+    stroke-width: 3px;
+    stroke-linejoin: round;
+  }
+  .city__labels .city__river-label {
+    font-style: italic;
+    fill: #4f7f94;
+  }
+  .city__labels .city__ring-label {
+    font-size: 8px;
+    letter-spacing: 0.08em;
+  }
+  .city__depot rect {
+    fill: var(--ink);
+  }
+  .city__depot path {
+    fill: var(--st-preparando);
+  }
+  .city__depot text {
+    font-family: var(--body);
+    font-size: 9px;
+    font-weight: 800;
+    fill: var(--ink);
+    text-anchor: middle;
+  }
+</style>

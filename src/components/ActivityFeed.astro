@@ -1,0 +1,50 @@
+---
+/** Live activity feed: every state change, incident and user action, newest first. */
+interface Props {
+  limit?: number;
+}
+const { limit = 14 } = Astro.props;
+---
+
+<section class="panel activity" aria-labelledby="activity-title">
+  <h2 class="panel__title" id="activity-title">
+    Actividad en vivo
+    <span class="activity__live" aria-hidden="true"></span>
+  </h2>
+  <ol class="feed activity__list" data-activity data-limit={limit}>
+    {
+      Array.from({ length: 6 }, () => (
+        <li class="skeleton-only activity__sk">
+          <span class="skeleton" style="height: 12px; width: 70%" />
+          <span class="skeleton" style="height: 10px; width: 45%" />
+        </li>
+      ))
+    }
+  </ol>
+</section>
+
+<style>
+  .activity__live {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--st-en-camino);
+    animation: activity-pulse 1.4s ease-in-out infinite;
+  }
+
+  @keyframes activity-pulse {
+    50% {
+      opacity: 0.3;
+    }
+  }
+
+  .activity__list {
+    margin-top: 10px;
+  }
+
+  .activity__sk {
+    display: grid;
+    gap: 6px;
+    padding: 10px 8px;
+  }
+</style>

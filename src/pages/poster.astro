@@ -1,0 +1,349 @@
+---
+/**
+ * 1600x900 composition used to capture public/poster.jpg (`pnpm poster`).
+ * Built from the real components and data: order LA-2074 halfway through its route.
+ */
+import '@fontsource-variable/oswald';
+import '@fontsource-variable/manrope';
+import '../styles/global.css';
+import CityMap from '../components/CityMap.astro';
+import StageArt from '../components/StageArt.astro';
+import { MAP_SIZE } from '../data/map';
+import { ORDERS, STATES, findOrder } from '../data/orders';
+import { STATE_META, clock, countdown, etaOf, ordersAt, routeProgress, stateAt, timeOf } from '../lib/status';
+import { getDriver } from '../data/catalog';
+
+const order = findOrder('LA-2074') ?? ORDERS[0]!;
+const leave = timeOf(order, 'en-camino');
+const eta = etaOf(order);
+const t = Math.round(leave + (eta - leave) * 0.62);
+const progress = routeProgress(order, t);
+const stops = order.route.stops;
+const fleet = ordersAt(t)
+  .filter((o) => o.id !== order.id && stateAt(o, t) === 'en-camino')
+  .map((o) => ({ id: o.id, d: o.route.d, p: routeProgress(o, t), initials: getDriver(o.driver).initials }));
+---
+
+<!doctype html>
+<html lang="es-AR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1600" />
+    <meta name="robots" content="noindex" />
+    <title>Póster · Logística Andina (demo)</title>
+  </head>
+  <body data-state="en-camino" class="poster-body">
+    <main class="poster" data-poster data-progress={progress}>
+      <div class="poster__left">
+        <div class="poster__brand">
+          <svg viewBox="0 0 32 32" width="34" height="34" aria-hidden="true">
+            <path d="M4 11 16 5l12 6v11l-12 6-12-6Z" fill="currentColor"></path>
+            <path d="M4 11l12 6 12-6M16 17v11" stroke="var(--state)" stroke-width="2" fill="none"></path>
+          </svg>
+          <span>Logística Andina</span>
+          <span class="poster__demo">Demo</span>
+          <span class="poster__live"><i></i>En vivo · {clock(t)}</span>
+        </div>
+        <p class="poster__label">Pedido</p>
+        <p class="poster__id display">{order.id}</p>
+        <p class="poster__state display">{STATE_META['en-camino'].label}</p>
+        <div class="poster__eta">
+          <p class="poster__eta-label">Llegada estimada</p>
+          <p class="poster__eta-time display">{clock(eta)}</p>
+          <p class="poster__eta-count">{countdown(eta - t)} · {order.customer}, {order.placeName}</p>
+        </div>
+        <ol class="poster__journey">
+          {
+            STATES.map((s, i) => (
+              <li data-state={s} class:list={{ 'is-now': s === 'en-camino', 'is-todo': i > 3 }}>
+                <span class="poster__art"><StageArt kind={s} /></span>
+                <span class="poster__step">{STATE_META[s].label}</span>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+
+      <div class="poster__map">
+        <svg viewBox={`0 0 ${MAP_SIZE} ${MAP_SIZE}`} aria-hidden="true">
+          <CityMap />
+          <path class="p-route p-route--base" d={order.route.d}></path>
+          <path class="p-route p-route--done" d={order.route.d} pathLength="1" data-done></path>
+          {
+            stops.map((s, i) => {
+              const last = i === stops.length - 1;
+              const passed = !last && s.at <= progress;
+              return (
+                <g class:list={['p-stop', { 'p-stop--final': last, 'is-passed': passed }]} transform={`translate(${s.x} ${s.y})`}>
+                  <circle r={last ? 11 : 8.5} />
+                  <text y={last ? 4 : 3.5}>{last ? '★' : i + 1}</text>
+                  {passed && <path d="M-7 -7 7 7M7 -7-7 7" class="p-stop__x" />}
+                </g>
+              );
+            })
+          }
+          {
+            fleet.map((f) => (
+              <g class="p-fleet" data-fleet-d={f.d} data-fleet-p={f.p}>
+                <circle r="9" />
+                <rect x="-5.5" y="-3.5" width="7" height="7" rx="1.5" />
+                <text y="-13">{f.initials}</text>
+              </g>
+            ))
+          }
+          <g data-truck>
+            <rect x="-13" y="-7" width="19" height="14" rx="2.5" fill="#16130f"></rect>
+            <rect x="6" y="-6" width="8" height="12" rx="2.5" fill="#f3b419" stroke="#16130f" stroke-width="2"></rect>
+          </g>
+        </svg>
+      </div>
+    </main>
+
+    <script>
+      import { gsap } from 'gsap';
+      import { MotionPathPlugin } from 'gsap/MotionPathPlugin';
+
+      gsap.registerPlugin(MotionPathPlugin);
+      const root = document.querySelector<HTMLElement>('[data-poster]');
+      const done = document.querySelector<SVGPathElement>('[data-done]');
+      const truck = document.querySelector<SVGGElement>('[data-truck]');
+      const p = Number(root?.dataset.progress ?? 0);
+      if (done && truck) {
+        gsap.set(truck, { motionPath: { path: done, align: done, alignOrigin: [0.5, 0.5], autoRotate: true, start: p, end: p } });
+        done.style.strokeDashoffset = String(1 - p);
+      }
+      const svgNS = 'http://www.w3.org/2000/svg';
+      document.querySelectorAll<SVGGElement>('[data-fleet-d]').forEach((g) => {
+        const path = document.createElementNS(svgNS, 'path');
+        path.setAttribute('d', g.dataset.fleetD ?? '');
+        const len = path.getTotalLength();
+        const pt = path.getPointAtLength(Number(g.dataset.fleetP ?? 0) * len);
+        g.setAttribute('transform', `translate(${pt.x} ${pt.y})`);
+      });
+      document.documentElement.dataset.ready = 'true';
+    </script>
+  </body>
+</html>
+
+<style>
+  .poster-body {
+    margin: 0;
+    width: 1600px;
+    height: 900px;
+    overflow: hidden;
+    background: var(--paper);
+  }
+
+  .poster {
+    display: grid;
+    grid-template-columns: 820px 1fr;
+    width: 1600px;
+    height: 900px;
+  }
+
+  .poster__left {
+    display: flex;
+    flex-direction: column;
+    padding: 48px 56px;
+    background: var(--state);
+    color: var(--on-state);
+  }
+
+  .poster__brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 800;
+    font-size: 1.35rem;
+  }
+
+  .poster__demo {
+    margin-left: 6px;
+    padding: 2px 12px 1px;
+    border: 2px solid var(--ink);
+    border-radius: 6px;
+    background: var(--st-preparando);
+    color: var(--ink);
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 1.1rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transform: rotate(-3deg);
+  }
+
+  .poster__label {
+    margin-top: 40px;
+    font-weight: 800;
+    font-size: 1.1rem;
+  }
+
+  .poster__id {
+    font-size: 13rem;
+    line-height: 0.82;
+  }
+
+  .poster__state {
+    margin-top: 14px;
+    font-size: 4.4rem;
+  }
+
+  .poster__eta {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 3px solid currentColor;
+  }
+
+  .poster__eta-label {
+    font-weight: 800;
+  }
+
+  .poster__eta-time {
+    font-size: 7.4rem;
+  }
+
+  .poster__eta-count {
+    margin-top: 6px;
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+
+  .poster__journey {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    margin: auto 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .poster__journey li {
+    display: grid;
+    gap: 6px;
+    justify-items: center;
+    padding: 10px 6px 8px;
+    border-radius: 14px;
+    background: var(--card);
+    color: var(--ink);
+    border: 2px solid var(--ink);
+  }
+
+  .poster__journey li.is-now {
+    background: var(--st-preparando);
+  }
+
+  .poster__journey li.is-todo {
+    opacity: 0.55;
+  }
+
+  .poster__art {
+    width: 92px;
+  }
+
+  .poster__step {
+    font-weight: 800;
+    font-size: 0.85rem;
+  }
+
+  .poster__map {
+    display: grid;
+    place-items: center;
+    padding: 36px;
+    background: #e9e2d2;
+  }
+
+  .poster__map svg {
+    width: 828px;
+    height: 828px;
+  }
+
+  .p-route {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .p-route--base {
+    stroke: var(--ink);
+    stroke-width: 3;
+    stroke-dasharray: 2 6;
+    opacity: 0.55;
+  }
+
+  .p-route--done {
+    stroke: var(--st-en-camino);
+    stroke-width: 6;
+    stroke-dasharray: 1 1;
+  }
+
+  .p-fleet circle {
+    fill: var(--card);
+    stroke: var(--ink);
+    stroke-width: 2;
+  }
+
+  .p-fleet rect {
+    fill: var(--ink);
+  }
+
+  .p-fleet text {
+    font-family: var(--body);
+    font-size: 7px;
+    font-weight: 800;
+    text-anchor: middle;
+    fill: var(--ink);
+    paint-order: stroke;
+    stroke: #e9e2d2;
+    stroke-width: 3px;
+  }
+
+  .poster__live {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: var(--ink);
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .poster__live i {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #fff;
+  }
+
+  .p-stop circle {
+    fill: var(--card);
+    stroke: var(--ink);
+    stroke-width: 2.5;
+  }
+
+  .p-stop text {
+    font-family: var(--display);
+    font-size: 11px;
+    font-weight: 600;
+    text-anchor: middle;
+    fill: var(--ink);
+  }
+
+  .p-stop--final circle {
+    fill: var(--st-en-camino);
+  }
+
+  .p-stop--final text {
+    fill: #fff;
+  }
+
+  .p-stop__x {
+    stroke: var(--ink);
+    stroke-width: 3;
+    stroke-linecap: round;
+  }
+</style>

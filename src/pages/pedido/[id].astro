@@ -1,0 +1,229 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Timeline from '../../components/Timeline.astro';
+import LiveMap from '../../components/LiveMap.astro';
+import Packing from '../../components/Packing.astro';
+import Receipt from '../../components/Receipt.astro';
+import { ORDERS, SIM_START, type Order } from '../../data/orders';
+import { STATE_META, clock, countdown, driverOf, etaOf, itemCount, stateAt } from '../../lib/status';
+
+export function getStaticPaths() {
+  return ORDERS.map((order) => ({ params: { id: order.id }, props: { order } }));
+}
+
+interface Props {
+  order: Order;
+}
+
+const { order } = Astro.props;
+const state = stateAt(order, SIM_START) ?? 'recibido';
+const eta = etaOf(order);
+---
+
+<Layout title={`Pedido ${order.id} · Logística Andina (demo)`} view="cliente" page="order" state={state}>
+  <div class="sheet" data-order={order.id}>
+    <section class="hero" aria-labelledby="order-title">
+      <div class="hero__wipe" data-hero-wipe aria-hidden="true"></div>
+      <div class="wrap hero__inner">
+        <a class="hero__back" href="/">
+          <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M16 10H5m4-5-5 5 5 5" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          Otro pedido
+        </a>
+        <p class="hero__label">Pedido</p>
+        <h1 id="order-title" class="hero__number display">
+          <span class="hero__id" style={`view-transition-name: order-${order.id}`}>{order.id}</span>
+        </h1>
+        <p class="hero__customer"><strong>{order.customer}</strong> · {order.address}, {order.placeName}</p>
+
+        <div class="hero__status">
+          <p class="hero__state" aria-live="polite">
+            <span class="sr-only">Estado actual:</span>
+            <span class="hero__state-label display" data-state-label>{STATE_META[state].label}</span>
+          </p>
+          <div class="hero__eta">
+            <p class="hero__eta-label" data-eta-label>{state === 'entregado' ? 'Entregado a las' : 'Llegada estimada'}</p>
+            <p class="hero__eta-time display" data-eta-time>{clock(eta)}</p>
+            <p class="hero__eta-count" data-eta-count>{state === 'entregado' ? 'Firmado en destino' : countdown(eta - SIM_START)}</p>
+          </div>
+        </div>
+
+        <dl class="hero__facts">
+          <div><dt>Bultos</dt><dd>{itemCount(order)}</dd></div>
+          <div><dt>Chofer</dt><dd data-driver-name>{driverOf(order).name}</dd></div>
+          <div><dt>Camión</dt><dd data-driver-truck>{driverOf(order).truck}</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <div class="wrap sheet__grid">
+      <div class="area area--timeline"><Timeline order={order} /></div>
+      <div class="area area--map"><LiveMap order={order} /></div>
+      <div class="area area--packing"><Packing order={order} /></div>
+      <div class="area area--receipt"><Receipt order={order} /></div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .hero {
+    position: relative;
+    overflow: hidden;
+    background: var(--state);
+    color: var(--on-state);
+    padding-block: 18px 26px;
+  }
+
+  .hero__wipe {
+    position: absolute;
+    inset: 0;
+    transform: scaleY(0);
+    transform-origin: 50% 100%;
+    pointer-events: none;
+  }
+
+  .hero__inner {
+    position: relative;
+  }
+
+  .hero__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 44px;
+    font-weight: 700;
+    font-size: 0.875rem;
+    text-decoration: none;
+  }
+
+  .hero__label {
+    margin-top: 6px;
+    font-weight: 800;
+    font-size: 0.875rem;
+  }
+
+  .hero__number {
+    font-size: clamp(4.6rem, 26vw, 12rem);
+    line-height: 0.85;
+  }
+
+  .hero__id {
+    display: inline-block;
+  }
+
+  .hero__customer {
+    margin-top: 10px;
+    font-size: 0.9375rem;
+  }
+
+  .hero__status {
+    display: grid;
+    gap: 16px;
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 2px solid currentColor;
+  }
+
+  .hero__state-label {
+    font-size: clamp(2.4rem, 12vw, 4.5rem);
+  }
+
+  .hero__eta-label {
+    font-weight: 800;
+    font-size: 0.8125rem;
+  }
+
+  .hero__eta-time {
+    font-size: clamp(4rem, 22vw, 8.5rem);
+  }
+
+  .hero__eta-count {
+    font-weight: 700;
+  }
+
+  .hero__facts {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    justify-content: start;
+    gap: 6px 22px;
+    margin: 20px 0 0;
+    font-size: 0.875rem;
+  }
+
+  .hero__facts dt {
+    font-weight: 600;
+  }
+
+  .hero__facts dd {
+    margin: 0;
+    font-weight: 800;
+  }
+
+  .sheet__grid {
+    display: grid;
+    gap: 48px;
+    margin-top: 36px;
+  }
+
+  .area {
+    min-width: 0;
+  }
+
+  @media (min-width: 980px) {
+    .sheet__grid {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+      grid-template-areas: 'timeline map' 'packing map' 'receipt receipt';
+      align-items: start;
+      column-gap: 56px;
+    }
+    .area--timeline {
+      grid-area: timeline;
+    }
+    .area--map {
+      grid-area: map;
+      position: sticky;
+      top: 92px;
+    }
+    .area--packing {
+      grid-area: packing;
+    }
+    .area--receipt {
+      grid-area: receipt;
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .hero__inner {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-areas:
+        'back back'
+        'label eta'
+        'number eta'
+        'customer eta'
+        'state facts';
+      column-gap: 48px;
+      align-items: end;
+    }
+    .hero__back { grid-area: back; justify-self: start; }
+    .hero__label { grid-area: label; }
+    .hero__number { grid-area: number; }
+    .hero__customer { grid-area: customer; }
+    .hero__status { display: contents; }
+    .hero__state { grid-area: state; margin-top: 18px; padding-top: 14px; border-top: 2px solid currentColor; }
+    .hero__eta { grid-area: eta; text-align: right; align-self: end; }
+    .hero__facts { grid-area: facts; justify-content: end; margin-top: 18px; padding-top: 18px; border-top: 2px solid currentColor; align-self: stretch; }
+  }
+
+  @media (min-width: 900px) {
+    .hero {
+      padding-block: 28px 40px;
+    }
+    .hero__status {
+      grid-template-columns: 1fr auto;
+      align-items: end;
+    }
+    .hero__eta {
+      text-align: right;
+    }
+  }
+</style>

@@ -1,0 +1,235 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { ORDERS, SIM_START, STATES, type OrderState } from '../data/orders';
+import { STATE_META, stateAt } from '../lib/status';
+import { cardHtml } from '../lib/card';
+
+const byState = new Map<OrderState, string[]>(STATES.map((s) => [s, []]));
+const counts = new Map<OrderState, number>(STATES.map((s) => [s, 0]));
+const sorted = [...ORDERS].sort((a, b) => b.history[0]!.at - a.history[0]!.at);
+for (const o of sorted) {
+  const s = stateAt(o, SIM_START);
+  if (!s) continue;
+  counts.set(s, (counts.get(s) ?? 0) + 1);
+  byState.get(s)!.push(cardHtml(o, s, SIM_START));
+}
+---
+
+<Layout title="Panel del depósito · Logística Andina (demo)" view="deposito" page="warehouse">
+  <section class="wh wrap" aria-labelledby="wh-title" data-warehouse>
+    <div class="wh__head">
+      <p class="eyebrow">Depósito Ruta 9 · Turno mañana</p>
+      <h1 id="wh-title" class="wh__title display">Panel del depósito</h1>
+      <p class="wh__lead">Los pedidos avanzan solos de columna y entran pedidos nuevos a medida que corre el reloj.</p>
+    </div>
+
+    <ul class="counters" aria-label="Pedidos por estado">
+      {
+        STATES.map((s) => (
+          <li>
+            <a class="counter" href={`#col-${s}`} data-state={s} data-counter={s}>
+              <span class="counter__n display" data-count>
+                {counts.get(s)}
+              </span>
+              <span class="counter__label">{STATE_META[s].label}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="board" data-board>
+      {
+        STATES.map((s) => (
+          <section class="col" id={`col-${s}`} data-state={s} aria-labelledby={`col-title-${s}`}>
+            <h2 class="col__head" id={`col-title-${s}`}>
+              <span class="display">{STATE_META[s].label}</span>
+              <span class="col__count" data-col-count>
+                {counts.get(s)}
+              </span>
+            </h2>
+            <div class="col__list" data-col={s}>
+              {byState.get(s)!.slice(0, s === 'entregado' ? 6 : 99).map((html) => <Fragment set:html={html} />)}
+            </div>
+            {s === 'entregado' && <p class="col__more" data-more />}
+          </section>
+        ))
+      }
+    </div>
+  </section>
+</Layout>
+
+<style is:global>
+  .kcard {
+    display: grid;
+    gap: 1px;
+    padding: 10px 12px 12px;
+    border-radius: 12px;
+    background: var(--card);
+    border: 2px solid var(--ink);
+    border-top: 8px solid var(--state);
+    text-decoration: none;
+    color: var(--ink);
+    font-size: 0.8125rem;
+  }
+
+  a.kcard:hover .kcard__id {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+  }
+
+  .kcard__id {
+    font-size: 1.6rem;
+  }
+
+  .kcard__customer {
+    font-weight: 800;
+    font-size: 0.875rem;
+    line-height: 1.25;
+  }
+
+  .kcard__meta {
+    color: var(--muted);
+  }
+
+  .kcard__time {
+    margin-top: 4px;
+    font-weight: 800;
+  }
+</style>
+
+<style>
+  .wh {
+    padding-top: 28px;
+  }
+
+  .wh__title {
+    margin-top: 8px;
+    font-size: clamp(3rem, 14vw, 6.5rem);
+  }
+
+  .wh__lead {
+    max-width: 56ch;
+    margin-top: 12px;
+    color: var(--ink-2);
+  }
+
+  .counters {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 6px;
+    margin: 24px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .counter {
+    display: grid;
+    gap: 6px;
+    min-height: 150px;
+    align-content: space-between;
+    padding: 10px 8px;
+    border-radius: 12px;
+    background: var(--state);
+    color: var(--on-state);
+    text-decoration: none;
+    overflow: hidden;
+  }
+
+  .counter__n {
+    display: block;
+    font-size: 2.4rem;
+  }
+
+  .counter__label {
+    font-size: 0.75rem;
+    font-weight: 800;
+    line-height: 1.1;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+  }
+
+  .board {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 80%;
+    gap: 12px;
+    margin: 24px calc(var(--gutter) * -1) 0;
+    padding: 0 var(--gutter) 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--gutter);
+    overscroll-behavior-x: contain;
+  }
+
+  .col {
+    scroll-snap-align: start;
+    min-width: 0;
+    padding: 10px;
+    border-radius: 16px;
+    background: var(--paper-2);
+    border: 1px solid var(--line);
+  }
+
+  .col__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 4px 10px;
+  }
+
+  .col__head .display {
+    font-size: 1.5rem;
+  }
+
+  .col__count {
+    min-width: 32px;
+    padding: 2px 10px;
+    border-radius: 999px;
+    background: var(--state);
+    color: var(--on-state);
+    font-weight: 800;
+    text-align: center;
+    font-size: 0.875rem;
+  }
+
+  .col__list {
+    display: grid;
+    gap: 8px;
+    align-content: start;
+    min-height: 120px;
+  }
+
+  .col__more {
+    margin-top: 8px;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  @media (min-width: 720px) {
+    .counter__n {
+      font-size: 3.6rem;
+    }
+    .counter__label {
+      font-size: 0.875rem;
+      writing-mode: horizontal-tb;
+      transform: none;
+    }
+    .counter {
+      min-height: 120px;
+      padding: 14px;
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .board {
+      grid-auto-flow: row;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      margin-inline: 0;
+      padding-inline: 0;
+      overflow: visible;
+    }
+  }
+</style>

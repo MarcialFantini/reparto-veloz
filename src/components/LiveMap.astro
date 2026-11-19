@@ -1,0 +1,273 @@
+---
+import CityMap from './CityMap.astro';
+import { MAP_SIZE } from '../data/map';
+import type { Order } from '../data/orders';
+import { clock, etaOf, timeOf } from '../lib/status';
+
+interface Props {
+  order: Order;
+}
+
+const { order } = Astro.props;
+const stops = order.route.stops;
+const leave = timeOf(order, 'en-camino');
+---
+
+<section class="scene livemap" aria-labelledby="map-title" data-livemap>
+  <div class="livemap__head">
+    <h2 id="map-title" class="section-title">Mapa en vivo</h2>
+    <p class="livemap__sub" data-map-status>Sale del depósito a las {clock(leave)}</p>
+  </div>
+
+  <div class="livemap__frame">
+    <svg class="livemap__svg" viewBox={`0 0 ${MAP_SIZE} ${MAP_SIZE}`} role="img" aria-labelledby="map-desc">
+      <desc id="map-desc">
+        Mapa ilustrado de Córdoba con la ruta del pedido {order.id}: sale del depósito de Ruta 9 y termina en {order.placeName}, con {stops.length - 1} paradas antes.
+      </desc>
+      <CityMap />
+      <path class="route route--base" d={order.route.d}></path>
+      <path class="route route--done" d={order.route.d} pathLength="1" data-route-done></path>
+      {
+        stops.map((s, i) => {
+          const last = i === stops.length - 1;
+          return (
+            <g class:list={['stop', { 'stop--final': last }]} transform={`translate(${s.x} ${s.y})`} data-map-stop={i}>
+              <circle r={last ? 11 : 8.5} />
+              <text y={last ? 4 : 3.5}>{last ? '★' : i + 1}</text>
+              <path class="stop__cross" d="M-7 -7 7 7M7 -7-7 7" pathLength="1" />
+            </g>
+          );
+        })
+      }
+      <g class="truck" data-truck>
+        <g class="truck__body">
+          <rect x="-13" y="-7" width="19" height="14" rx="2.5" class="truck__cargo"></rect>
+          <rect x="6" y="-6" width="8" height="12" rx="2.5" class="truck__cab"></rect>
+          <rect x="10" y="-4.5" width="2.5" height="9" rx="1" class="truck__glass"></rect>
+        </g>
+      </g>
+    </svg>
+
+    <div class="livemap__eta" aria-live="off">
+      <p class="livemap__eta-label">Llega</p>
+      <p class="livemap__eta-time display" data-map-eta>{clock(etaOf(order))}</p>
+      <p class="livemap__eta-count" data-map-count></p>
+    </div>
+  </div>
+
+  <ol class="stoplist" aria-label="Paradas de la ruta">
+    <li class="stoplist__item is-done">
+      <span class="stoplist__pin stoplist__pin--depot" aria-hidden="true"></span>
+      <span class="stoplist__name">Depósito Ruta 9</span>
+      <span class="stoplist__time">{clock(leave)}</span>
+    </li>
+    {
+      stops.map((s, i) => {
+        const last = i === stops.length - 1;
+        return (
+          <li class:list={['stoplist__item', { 'stoplist__item--final': last }]} data-list-stop={i}>
+            <span class="stoplist__pin" aria-hidden="true">{last ? '★' : i + 1}</span>
+            <span class="stoplist__name">
+              <span class="stoplist__strike" aria-hidden="true" />
+              {last ? `${order.customer} · ${s.name}` : `Parada ${i + 1} · ${s.name}`}
+            </span>
+            <span class="stoplist__time" data-stop-status>{last ? 'Destino' : 'Pendiente'}</span>
+          </li>
+        );
+      })
+    }
+  </ol>
+</section>
+
+<style>
+  .livemap__head {
+    display: grid;
+    gap: 4px;
+  }
+
+  .livemap__sub {
+    color: var(--muted);
+    font-weight: 700;
+    font-size: 0.9375rem;
+  }
+
+  .livemap__frame {
+    position: relative;
+    margin-top: 16px;
+    border-radius: 20px;
+    border: 2px solid var(--ink);
+    overflow: hidden;
+    background: #e9e2d2;
+  }
+
+  .livemap__svg {
+    width: 100%;
+    height: auto;
+  }
+
+  .route {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .route--base {
+    stroke: var(--ink);
+    stroke-width: 3;
+    stroke-dasharray: 2 6;
+    opacity: 0.55;
+  }
+
+  .route--done {
+    stroke: var(--st-en-camino);
+    stroke-width: 6;
+    stroke-dasharray: 1 1;
+    stroke-dashoffset: 1;
+  }
+
+  .stop circle {
+    fill: var(--card);
+    stroke: var(--ink);
+    stroke-width: 2.5;
+  }
+
+  .stop text {
+    font-family: var(--display);
+    font-size: 11px;
+    font-weight: 600;
+    text-anchor: middle;
+    fill: var(--ink);
+  }
+
+  .stop--final circle {
+    fill: var(--st-en-camino);
+  }
+
+  .stop--final text {
+    fill: #fff;
+    font-size: 12px;
+  }
+
+  .stop__cross {
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-dasharray: 1 1;
+    stroke-dashoffset: 1;
+  }
+
+  .truck__cargo {
+    fill: var(--ink);
+  }
+
+  .truck__cab {
+    fill: var(--st-preparando);
+    stroke: var(--ink);
+    stroke-width: 2;
+  }
+
+  .truck__glass {
+    fill: var(--ink);
+  }
+
+  .livemap__eta {
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    padding: 8px 12px 10px;
+    border-radius: 14px;
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .livemap__eta-label {
+    font-size: 0.75rem;
+    font-weight: 800;
+    opacity: 0.8;
+  }
+
+  .livemap__eta-time {
+    font-size: 2rem;
+  }
+
+  @media (min-width: 720px) {
+    .livemap__eta-time {
+      font-size: 2.6rem;
+    }
+  }
+
+  .livemap__eta-count {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--st-preparando);
+  }
+
+  .stoplist {
+    display: grid;
+    gap: 2px;
+    margin: 16px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .stoplist__item {
+    display: grid;
+    grid-template-columns: 28px 1fr auto;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px dashed var(--line);
+    font-size: 0.9375rem;
+  }
+
+  .stoplist__pin {
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 2px solid var(--ink);
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 0.875rem;
+    background: var(--card);
+  }
+
+  .stoplist__pin--depot {
+    background: var(--ink);
+  }
+
+  .stoplist__item--final .stoplist__pin {
+    background: var(--st-en-camino);
+    color: #fff;
+  }
+
+  .stoplist__name {
+    position: relative;
+    font-weight: 700;
+    width: fit-content;
+  }
+
+  .stoplist__strike {
+    position: absolute;
+    left: -2px;
+    right: -2px;
+    top: 52%;
+    height: 2.5px;
+    border-radius: 2px;
+    background: var(--ink);
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+  }
+
+  .stoplist__item.is-done .stoplist__name {
+    color: var(--muted);
+  }
+
+  .stoplist__time {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--muted);
+  }
+</style>

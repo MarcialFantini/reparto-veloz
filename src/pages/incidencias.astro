@@ -1,0 +1,159 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ActivityFeed from '../components/ActivityFeed.astro';
+import { DRIVERS } from '../data/catalog';
+---
+
+<Layout title="Incidencias · Logística Andina (demo)" view="incidencias" page="incidents">
+  <div class="wrap">
+    <div class="ops-head">
+      <div>
+        <p class="eyebrow">Centro de control · Excepciones</p>
+        <h1 class="ops-title display">Incidencias</h1>
+        <p class="ops-lead">Demoras en ruta, fallas de vehículo y clientes ausentes. Mientras una incidencia sigue abierta, el camión no avanza y la hora de llegada se corre. Si nadie actúa, el centro de control la cierra a los 40 minutos.</p>
+      </div>
+    </div>
+
+    <div class="kpis">
+      <div class="kpi kpi--alert"><span class="kpi__label">Abiertas ahora</span><span class="kpi__value display" data-ikpi="open">–</span></div>
+      <div class="kpi"><span class="kpi__label">Cerradas hoy</span><span class="kpi__value display" data-ikpi="closed">–</span></div>
+      <div class="kpi"><span class="kpi__label">Minutos de demora acumulados</span><span class="kpi__value display" data-ikpi="minutes">–</span></div>
+      <div class="kpi"><span class="kpi__label">Resueltas por el equipo</span><span class="kpi__value display" data-ikpi="team">–</span></div>
+    </div>
+
+    <div class="ops-grid incidents">
+      <section aria-labelledby="open-title">
+        <h2 class="panel__title" id="open-title">Abiertas</h2>
+        <ul class="icards" data-open-list aria-live="polite">
+          <li class="skeleton-only panel"><span class="skeleton" style="height: 18px; width: 50%"></span></li>
+          <li class="skeleton-only panel"><span class="skeleton" style="height: 18px; width: 70%"></span></li>
+        </ul>
+      </section>
+      <section class="panel" aria-labelledby="closed-title">
+        <h2 class="panel__title" id="closed-title">Historial del día</h2>
+        <ol class="feed ihistory" data-closed-list></ol>
+      </section>
+      <div class="incidents__activity">
+        <ActivityFeed limit={8} />
+      </div>
+    </div>
+
+    <template data-driver-options>
+      {DRIVERS.map((d) => <option value={d.id}>{d.name} · {d.truck}</option>)}
+    </template>
+  </div>
+</Layout>
+
+<style is:global>
+  .kpi--alert {
+    background: #b3261e;
+    color: #fff;
+    border-color: #b3261e;
+  }
+
+  .kpi--alert .kpi__label {
+    color: #fff;
+  }
+
+  .icards {
+    display: grid;
+    gap: 12px;
+    margin: 12px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .icard {
+    display: grid;
+    gap: 12px;
+    border-color: #b3261e;
+    border-left-width: 10px;
+  }
+
+  .icard__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 6px 12px;
+  }
+
+  .icard__id {
+    font-size: 2rem;
+  }
+
+  .icard__kind {
+    font-weight: 800;
+    color: #b3261e;
+  }
+
+  .icard__facts {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    margin: 0;
+    font-size: 0.8125rem;
+  }
+
+  .icard__facts dt {
+    font-weight: 800;
+    color: var(--muted);
+  }
+
+  .icard__facts dd {
+    margin: 0;
+    font-family: var(--display);
+    font-size: 1.5rem;
+  }
+
+  .icard__timer {
+    height: 6px;
+    border-radius: 3px;
+    background: var(--paper-2);
+    overflow: hidden;
+  }
+
+  .icard__timer span {
+    display: block;
+    height: 100%;
+    background: #b3261e;
+    transform-origin: 0 50%;
+    transition: transform 300ms linear;
+  }
+
+  .icard__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    gap: 8px;
+  }
+
+  .icard__actions .field {
+    flex: 1 1 200px;
+  }
+
+  .icards__empty {
+    display: grid;
+    gap: 6px;
+    padding: 22px;
+    border-radius: 18px;
+    border: 2px dashed var(--st-entregado);
+    color: var(--st-entregado);
+    font-weight: 800;
+  }
+
+  .ihistory {
+    margin-top: 10px;
+  }
+
+  @media (min-width: 1000px) {
+    .incidents {
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      grid-template-areas: 'open closed' 'open activity';
+      align-items: start;
+    }
+    .incidents > section:first-child { grid-area: open; }
+    .incidents > section.panel { grid-area: closed; }
+    .incidents__activity { grid-area: activity; }
+  }
+</style>

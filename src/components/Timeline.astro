@@ -1,0 +1,184 @@
+---
+import StageArt from './StageArt.astro';
+import { STATES, SIM_START, type Order } from '../data/orders';
+import { STATE_META, clock, stateAt, stateIndex, timeOf } from '../lib/status';
+
+interface Props {
+  order: Order;
+}
+
+const { order } = Astro.props;
+const current = stateIndex(stateAt(order, SIM_START) ?? 'recibido');
+
+const DESCRIPTIONS: Record<(typeof STATES)[number], string> = {
+  recibido: 'El pedido entró al sistema y quedó confirmado.',
+  preparando: 'Armamos las cajas en el depósito de Ruta 9.',
+  despachado: 'Cajas cerradas, cinta puesta y carga en el camión.',
+  'en-camino': 'El camión recorre la ciudad con tu pedido.',
+  entregado: 'Llegó a destino y se firmó la recepción.',
+};
+---
+
+<section class="scene timeline" aria-labelledby="timeline-title" data-timeline>
+  <h2 id="timeline-title" class="section-title">El viaje del pedido</h2>
+  <div class="stages-wrap">
+  <span class="stages__rail" aria-hidden="true"><span class="stages__fill" data-rail-fill></span></span>
+  <ol class="stages">
+    {
+      STATES.map((s, i) => {
+        const status = i < current ? 'done' : i === current ? 'current' : 'todo';
+        return (
+          <li class="stage" data-stage={s} data-state={s} data-status={status} aria-current={status === 'current' ? 'step' : undefined}>
+            <div class="stage__art">
+              <StageArt kind={s} />
+            </div>
+            <div class="stage__text">
+              <p class="stage__name">
+                <span class="display">{STATE_META[s].label}</span>
+                <span class="stage__flag" data-stage-flag>
+                  {status === 'current' ? 'Ahora' : status === 'done' ? 'Listo' : 'Pendiente'}
+                </span>
+              </p>
+              <p class="stage__time">
+                <span data-stage-time-label>{status === 'todo' ? 'Estimado' : 'A las'}</span>{' '}
+                <strong>{clock(timeOf(order, s))}</strong>
+              </p>
+              <p class="stage__desc">{DESCRIPTIONS[s]}</p>
+            </div>
+          </li>
+        );
+      })
+    }
+  </ol>
+  </div>
+</section>
+
+<style>
+  .stages-wrap {
+    position: relative;
+    margin-top: 20px;
+  }
+
+  .stages {
+    position: relative;
+    display: grid;
+    gap: 14px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .stages__rail {
+    position: absolute;
+    left: 43px;
+    top: 30px;
+    bottom: 30px;
+    width: 4px;
+    border-radius: 2px;
+    background: var(--line);
+  }
+
+  .stages__fill {
+    position: absolute;
+    inset: 0;
+    border-radius: 2px;
+    background: var(--ink);
+    transform-origin: 50% 0;
+    transform: scaleY(0);
+  }
+
+  .stage {
+    position: relative;
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .stage__art {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 90px;
+    height: 78px;
+    padding: 8px;
+    border-radius: 16px;
+    background: var(--card);
+    border: 2px solid var(--ink);
+  }
+
+  .stage[data-status='todo'] {
+    --state: var(--paper-2);
+    --on-state: var(--muted);
+  }
+
+  .stage[data-status='todo'] .stage__art {
+    border-style: dashed;
+    border-color: var(--line);
+    opacity: 0.7;
+  }
+
+  .stage[data-status='current'] .stage__art {
+    background: var(--state);
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+
+  .stage__name {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4px 10px;
+  }
+
+  .stage__name .display {
+    font-size: 1.75rem;
+  }
+
+  .stage[data-status='todo'] .stage__name .display {
+    color: var(--muted);
+  }
+
+  .stage__flag {
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    border: 1.5px solid var(--ink);
+  }
+
+  .stage[data-status='current'] .stage__flag {
+    background: var(--state);
+    color: var(--on-state);
+    border-color: var(--state);
+  }
+
+  .stage[data-status='todo'] .stage__flag {
+    border-color: var(--line);
+    color: var(--muted);
+  }
+
+  .stage__time {
+    font-size: 0.875rem;
+    color: var(--ink-2);
+  }
+
+  .stage__desc {
+    margin-top: 2px;
+    font-size: 0.875rem;
+    color: var(--muted);
+  }
+
+  @media (min-width: 720px) {
+    .stage {
+      grid-template-columns: 120px 1fr;
+      gap: 20px;
+    }
+    .stage__art {
+      width: 120px;
+      height: 100px;
+    }
+    .stages__rail {
+      left: 58px;
+    }
+  }
+</style>

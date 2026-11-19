@@ -1,0 +1,324 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ActivityFeed from '../components/ActivityFeed.astro';
+import { STATES } from '../data/orders';
+import { STATE_META } from '../lib/status';
+---
+
+<Layout title="Métricas · Logística Andina (demo)" view="metricas" page="metrics">
+  <div class="wrap">
+    <div class="ops-head">
+      <div>
+        <p class="eyebrow">Indicadores del día · en vivo</p>
+        <h1 class="ops-title display">Métricas</h1>
+        <p class="ops-lead">Puntualidad, tiempos y volumen calculados en el navegador con cada minuto simulado. Probá 10x y mirá cómo se mueven.</p>
+      </div>
+    </div>
+
+    <div class="kpis">
+      <div class="kpi kpi--accent">
+        <span class="kpi__label">Puntualidad</span>
+        <span class="kpi__value display"><span data-m="ontime">–</span><span class="kpi__unit">%</span></span>
+        <span class="kpi__delta" data-m-delta="ontime">entregas dentro de los 10 min prometidos</span>
+      </div>
+      <div class="kpi">
+        <span class="kpi__label">Tiempo promedio de entrega</span>
+        <span class="kpi__value display"><span data-m="avg">–</span><span class="kpi__unit"> min</span></span>
+        <span class="kpi__delta">desde que entra hasta que llega</span>
+      </div>
+      <div class="kpi">
+        <span class="kpi__label">Entregas en la última hora</span>
+        <span class="kpi__value display" data-m="lasthour">–</span>
+        <span class="kpi__delta" data-m-delta="lasthour">–</span>
+      </div>
+      <div class="kpi">
+        <span class="kpi__label">Entregados hoy</span>
+        <span class="kpi__value display" data-m="delivered">–</span>
+        <span class="kpi__delta" data-m-delta="delivered">–</span>
+      </div>
+    </div>
+
+    <ul class="statebar" aria-label="Pedidos por estado ahora">
+      {
+        STATES.map((s) => (
+          <li data-state={s}>
+            <span class="statebar__n display" data-m-state={s}>–</span>
+            <span class="statebar__label">{STATE_META[s].label}</span>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="ops-grid metrics">
+      <section class="panel chart" aria-labelledby="c1-title">
+        <div class="chart__head">
+          <h2 class="panel__title" id="c1-title">Entregas por hora</h2>
+          <ul class="legend" aria-label="Referencias">
+            <li><span class="legend__key legend__key--a"></span>A tiempo</li>
+            <li><span class="legend__key legend__key--b"></span>Con demora</li>
+          </ul>
+        </div>
+        <div class="chart__plot" data-chart="hours"><span class="skeleton skeleton-only" style="height: 220px"></span></div>
+        <details class="chart__table">
+          <summary>Ver como tabla</summary>
+          <table data-table="hours"><thead><tr><th scope="col">Hora</th><th scope="col">A tiempo</th><th scope="col">Con demora</th></tr></thead><tbody></tbody></table>
+        </details>
+      </section>
+
+      <section class="panel chart" aria-labelledby="c2-title">
+        <div class="chart__head">
+          <h2 class="panel__title" id="c2-title">Puntualidad acumulada</h2>
+          <p class="chart__sub">% de entregas a tiempo desde las 08:00 · objetivo 90 %</p>
+        </div>
+        <div class="chart__plot" data-chart="ontime"><span class="skeleton skeleton-only" style="height: 220px"></span></div>
+        <details class="chart__table">
+          <summary>Ver como tabla</summary>
+          <table data-table="ontime"><thead><tr><th scope="col">Hora</th><th scope="col">Puntualidad</th><th scope="col">Entregas</th></tr></thead><tbody></tbody></table>
+        </details>
+      </section>
+
+      <div class="metrics__activity">
+        <ActivityFeed limit={10} />
+      </div>
+    </div>
+    <div class="chart-tip" role="status" data-chart-tip hidden></div>
+  </div>
+</Layout>
+
+<style is:global>
+  .statebar {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 6px;
+    margin: 10px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .statebar li {
+    display: grid;
+    gap: 2px;
+    min-width: 0;
+    padding: 8px 6px;
+    border-radius: 14px;
+    background: var(--card);
+    border: 2px solid var(--ink);
+    border-top: 8px solid var(--state);
+  }
+
+  .statebar__n {
+    font-size: 2rem;
+  }
+
+  .statebar__label {
+    font-size: 0.625rem;
+    font-weight: 800;
+    color: var(--ink-2);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .chart__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 16px;
+  }
+
+  .chart__sub {
+    width: 100%;
+    font-size: 0.8125rem;
+    color: var(--muted);
+  }
+
+  .legend {
+    display: flex;
+    gap: 14px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--ink-2);
+  }
+
+  .legend__key {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin-right: 6px;
+    vertical-align: -1px;
+    border-radius: 3px;
+  }
+
+  .legend__key--a {
+    background: #2e5be8;
+  }
+
+  .legend__key--b {
+    background: #f06a2c;
+  }
+
+  .chart__plot {
+    position: relative;
+    margin-top: 12px;
+    min-height: 220px;
+  }
+
+  .chart__plot svg {
+    display: block;
+    width: 100%;
+    overflow: visible;
+  }
+
+  .chart__plot svg:focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 4px;
+  }
+
+  .c-grid {
+    stroke: #e3dccd;
+    stroke-width: 1;
+  }
+
+  .c-axis {
+    font-family: var(--body);
+    font-size: 11px;
+    font-weight: 600;
+    fill: var(--muted);
+  }
+
+  .c-val {
+    font-family: var(--body);
+    font-size: 11px;
+    font-weight: 800;
+    fill: var(--ink);
+  }
+
+  .c-bar {
+    outline: none;
+  }
+
+  .c-bar:hover .c-seg,
+  .c-bar:focus-visible .c-seg {
+    opacity: 0.8;
+  }
+
+  .c-bar:focus-visible .c-hit {
+    stroke: var(--focus);
+    stroke-width: 2;
+  }
+
+  .c-line {
+    fill: none;
+    stroke: #2e5be8;
+    stroke-width: 2;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+
+  .c-area {
+    fill: #2e5be8;
+    opacity: 0.1;
+  }
+
+  .c-target {
+    stroke: var(--ink-2);
+    stroke-width: 1;
+  }
+
+  .c-dot {
+    fill: #2e5be8;
+    stroke: var(--card);
+    stroke-width: 2;
+  }
+
+  .c-cross {
+    stroke: var(--ink-2);
+    stroke-width: 1;
+  }
+
+  .chart-tip {
+    position: fixed;
+    z-index: 50;
+    min-width: 140px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    background: var(--ink);
+    color: var(--paper);
+    font-size: 0.8125rem;
+    pointer-events: none;
+    box-shadow: 0 8px 24px -10px rgb(0 0 0 / 0.5);
+  }
+
+  .chart-tip strong {
+    display: block;
+    font-family: var(--display);
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  .chart-tip .tip-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .chart-tip .tip-key {
+    width: 12px;
+    height: 2px;
+    border-radius: 1px;
+  }
+
+  .chart__table {
+    margin-top: 10px;
+    font-size: 0.875rem;
+  }
+
+  .chart__table summary {
+    cursor: pointer;
+    font-weight: 800;
+    font-size: 0.8125rem;
+  }
+
+  .chart__table table {
+    width: 100%;
+    margin-top: 8px;
+    border-collapse: collapse;
+  }
+
+  .chart__table th,
+  .chart__table td {
+    padding: 4px 6px;
+    border-bottom: 1px solid var(--line);
+    text-align: right;
+  }
+
+  .chart__table th:first-child,
+  .chart__table td:first-child {
+    text-align: left;
+  }
+
+  @media (min-width: 720px) {
+    .statebar li {
+      padding: 10px;
+    }
+    .statebar__label {
+      font-size: 0.8125rem;
+    }
+    .statebar__n {
+      font-size: 2.6rem;
+    }
+  }
+
+  @media (min-width: 1000px) {
+    .metrics {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+    .metrics__activity {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

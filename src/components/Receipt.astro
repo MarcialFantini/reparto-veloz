@@ -1,0 +1,258 @@
+---
+import type { Order } from '../data/orders';
+import { clock, etaOf } from '../lib/status';
+
+interface Props {
+  order: Order;
+}
+
+const { order } = Astro.props;
+---
+
+<section class="scene receipt" aria-labelledby="receipt-title" data-receipt>
+  <h2 id="receipt-title" class="section-title">Recepción</h2>
+
+  <div class="receipt__locked" data-receipt-locked>
+    <p>La firma y la calificación se habilitan cuando el pedido llegue. Llegada estimada: <strong>{clock(etaOf(order))}</strong>.</p>
+    <button type="button" class="btn" data-jump-eta>Saltar a la entrega</button>
+  </div>
+
+  <div class="receipt__card" data-receipt-body hidden>
+    <div class="receipt__step" data-step="sign">
+      <p class="receipt__label">
+        <span class="receipt__n display">1</span>
+        Firmá con el dedo o el mouse
+      </p>
+      <div class="pad">
+        <canvas class="pad__canvas" data-pad aria-label="Área de firma. Dibujá tu firma o usá el botón Firmar por mí." role="img"></canvas>
+        <span class="pad__line" aria-hidden="true"></span>
+        <span class="pad__hint" data-pad-hint aria-hidden="true">Firmá acá</span>
+      </div>
+      <div class="receipt__actions">
+        <button type="button" class="btn btn--ghost" data-pad-clear>Borrar</button>
+        <button type="button" class="btn btn--ghost" data-pad-auto>Firmar por mí</button>
+        <button type="button" class="btn" data-pad-confirm disabled>Confirmar firma</button>
+      </div>
+      <p class="receipt__ok" data-sign-ok hidden>Firma registrada.</p>
+    </div>
+
+    <form class="receipt__step" data-step="rate" data-rate-form>
+      <fieldset class="stars" data-stars disabled>
+        <legend class="receipt__label">
+          <span class="receipt__n display">2</span>
+          ¿Cómo fue la entrega?
+        </legend>
+        <div class="stars__row">
+          {
+            [1, 2, 3, 4, 5].map((n) => (
+              <label class="star">
+                <input type="radio" name="rating" value={n} class="sr-only" />
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.2l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z" />
+                </svg>
+                <span class="sr-only">{n} de 5</span>
+              </label>
+            ))
+          }
+        </div>
+      </fieldset>
+      <button type="submit" class="btn" data-rate-send disabled>Enviar calificación</button>
+    </form>
+
+    <div class="receipt__done" data-receipt-done hidden>
+      <div class="stamp display" data-stamp>Entrega cerrada</div>
+      <p class="receipt__thanks" data-thanks>¡Gracias! Tu calificación ayuda al equipo de reparto.</p>
+    </div>
+    <div class="burst" data-burst aria-hidden="true"></div>
+  </div>
+</section>
+
+<style>
+  .receipt__locked {
+    display: grid;
+    gap: 14px;
+    justify-items: start;
+    margin-top: 14px;
+    padding: 18px;
+    border-radius: var(--radius);
+    border: 2px dashed var(--line);
+    color: var(--ink-2);
+  }
+
+  .receipt__card {
+    position: relative;
+    display: grid;
+    gap: 26px;
+    margin-top: 14px;
+    padding: 18px;
+    border-radius: 20px;
+    background: var(--card);
+    border: 2px solid var(--ink);
+    box-shadow: 6px 6px 0 var(--ink);
+    overflow: hidden;
+  }
+
+  .receipt__card[hidden],
+  .receipt__locked[hidden] {
+    display: none;
+  }
+
+  .receipt__label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0;
+    font-weight: 800;
+  }
+
+  .receipt__n {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--st-entregado);
+    color: #fff;
+    font-size: 1.3rem;
+  }
+
+  .pad {
+    position: relative;
+    margin-top: 12px;
+    border-radius: 14px;
+    background: #fff;
+    border: 2px solid var(--ink);
+    touch-action: none;
+  }
+
+  .pad__canvas {
+    width: 100%;
+    height: 180px;
+    cursor: crosshair;
+    border-radius: 12px;
+  }
+
+  .pad__line {
+    position: absolute;
+    left: 18px;
+    right: 18px;
+    bottom: 40px;
+    border-bottom: 2px dashed var(--line);
+    pointer-events: none;
+  }
+
+  .pad__hint {
+    position: absolute;
+    left: 18px;
+    bottom: 14px;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--muted);
+    pointer-events: none;
+  }
+
+  .receipt__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .receipt__ok {
+    margin-top: 8px;
+    font-weight: 800;
+    color: var(--st-entregado);
+  }
+
+  .stars {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    min-width: 0;
+  }
+
+  .stars[disabled]:not(.is-final) {
+    opacity: 0.45;
+  }
+
+  .stars__row {
+    display: flex;
+    gap: 6px;
+    margin: 12px 0 14px;
+  }
+
+  .star {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    cursor: pointer;
+  }
+
+  .star svg {
+    width: 40px;
+    height: 40px;
+    fill: var(--paper-2);
+    stroke: var(--ink);
+    stroke-width: 1.6;
+    stroke-linejoin: round;
+    transition: transform 160ms var(--ease-out);
+  }
+
+  .star.is-on svg {
+    fill: var(--st-preparando);
+  }
+
+  .star:hover svg {
+    transform: scale(1.1);
+  }
+
+  .star:has(input:focus-visible) {
+    outline: 3px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  .receipt__done {
+    display: grid;
+    justify-items: center;
+    gap: 12px;
+    padding: 12px 0 4px;
+    text-align: center;
+  }
+
+  .receipt__done[hidden] {
+    display: none;
+  }
+
+  .stamp {
+    padding: 10px 20px 8px;
+    border: 5px solid var(--st-entregado);
+    border-radius: 12px;
+    color: var(--st-entregado);
+    font-size: clamp(1.9rem, 9vw, 3.6rem);
+    white-space: nowrap;
+    transform: rotate(-8deg);
+  }
+
+  .receipt__thanks {
+    font-weight: 700;
+  }
+
+  .burst {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  @media (min-width: 980px) {
+    .receipt__card {
+      grid-template-columns: 1.3fr 1fr;
+      align-items: start;
+      padding: 26px;
+    }
+    .receipt__done {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

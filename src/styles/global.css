@@ -1,260 +1,712 @@
-@import "tailwindcss";
-
-/* Self-hosted fonts via @fontsource — replaces the Bunny Fonts CDN
- * (privacy-friendly Google Fonts mirror) that previously loaded these
- * families. Self-hosting is faster, removes a network dependency and
- * keeps every weight offline.
- *
- * Plus Jakarta Sans — UI (400 / 500 / 600 / 700)
- * JetBrains Mono  — codes, timestamps, ETAs (400 / 500 / 600)
- *
- * Importing the per-language subsets we actually need keeps the
- * bundle small (no cyrillic / vietnamese faces for an es-AR product).
- */
-@import "@fontsource/plus-jakarta-sans/latin-400.css";
-@import "@fontsource/plus-jakarta-sans/latin-500.css";
-@import "@fontsource/plus-jakarta-sans/latin-600.css";
-@import "@fontsource/plus-jakarta-sans/latin-700.css";
-@import "@fontsource/jetbrains-mono/latin-400.css";
-@import "@fontsource/jetbrains-mono/latin-500.css";
-@import "@fontsource/jetbrains-mono/latin-600.css";
-
-/* ===========================================================
- * Spec-mandated palette — Reparto Veloz SRL
- * Paleta: delivery naranja + navy + mist + blanco.
- * Tipografía UI: Plus Jakarta Sans · Mono: JetBrains Mono.
- * Mobile-first. AA contrast verified for every state pill pair.
- *
- * The four CSS variables below are the literal names required by
- * the brand spec. They live at :root so any consumer (Tailwind,
- * inline style, child project) can read them by spec name without
- * knowing our internal semantic aliases.
- *
- * Renaming policy: existing semantic names kept (`papel`, `ink`,
- * `accent`, `gris`, etc.) so any consumer outside the allowed
- * component set keeps working; their VALUES were shifted to the
- * new identity (mist body bg, white card surfaces, delivery
- * orange CTA). The brand-spec navy lives under its own name
- * and is used by Header / Footer / PedidoTracker / ConsultaForm.
- * =========================================================== */
+/* Logística Andina · visual system
+   Light paper background, one flat colour per order state,
+   condensed display type for order numbers and arrival times. */
 
 :root {
-  /* Spec-mandated tokens — exact names + values from the brand spec. */
-  --color-delivery: #E76F2C;          /* primary CTAs (naranja delivery) */
-  --color-navy: #1B2845;              /* headers, badges */
-  --color-mist: #F4F4F4;              /* light gray, section bg */
-  --color-white: #FFFFFF;             /* cards */
+  --paper: #f3efe6;
+  --paper-2: #ebe5d8;
+  --card: #fffcf6;
+  --ink: #16130f;
+  --ink-2: #3a342c;
+  --muted: #635c52;
+  --line: #d9d1c1;
+  --focus: #16130f;
+
+  --st-recibido: #2e5be8;
+  --st-preparando: #f3b419;
+  --st-despachado: #f06a2c;
+  --st-en-camino: #d6336c;
+  --st-entregado: #137a4b;
+
+  --on-recibido: #ffffff;
+  --on-preparando: #16130f;
+  --on-despachado: #16130f;
+  --on-en-camino: #ffffff;
+  --on-entregado: #ffffff;
+
+  --state: var(--ink);
+  --on-state: var(--paper);
+
+  --display: 'Oswald Variable', 'Arial Narrow', 'Roboto Condensed', sans-serif-condensed, sans-serif;
+  --body: 'Manrope Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --radius: 14px;
+  --radius-sm: 8px;
+  --gutter: 16px;
+  --max: 1180px;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+
+  color-scheme: light;
 }
 
-/* ===========================================================
- * Tailwind v4 theme — same spec tokens exposed as utilities
- * (`bg-delivery`, `text-rv-navy`, …) so components can address
- * the palette by spec name without a tailwind.config.mjs.
- * Semantic aliases (`accent`, `papel`, `gris`) are preserved
- * for backward compatibility with the existing component set.
- * =========================================================== */
+[data-state='recibido'] { --state: var(--st-recibido); --on-state: var(--on-recibido); }
+[data-state='preparando'] { --state: var(--st-preparando); --on-state: var(--on-preparando); }
+[data-state='despachado'] { --state: var(--st-despachado); --on-state: var(--on-despachado); }
+[data-state='en-camino'] { --state: var(--st-en-camino); --on-state: var(--on-en-camino); }
+[data-state='entregado'] { --state: var(--st-entregado); --on-state: var(--on-entregado); }
 
-@theme {
-  /* ---- Spec tokens (utility classes) ---- */
-  --color-delivery: #E76F2C;
-  --color-rv-navy: #1B2845;
-  --color-rv-mist: #F4F4F4;
-  --color-rv-white: #FFFFFF;
-
-  /* ---- Brand: surface ---- */
-  --color-papel: #f4f4f4;             /* body bg — mist per brand spec */
-  --color-papel-soft: #ffffff;        /* cards, inputs — blanco per brand spec */
-  --color-papel-line: #e6e6e6;        /* hairline divider on mist */
-
-  /* ---- Brand: text ---- */
-  --color-ink: #1b2845;               /* primary text — navy per brand spec */
-  --color-ink-soft: #4a5568;          /* secondary text on white/mist */
-  --color-ink-muted: #6b7280;         /* tertiary / metadata */
-  --color-ink-inverse: #ffffff;       /* text on navy / delivery */
-
-  /* ---- Brand: navy (new) ---- */
-  --color-navy: #1b2845;
-  --color-navy-soft: #2a3a5c;
-  --color-navy-tint: #eef1f6;         /* tinted surface behind navy headers */
-
-  /* ---- Brand: delivery (CTAs, accents, badges) ---- */
-  --color-accent: #e76f2c;            /* delivery naranja */
-  --color-accent-deep: #c25818;       /* hover / active */
-  --color-accent-soft: #fef3e7;       /* badge bg, subtle tints */
-
-  /* ---- Brand: line / divider ---- */
-  --color-gris: #e6e6e6;
-  --color-gris-soft: #ededed;
-
-  /* ---- State semantics — contrast-checked for AA ---- */
-  --color-state-preparando-bg: #eef2f6;
-  --color-state-preparando-text: #334155;
-  --color-state-preparando-ring: #cbd5e1;
-  --color-state-preparando-dot: #64748b;
-
-  --color-state-en-camino-bg: #fef3e7;
-  --color-state-en-camino-text: #9a4112;
-  --color-state-en-camino-ring: #fcd9b6;
-  --color-state-en-camino-dot: #e76f2c;
-
-  --color-state-entregado-bg: #dcfce7;
-  --color-state-entregado-text: #14532d;
-  --color-state-entregado-ring: #86efac;
-  --color-state-entregado-dot: #16a34a;
-
-  --color-state-demorado-bg: #fee2e2;
-  --color-state-demorado-text: #7f1d1d;
-  --color-state-demorado-ring: #fca5a5;
-  --color-state-demorado-dot: #dc2626;
-
-  --color-state-cancelado-bg: #f1f5f9;
-  --color-state-cancelado-text: #475569;
-  --color-state-cancelado-ring: #cbd5e1;
-  --color-state-cancelado-dot: #64748b;
-
-  --color-state-devuelto-bg: #ede9fe;
-  --color-state-devuelto-text: #4c1d95;
-  --color-state-devuelto-ring: #c4b5fd;
-  --color-state-devuelto-dot: #7c3aed;
-
-  /* ---- Typography — Plus Jakarta Sans (UI) + JetBrains Mono (codes) ---- */
-  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system,
-    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", "Menlo",
-    "Monaco", "Consolas", monospace;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
-
-/* ===========================================================
- * Base
- * =========================================================== */
 
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
-  background-color: var(--color-mist);
+  scroll-padding-top: 120px;
 }
 
 body {
-  font-family: var(--font-sans);
-  background-color: var(--color-mist);
-  color: var(--color-navy);
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.5;
+  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  font-feature-settings: "ss01", "cv11";
 }
 
-::selection {
-  background-color: var(--color-accent-soft);
-  color: var(--color-accent-deep);
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+img,
+svg,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-accent-deep);
-  outline-offset: 2px;
-  border-radius: 4px;
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+  border-radius: 6px;
 }
 
-/* ===========================================================
- * Reduced motion
- * =========================================================== */
+[hidden] {
+  display: none !important;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.wrap {
+  width: 100%;
+  max-width: var(--max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* Condensed display numerals */
+.display {
+  font-family: var(--display);
+  font-weight: 650;
+  line-height: 0.88;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+  text-transform: uppercase;
+}
+
+.eyebrow {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  font-weight: 700;
+  font-size: 0.9375rem;
+  text-decoration: none;
+  transition: transform 160ms var(--ease-out), opacity 160ms;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn[disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--ink);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  background: var(--state);
+  color: var(--on-state);
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--state);
+  flex: none;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.section-title {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: clamp(1.75rem, 6vw, 2.5rem);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+/* Showcase recordings: no cursor anywhere */
+html.is-showcase,
+html.is-showcase * {
+  cursor: none !important;
+}
+
+/* Root view transition: quick cross-fade, the order number morphs on its own */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 360ms;
+}
+
+::view-transition-group(*) {
+  animation-duration: 520ms;
+  animation-timing-function: var(--ease-out);
+}
 
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
-    animation-duration: 0.001ms !important;
+    animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
+    transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
 }
 
-/* ===========================================================
- * Small utility helpers
- * =========================================================== */
-
-.font-mono {
-  font-family: var(--font-mono);
-  font-feature-settings: "zero", "ss02";
+/* In-app notices (created at runtime) */
+.toasts__stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  padding-top: 10px;
+  pointer-events: none;
 }
 
-/* Mono tabular numerals for codes / timestamps / ETAs. */
-.tabular {
+.toast {
+  display: grid;
+  gap: 2px;
+  width: min(100%, 360px);
+  padding: 12px 16px 12px 18px;
+  border-radius: 12px;
+  background: var(--ink);
+  color: var(--paper);
+  border-left: 8px solid var(--state, var(--paper));
+  box-shadow: 0 10px 30px -12px rgb(22 19 15 / 0.45);
+  font-size: 0.9rem;
+  line-height: 1.35;
+  pointer-events: auto;
+}
+
+.toast strong {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 1.05rem;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+}
+
+/* Product token flying into the 3D box (created at runtime) */
+.fly-token {
+  position: fixed;
+  z-index: 60;
+  padding: 5px;
+  border-radius: 10px;
+  background: var(--st-preparando);
+  fill: var(--card);
+  stroke: var(--ink);
+  stroke-width: 1.8;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+/* Rating closing burst (created at runtime) */
+.burst__bit {
+  position: absolute;
+  width: 10px;
+  height: 14px;
+  margin: -7px 0 0 -5px;
+  border-radius: 2px;
+  will-change: transform, opacity;
+}
+
+/* ---------- Feed items (notifications centre + live activity) ---------- */
+.feed {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.feed__item {
+  border-radius: 10px;
+}
+
+.feed__link {
+  display: grid;
+  grid-template-columns: 12px 1fr auto;
+  align-items: start;
+  gap: 10px;
+  padding: 9px 8px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: inherit;
+}
+
+a.feed__link:hover {
+  background: var(--paper-2);
+}
+
+.feed__item.is-unread .feed__link {
+  background: color-mix(in srgb, var(--st-recibido) 9%, transparent);
+}
+
+.feed__dot {
+  width: 10px;
+  height: 10px;
+  margin-top: 5px;
+  border-radius: 50%;
+  background: var(--muted);
+}
+
+.feed__dot[data-tone='recibido'] { background: var(--st-recibido); }
+.feed__dot[data-tone='preparando'] { background: var(--st-preparando); }
+.feed__dot[data-tone='despachado'] { background: var(--st-despachado); }
+.feed__dot[data-tone='en-camino'] { background: var(--st-en-camino); }
+.feed__dot[data-tone='entregado'] { background: var(--st-entregado); }
+.feed__dot[data-tone='incident'] { background: #b3261e; border-radius: 2px; transform: rotate(45deg); }
+.feed__dot[data-tone='resolved'] { background: var(--card); border: 2.5px solid var(--st-entregado); }
+.feed__dot[data-tone='action'] { background: var(--ink); }
+
+.feed__body {
+  display: grid;
+  min-width: 0;
+}
+
+.feed__title {
+  font-weight: 800;
+  font-size: 0.875rem;
+  line-height: 1.3;
+}
+
+.feed__text {
+  font-size: 0.8125rem;
+  color: var(--muted);
+  line-height: 1.35;
+}
+
+.feed__time {
+  font-family: var(--display);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--ink-2);
   font-variant-numeric: tabular-nums;
-  font-feature-settings: "tnum" 1, "zero" 1;
 }
 
-/* Navy surface used by Header / Footer brand blocks. */
-.surface-navy {
-  background-color: var(--color-navy);
-  color: var(--color-ink-inverse);
+.feed__empty {
+  padding: 18px 10px;
+  color: var(--muted);
+  font-size: 0.875rem;
 }
 
-/* ===========================================================
- * Live-mode keyframe — used by the "Ver repartidor en vivo"
- * toggle in PedidoTracker. Runs the courier dot along the
- * route twice as fast as the static animateMotion fallback
- * and keeps the trail transparent for a "live GPS" feel.
- * =========================================================== */
-@keyframes rv-live-pulse {
-  0%,
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
+/* ---------- Command palette and help ---------- */
+.palette,
+.help {
+  width: min(640px, calc(100vw - 24px));
+  max-height: calc(100dvh - 48px);
+  margin: 8vh auto auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  overflow: visible;
+}
+
+.palette::backdrop,
+.help::backdrop {
+  background: rgb(22 19 15 / 0.45);
+}
+
+.palette__box,
+.help__box {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100dvh - 16vh);
+  border-radius: 18px;
+  background: var(--card);
+  border: 2px solid var(--ink);
+  box-shadow: 10px 10px 0 var(--ink);
+  overflow: hidden;
+}
+
+.palette__field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--line);
+}
+
+.palette__input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  font-size: 1.0625rem;
+  font-weight: 600;
+}
+
+.palette__input:focus-visible {
+  outline: none;
+}
+
+.palette__list {
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.palette__group {
+  padding: 10px 10px 4px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--muted);
+}
+
+.palette__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.palette__item.is-active {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.palette__label {
+  font-weight: 700;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.palette__hint {
+  flex: none;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.palette__item.is-active .palette__hint {
+  color: var(--line);
+}
+
+.palette__empty {
+  padding: 18px 12px;
+  color: var(--muted);
+}
+
+.palette__foot {
+  display: none;
+  padding: 10px 16px;
+  border-top: 1px solid var(--line);
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.help__box {
+  padding: 22px;
+  gap: 16px;
+}
+
+.help__box h2 {
+  font-size: 2rem;
+}
+
+.help__list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+}
+
+.help__list div {
+  display: grid;
+  gap: 2px;
+}
+
+.help__list dd {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: 0.9375rem;
+}
+
+/* ---------- Ops views ---------- */
+.ops-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 14px 24px;
+  padding-top: 26px;
+}
+
+.ops-title {
+  margin-top: 10px;
+  font-size: clamp(2.6rem, 12vw, 5rem);
+}
+
+.ops-lead {
+  max-width: 60ch;
+  margin-top: 8px;
+  color: var(--ink-2);
+}
+
+.ops-grid {
+  display: grid;
+  gap: 20px;
+  margin-top: 22px;
+}
+
+.panel {
+  min-width: 0;
+  padding: 16px;
+  border-radius: 18px;
+  background: var(--card);
+  border: 2px solid var(--ink);
+}
+
+.panel__title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 1.5rem;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.kpi {
+  display: grid;
+  align-content: space-between;
+  gap: 4px;
+  min-height: 92px;
+  padding: 12px;
+  border-radius: 16px;
+  background: var(--card);
+  border: 2px solid var(--ink);
+}
+
+.kpi__label {
+  font-size: 0.8125rem;
+  font-weight: 800;
+  color: var(--ink-2);
+}
+
+.kpi__value {
+  font-size: 2.5rem;
+}
+
+.kpi__unit {
+  font-size: 1.4rem;
+}
+
+.kpi__delta {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.kpi--accent {
+  background: var(--st-preparando);
+}
+
+.kpi--accent .kpi__delta {
+  color: var(--ink-2);
+}
+
+.skeleton {
+  display: block;
+  border-radius: 10px;
+  background: var(--paper-2);
+  animation: skeleton-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes skeleton-pulse {
   50% {
-    transform: scale(1.5);
-    opacity: 0.55;
+    opacity: 0.45;
   }
 }
 
-.rv-live-dot {
-  animation: rv-live-pulse 0.9s ease-in-out infinite;
-  transform-origin: center;
-  transform-box: fill-box;
+body.is-ready .skeleton-only {
+  display: none;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  white-space: nowrap;
+  background: var(--state, var(--paper-2));
+  color: var(--on-state, var(--ink));
+}
+
+.badge--alert {
+  background: #b3261e;
+  color: #fff;
+}
+
+.badge--ok {
+  background: var(--st-entregado);
+  color: #fff;
+}
+
+.badge--muted {
+  background: var(--paper-2);
+  color: var(--ink-2);
+}
+
+.avatar {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.field {
+  display: grid;
+  gap: 4px;
+  font-size: 0.8125rem;
+  font-weight: 800;
+}
+
+.field input,
+.field select {
+  min-height: 44px;
+  padding: 0 12px;
+  border: 2px solid var(--ink);
+  border-radius: 10px;
+  background: var(--card);
+  font-weight: 600;
+  font-size: 0.9375rem;
+}
+
+.kcard.is-stuck,
+.is-stuck-row {
+  box-shadow: inset 0 0 0 3px #b3261e;
+}
+
+.kcard.is-stuck .kcard__time {
+  color: #b3261e;
+}
+
+@media (min-width: 720px) {
+  .palette__foot {
+    display: block;
+  }
+  .kpis {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .kpi__value {
+    font-size: 3.6rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .rv-live-dot {
+  .skeleton {
     animation: none;
-  }
-}
-
-/* Used by the comprobante card so the "live" indicator can
- * sit on the printed page when the user exports to PDF. */
-@media print {
-  /* Hide navigation / interactive bits on print. */
-  header.sticky,
-  footer,
-  .no-print,
-  .rv-no-print {
-    display: none !important;
-  }
-
-  /* Reset background to white so the comprobante prints clean. */
-  html,
-  body {
-    background: #ffffff !important;
-    color: #0f1112 !important;
-  }
-
-  /* Comprobante: span the full page, no shadow, no soft cards. */
-  .rv-comprobante {
-    border: 1px solid #0f1112 !important;
-    background: #ffffff !important;
-    box-shadow: none !important;
-    page-break-inside: avoid;
-  }
-
-  a {
-    color: inherit !important;
-    text-decoration: none !important;
-  }
-
-  /* Each section inside the comprobante should not break. */
-  .rv-comprobante section,
-  .rv-comprobante header,
-  .rv-comprobante dl {
-    page-break-inside: avoid;
   }
 }

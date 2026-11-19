@@ -1,0 +1,173 @@
+---
+/**
+ * Micro-illustrations for each stage. Parts carry `data-part` hooks that
+ * src/scripts/scenes/timeline.ts animates (transform, opacity and stroke only).
+ */
+import type { OrderState } from '../data/orders';
+
+interface Props {
+  kind: OrderState;
+}
+
+const { kind } = Astro.props;
+---
+
+<svg class="art" viewBox="0 0 96 80" aria-hidden="true" data-art={kind}>
+  <rect class="art__ground" x="6" y="68" width="84" height="4" rx="2"></rect>
+  {
+    kind === 'recibido' && (
+      <g>
+        <g data-part="paper">
+          <path class="art__paper" d="M30 14h36v48l-6-4-6 4-6-4-6 4-6-4-6 4z" />
+          <path class="art__ink" d="M37 25h22M37 33h22M37 41h14" />
+        </g>
+        <circle class="art__badge" cx="66" cy="54" r="12" data-part="badge" />
+        <path class="art__check" d="M60 54l4.5 4.5L72 50" pathLength="1" data-part="check" />
+      </g>
+    )
+  }
+  {
+    kind === 'preparando' && (
+      <g>
+        <rect class="art__item" x="40" y="10" width="14" height="18" rx="3" data-part="item" />
+        <rect class="art__item art__item--b" x="52" y="2" width="10" height="14" rx="5" data-part="item2" />
+        <path class="art__flap" d="M24 38h24l-6-12H18z" data-part="flap-l" />
+        <path class="art__flap" d="M48 38h24l6-12H54z" data-part="flap-r" />
+        <rect class="art__box" x="24" y="38" width="48" height="30" rx="2" />
+        <path class="art__ink" d="M24 38h48" />
+      </g>
+    )
+  }
+  {
+    kind === 'despachado' && (
+      <g>
+        <rect class="art__box" x="22" y="30" width="52" height="38" rx="2" />
+        <path class="art__ink" d="M22 30h52M48 30v38" />
+        <rect class="art__tape" x="44" y="30" width="8" height="38" data-part="tape" />
+        <g data-part="roll">
+          <circle class="art__roll" cx="48" cy="24" r="8" />
+          <circle class="art__roll-core" cx="48" cy="24" r="3" />
+        </g>
+      </g>
+    )
+  }
+  {
+    kind === 'en-camino' && (
+      <g>
+        <g data-part="lines">
+          <path class="art__speed" d="M4 40h12M0 50h14M6 60h10" />
+        </g>
+        <g data-part="truck">
+          <rect class="art__cargo" x="18" y="28" width="42" height="30" rx="3" />
+          <path class="art__cab" d="M60 38h12l8 10v10H60z" />
+          <path class="art__window" d="M64 41h7l5 6H64z" />
+          <g data-part="wheel" class="art__wheel-g">
+            <circle class="art__wheel" cx="30" cy="60" r="6" />
+            <path class="art__spoke" d="M30 55v10M25 60h10" />
+          </g>
+          <g data-part="wheel" class="art__wheel-g">
+            <circle class="art__wheel" cx="68" cy="60" r="6" />
+            <path class="art__spoke" d="M68 55v10M63 60h10" />
+          </g>
+        </g>
+      </g>
+    )
+  }
+  {
+    kind === 'entregado' && (
+      <g>
+        <path class="art__house" d="M16 40 44 18l28 22v28H16z" />
+        <rect class="art__door" x="36" y="46" width="16" height="22" rx="1" />
+        <rect class="art__box art__box--small" x="54" y="54" width="14" height="14" rx="1" data-part="parcel" />
+        <circle class="art__badge" cx="74" cy="26" r="11" data-part="badge" />
+        <path class="art__check" d="M68.5 26l4 4 7-7.5" pathLength="1" data-part="check" />
+      </g>
+    )
+  }
+</svg>
+
+<style>
+  .art {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+  .art__ground {
+    fill: var(--ink);
+    opacity: 0.12;
+  }
+  .art__paper,
+  .art__house {
+    fill: var(--card);
+    stroke: var(--ink);
+    stroke-width: 2.5;
+    stroke-linejoin: round;
+  }
+  .art__ink,
+  .art__spoke,
+  .art__speed {
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+  }
+  .art__badge {
+    fill: var(--state);
+    stroke: var(--ink);
+    stroke-width: 2.5;
+  }
+  .art__check {
+    fill: none;
+    stroke: var(--on-state);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .art__box,
+  .art__flap,
+  .art__cargo {
+    fill: var(--state);
+    stroke: var(--ink);
+    stroke-width: 2.5;
+    stroke-linejoin: round;
+  }
+  .art__item {
+    fill: var(--card);
+    stroke: var(--ink);
+    stroke-width: 2.5;
+  }
+  .art__tape {
+    fill: var(--ink);
+    opacity: 0.85;
+  }
+  .art__roll {
+    fill: var(--card);
+    stroke: var(--ink);
+    stroke-width: 2.5;
+  }
+  .art__roll-core {
+    fill: var(--ink);
+  }
+  .art__cab {
+    fill: var(--card);
+    stroke: var(--ink);
+    stroke-width: 2.5;
+    stroke-linejoin: round;
+  }
+  .art__window {
+    fill: var(--ink);
+    opacity: 0.25;
+  }
+  .art__wheel {
+    fill: var(--ink);
+  }
+  .art__spoke {
+    stroke: var(--card);
+    stroke-width: 2;
+  }
+  .art__door {
+    fill: var(--state);
+    stroke: var(--ink);
+    stroke-width: 2.5;
+  }
+</style>

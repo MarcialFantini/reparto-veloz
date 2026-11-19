@@ -1,0 +1,174 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { DRIVERS } from '../data/catalog';
+---
+
+<Layout title="Repartidores · Logística Andina (demo)" view="repartidores" page="drivers">
+  <div class="wrap">
+    <div class="ops-head">
+      <div>
+        <p class="eyebrow">Equipo de reparto · Hoy</p>
+        <h1 class="ops-title display">Repartidores</h1>
+        <p class="ops-lead">Quién está en la calle, qué lleva y cómo viene el día. Las cifras se recalculan con cada entrega.</p>
+      </div>
+    </div>
+
+    <div class="kpis">
+      <div class="kpi kpi--accent"><span class="kpi__label">En ruta ahora</span><span class="kpi__value display" data-dkpi="route">–</span></div>
+      <div class="kpi"><span class="kpi__label">Disponibles</span><span class="kpi__value display" data-dkpi="free">–</span></div>
+      <div class="kpi"><span class="kpi__label">Entregas del equipo</span><span class="kpi__value display" data-dkpi="done">–</span></div>
+      <div class="kpi"><span class="kpi__label">Puntualidad del equipo</span><span class="kpi__value display" data-dkpi="ontime">–</span></div>
+    </div>
+
+    <ul class="drivers" data-drivers>
+      {
+        DRIVERS.map((d) => (
+          <li class="dcard panel" id={`chofer-${d.id}`} data-driver={d.id}>
+            <div class="dcard__head">
+              <span class="avatar">{d.initials}</span>
+              <div class="dcard__who">
+                <h2 class="dcard__name">{d.name}</h2>
+                <p class="dcard__meta">{d.truck} · {d.vehicle} · zona {d.zone} · desde {d.since}</p>
+              </div>
+              <span class="badge badge--muted" data-d-status>…</span>
+            </div>
+            <dl class="dcard__stats">
+              <div><dt>Entregas hoy</dt><dd class="display" data-d="done">–</dd></div>
+              <div><dt>A tiempo</dt><dd class="display" data-d="ontime">–</dd></div>
+              <div><dt>Bultos</dt><dd class="display" data-d="parcels">–</dd></div>
+              <div><dt>Calificación</dt><dd class="display" data-d="rating">–</dd></div>
+            </dl>
+            <div class="dcard__bars" aria-hidden="true" data-d-bars></div>
+            <p class="dcard__now" data-d-now><span class="skeleton" style="height: 14px; width: 70%"></span></p>
+            <ul class="dcard__queue" data-d-queue></ul>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</Layout>
+
+<style is:global>
+  .drivers {
+    display: grid;
+    gap: 14px;
+    margin: 20px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .dcard {
+    display: grid;
+    gap: 14px;
+    scroll-margin-top: 140px;
+    transition: box-shadow 200ms;
+  }
+
+  .dcard.is-focus {
+    box-shadow: 8px 8px 0 var(--st-en-camino);
+  }
+
+  .dcard__head {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 6px 12px;
+  }
+
+  .dcard__head .badge {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+
+  .dcard__name {
+    font-weight: 800;
+    font-size: 1.0625rem;
+  }
+
+  .dcard__meta {
+    font-size: 0.8125rem;
+    color: var(--muted);
+  }
+
+  .dcard__stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    margin: 0;
+  }
+
+  .dcard__stats dt {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: var(--muted);
+  }
+
+  .dcard__stats dd {
+    margin: 0;
+    font-size: 1.9rem;
+  }
+
+  .dcard__bars {
+    display: flex;
+    align-items: end;
+    gap: 3px;
+    height: 34px;
+    padding-bottom: 2px;
+    border-bottom: 1.5px solid var(--line);
+  }
+
+  .dcard__bars span {
+    flex: 1;
+    height: 100%;
+    border-radius: 3px 3px 0 0;
+    background: var(--st-entregado);
+    transform-origin: 50% 100%;
+    transition: transform 400ms var(--ease-out);
+  }
+
+  .dcard__now {
+    font-size: 0.875rem;
+    font-weight: 700;
+  }
+
+  .dcard__queue {
+    display: grid;
+    gap: 4px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.8125rem;
+  }
+
+  .dcard__queue a {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 6px 8px;
+    border-radius: 8px;
+    background: var(--paper);
+    text-decoration: none;
+  }
+
+  .dcard__queue a:hover {
+    background: var(--paper-2);
+  }
+
+  @media (min-width: 760px) {
+    .drivers {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .dcard__head {
+      grid-template-columns: auto 1fr auto;
+    }
+    .dcard__head .badge {
+      grid-column: auto;
+    }
+  }
+
+  @media (min-width: 1180px) {
+    .drivers {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>
